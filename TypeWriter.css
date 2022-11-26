@@ -1,0 +1,96 @@
+:root {
+    --bg-color: #333;
+    --font-color: whitesmoke;
+    --font-size: clamp(.6em, 2vw + .4em, 4em);
+    --typeWriterSpeed: 2s;
+    --numberOfSteps: 29;
+  }
+
+body {
+margin:0;
+font-family: 'Space Mono', monospace;
+color: var(--font-color);
+}
+
+.container{
+    min-height: 100vh;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    background: var(--bg-color);
+}
+
+.header {
+    transform: translateX(calc(-1 * var(--font-size)));
+}
+
+.cPrompt{
+    font-size: var(--font-size);
+    opacity: 1;
+    animation: disappear 1s ease calc(var(--typeWriterSpeed) + 2s) forwards ;
+}
+
+.headerText{
+    font-size: var(--font-size);
+    position: relative;
+    max-width: max-content;
+}
+
+.headerText::before,
+.headerText::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
+
+.headerText::before {
+    background: var(--bg-color);
+    animation: typewriter var(--typeWriterSpeed) steps(var(--numberOfSteps)) 2s forwards;
+}
+
+.headerText::after {
+    width: .65em;
+    height: .25em;
+    background: var(--font-color);
+    transform: translateY(1.02em);
+    animation: 
+        typewriter var(--typeWriterSpeed) steps(var(--numberOfSteps)) 2s forwards,
+        blinks 1000ms steps(var(--numberOfSteps)) infinite;
+}
+
+.subtitle {
+    font-size: calc( .8 * (var(--font-size)));
+    opacity: 0;
+    transform: translateY(2em);
+    animation: fadeInUp 2s ease calc(var(--typeWriterSpeed) + 2s) forwards;
+}
+
+
+@keyframes typewriter {
+    to {
+        left: 100%;
+    }
+}
+
+@keyframes blinks {
+    0%          { background: var(--font-color);}
+    50%         { background: var(--font-color)}
+    50.001%     { background: transparent;}
+    100%        { background: transparent;}
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes disappear {
+    to {
+        opacity: 0;
+    }
+}
