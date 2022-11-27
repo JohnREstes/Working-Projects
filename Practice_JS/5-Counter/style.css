@@ -1,0 +1,51 @@
+
+body{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.container{
+    width: 100vw;
+    height: 100vh;
+    background-color: aquamarine;
+    position: relative;
+}
+.centered{
+    width: 50%;
+    height: 50%;
+    background-color: antiquewhite;
+    position: absolute;
+    right: 25%;
+    top: 25%;
+}
+.title{
+    position: absolute;
+    right: 50%;
+
+    transform: translateX(50%);
+    font-size: 6em;
+}
+.counter{
+    text-align: center;
+    font-size: 5em;
+    position: absolute;
+    top: 50%;
+    right: 50%;
+    transform: translate(50%, -50%);
+}
+.fontGreen{
+    color: green;
+}
+.fontRed{
+    color: red;
+}
+.btn{
+    bottom: 0;
+    right: 50%;
+    position: absolute;
+    transform: translateX(50%);
+    font-size: larger;
+}
+.increase{
+    bottom: 10%;
+}
