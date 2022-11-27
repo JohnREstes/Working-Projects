@@ -1,0 +1,30 @@
+:root{
+    --HEX: #362fbc;
+}
+
+body{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.container{
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--HEX);
+    position: relative;
+    text-align: center;
+}
+.button{
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.quotes{
+    position: absolute;
+    top: 40%;
+    transform: translateY(-40%);
+    color: antiquewhite;
+    margin-top: 0;
+    width: 100%;
+}
