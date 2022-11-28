@@ -5,13 +5,11 @@ const counter = document.querySelector('.counter');
 increase.addEventListener('click', ()=>{
   counter.textContent = Number(counter.textContent) + 1;
   positiveNegative();
-  console.log(counter.textContent);
 });
 
 decrease.addEventListener('click', ()=>{
   counter.textContent = Number(counter.textContent) - 1;
   positiveNegative();
-  console.log(counter.textContent);
 });
 
 function positiveNegative(){
