@@ -1,5 +1,6 @@
 const buttons = document.querySelectorAll('.btn');
 const items = document.querySelectorAll('.item');
+const searchBar = document.querySelector('.searchBar');
 
 buttons.forEach(button => {
     button.addEventListener('click', (e) => {
@@ -8,15 +9,20 @@ buttons.forEach(button => {
   })
 
 function btnClick(target){
-    items.forEach(item => {
-        item.classList.remove("hidden");
-    })
-    if (target === "all") return;
-    var finalList = [];
-    items.forEach(item => {
-        if(item.classList[1] !== target)finalList.push(item);
-    });
-    finalList.forEach(item => {
-        item.classList.add("hidden");
-    });
+    searchBar.value = "";
+    if (target === "all") processSort('');
+    else processSort(target);
+}
+
+searchBar.onkeyup = () => {
+    let search = searchBar.value.toLowerCase();
+    console.log(search);
+    processSort(search);
+}
+function processSort(value){
+    for (let i of items) {
+        let item = i.classList[1].toLowerCase();
+        if (item.indexOf(value) == -1) { i.classList.add("hidden"); }
+        else { i.classList.remove("hidden"); }
+    }
 }
