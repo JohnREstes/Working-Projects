@@ -16,7 +16,6 @@ function btnClick(target){
 
 searchBar.onkeyup = () => {
     let search = searchBar.value.toLowerCase();
-    console.log(search);
     processSort(search);
 }
 function processSort(value){
