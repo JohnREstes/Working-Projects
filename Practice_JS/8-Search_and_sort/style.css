@@ -68,6 +68,9 @@ body{
     position: absolute;
     right: 5px;
 }
+.hidden{
+    display: none;
+}
 [data-number="one"] > .itemBkgrd {
     background-image: URL("./IMG/sweet1.png");
 }
