@@ -1,0 +1,27 @@
+
+body{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: antiquewhite;
+    font-size: larger;
+}
+.container{
+    width: 100vw;
+    height: 100vh;
+    background-color: grey;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+.calc{
+    width: auto;
+    height: auto;
+    background-color: black;
+    display: grid;
+    grid-column: 4;
+}
+.grid{
+    width: 50px;
+    height: 50px;
+}
