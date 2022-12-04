@@ -10,18 +10,35 @@ body{
     width: 100vw;
     height: 100vh;
     background-color: grey;
-    display: flex;
-    flex-direction: column;
     position: relative;
 }
 .calc{
+   justify-content: center;
     width: auto;
     height: auto;
     background-color: black;
     display: grid;
-    grid-column: 4;
+    grid-template-columns: 75px 75px 75px 75px;
+    background-color: #2196F3;
+    padding: 10px;
 }
 .grid{
-    width: 50px;
-    height: 50px;
+    background-color: hsl(0, 0%, 50%);
+    border: 1px solid black;
+    padding: 20px;
+    font-size: 30px;
+    text-align: center;
+}
+.total{
+    grid-column: 1/5;
+    background-color: black;
+}
+.zero{
+    grid-column: 1/3;
+}
+.orange{
+    background-color: orange;
+}
+.dark{
+    background-color: hsl(0, 0%, 25%);
 }
