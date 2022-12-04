@@ -6,7 +6,9 @@ const closeX = document.querySelector(".close");
 const itemBkgrd = document.querySelectorAll(".itemBkgrd");
 const modalImg = document.querySelector('.modalImg');
 const arrows = document.querySelectorAll('.arrow');
-let next, previous;
+let backgroundImg, index, modalArry = [];
+
+processSort('');
 
 buttons.forEach(button => {
     button.onclick = (e) => {
@@ -16,18 +18,22 @@ buttons.forEach(button => {
 items.forEach(item => {
     item.onclick = (e) => {
         modal.style.display = "block";
-        modalImg.style.backgroundImage = e.target.style.backgroundImage;
-        console.log(e.target.closest(".item").nextElementSibling.children[0].style.backgroundImage);
-        console.log(e.target.closest(".item").previousElementSibling.children[0].style.backgroundImage);
-        next = e.target.closest(".item").nextElementSibling.children[0].style.backgroundImage;
-        previous = e.target.closest(".item").previousElementSibling.children[0].style.backgroundImage;
-
+        backgroundImg = e.target.style.backgroundImage;
+        modalImg.style.backgroundImage = backgroundImg;
+        index = modalArry.indexOf(backgroundImg);
     }
 })
 arrows.forEach(arrow => {
     arrow.onclick = (e) => {
-        console.log(next);
-        modalImg.style.backgroundImage = next;
+        if (e.target.classList[1] === 'arrow-right'){
+            index++;
+            if (index === modalArry.length) index = 0;
+            modalImg.style.backgroundImage = modalArry[index];
+        } else {
+            index--;
+            if (index === -1) index = modalArry.length -1;
+            modalImg.style.backgroundImage = modalArry[index];
+        }
     }
 })
 function btnClick(target){
@@ -41,10 +47,16 @@ searchBar.onkeyup = () => {
     processSort(search);
 }
 function processSort(value){
+    modalArry = [];
     for (let i of items) {
         let item = i.classList[1].toLowerCase();
-        if (item.indexOf(value) == -1) { i.classList.add("hidden"); }
-        else { i.classList.remove("hidden"); }
+        if (item.indexOf(value) == -1) { 
+            i.classList.add("hidden");
+        }
+        else { 
+            i.classList.remove("hidden"); 
+            modalArry.push(i.children[0].style.backgroundImage);
+        }  
     }
 }
 closeX.onclick = () => {
