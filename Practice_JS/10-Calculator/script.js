@@ -13,11 +13,7 @@ grid.forEach(item => {
     }
 })
 function process(button) {
-    /*if(button.match(digit) == null ) return*/
-
     if(button.match(digit)){
-        console.log(button);
-        console.log(decimal);
         if (active){
             clear()
             active = false;
@@ -28,61 +24,58 @@ function process(button) {
     } else {
         decimal = false;
         trailingZero = 0;
-        active = false;
+        active = false; 
         problem.push(button)
         postition = problem.length;
-        problem.push(0);
+        problem.push(0); 
     }
-    if (problem[(problem.length - 2)]==="ac") {
-        console.log("ac");
-        clear();
-        grid[0].innerHTML = 0;
+    switch (button){
+        case "ac":
+            console.log("ac");
+            clear();
+            grid[0].innerHTML = 0;
+            break;
+        case "plusMinus":
+            problem[(problem.length - 1)] = (parseFloat(problem[(problem.length - 1)]) * -1);
+            grid[0].innerHTML = problem[(problem.length - 1)];
+            break;
+        case "percentage":
+            problem[(problem.length - 1)] = (parseFloat(problem[(problem.length - 1)]) * .01);
+            grid[0].innerHTML = problem[(problem.length - 1)];
+            break;
+        case "decimal":
+            problem[postition] += '.';
+            decimal = true;
+            grid[0].innerHTML = parseFloat(problem[postition]) + ".";
+            break;
+        case "equal":
+            let sol = 0;
+            switch (problem[1]){
+                case "plus": 
+                    sol = add();
+                    break;
+                case "minus":   
+                    sol = subtract();
+                    break;
+                case "times":   
+                    sol = multiply();
+                    break;
+                case "divides": 
+                    sol = divide();
+                    break;
+                default: 
+                    grid[0].innerHTML = "ERROR";
+            }
+            grid[0].innerHTML = sol;
+            clear();
+            active = true;
+            problem[0] = sol
+            console.log(problem);
+            break;
     }
-    if (problem[(problem.length - 2)]==="plusMinus") {
-        problem.pop();
-        problem.pop();
-        problem[(problem.length - 1)] = (parseFloat(problem[(problem.length - 1)]) * -1);
-        grid[0].innerHTML = problem[(problem.length - 1)];
-    }
-    if (problem[(problem.length - 2)]==="percentage") {
-        problem.pop();
-        problem.pop();
-        problem[(problem.length - 1)] = (parseFloat(problem[(problem.length - 1)]) * .01);
-        grid[0].innerHTML = problem[(problem.length - 1)];
-        console.log(problem);
-    }
-    if (problem[(problem.length - 2)]==="decimal") {
-        problem.pop();
-        problem.pop();
-        postition -= 2;
-        problem[postition] += '.';
-        decimal = true;
-        grid[0].innerHTML = parseFloat(problem[postition]) + ".";
-    }
-    if (problem[(problem.length - 2)]==="equal") {
-        let sol = 0;
-        switch (problem[1]){
-            case "plus": 
-                sol = add();
-                break;
-            case "minus":   
-                sol = subtract();
-                break;
-            case "times":   
-                sol = multiply();
-                break;
-            case "divides": 
-                sol = divide();
-                break;
-            default: 
-                grid[0].innerHTML = "ERROR";
-        }
-        grid[0].innerHTML = sol;
-        clear();
-        active = true;
-        problem[0] = sol
-        console.log(problem);
-    }
+    /*problem.push(button)
+    postition = problem.length;
+    problem.push(0);*/
     console.log(problem);
 }
 
@@ -108,4 +101,8 @@ function clear(){
     decimal = false;
     active = false;
     trailingZero = 0;
+}
+function addMath(){
+    problem.push(button)
+    postition = problem.length;
 }
