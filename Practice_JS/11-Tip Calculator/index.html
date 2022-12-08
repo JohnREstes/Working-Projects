@@ -12,22 +12,25 @@
     <div class="container">
         <div class="calc">
             <div class="header">
-                <h1>Tip Calculator</h1>
+                <h1>Individual Bill Calculator</h1>
             </div>
             <div class="mainBody">
-                <div class="answer"></div>
+                <div class="answerDiv">
+                    <h1 class="answer">$0.00</h1>
+                </div>
                 <label for="billAmt">How Much Was Your Bill?</label>
-                <input type="text" class="billAmt">
+                <input type="number" min="0.00" step="0.01" class="billAmt"/>
                 <label for="sharing">How Many People Sharing The Bill?</label>
-                <input type="text" class="sharing">
+                <input type="number" min="1" step="1"  class="sharing">
                 <label for="service">How Was Your Service?</label>
                 <select id="serviceRating" name="service">
-                    <option value="average">Average (15%)</option>
-                    <option value="good">Good (18%)</option>
-                    <option value="great">Great (22%)</option>
+                    <option value="blank">---</option>                   
+                    <option value=15>Average (15%)</option>
+                    <option value=18>Good (18%)</option>
+                    <option value=22>Great (22%)</option>
                   </select>
                 <div class="calcDiv">
-                    <input type="button" value="Calcute">
+                    <input type="button" value="Calculate" class="calculate">
                 </div>
             </div>
 
