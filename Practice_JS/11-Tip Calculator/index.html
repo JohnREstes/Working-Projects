@@ -21,8 +21,14 @@
                 <label for="sharing">How Many People Sharing The Bill?</label>
                 <input type="text" class="sharing">
                 <label for="service">How Was Your Service?</label>
-                <input type="text" class="service">
-                <input type="button" value="Calcute">
+                <select id="serviceRating" name="service">
+                    <option value="average">Average (15%)</option>
+                    <option value="good">Good (18%)</option>
+                    <option value="great">Great (22%)</option>
+                  </select>
+                <div class="calcDiv">
+                    <input type="button" value="Calcute">
+                </div>
             </div>
 
         </div>
