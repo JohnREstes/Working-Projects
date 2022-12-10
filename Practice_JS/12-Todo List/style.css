@@ -1,0 +1,61 @@
+body{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-size: 2em;
+}
+.container{
+    width: 100vw;
+    height: 100vh;
+    background-color: grey;
+    position: relative;
+}
+.header{
+    margin: 0;
+    text-align: center;
+    padding: 1em;
+}
+.inputs{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+.inputBox{
+    position: relative;
+}
+.inputItem{
+    border: none;
+    width: 400px;
+    height: 40px;
+    padding: 0 15px;
+    position: relative;
+
+}
+.inputButton{
+    position: absolute;
+    top: 5px;
+    bottom: 0;
+    border: none;
+    padding: 0 15px;
+
+}
+.todoItems{
+    width: 80%;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.right{
+    position: absolute;
+    right: 0;
+}
+.green{
+    color: green;
+}
+.red{
+    color: red;
+}
+.blue{
+    color: blue;
+}
