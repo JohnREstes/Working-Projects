@@ -38,6 +38,9 @@ input, label, select{
 label{
     margin-bottom: -3em;
 }
+.billAmt, .sharing{
+    width: 97.5%;
+}
 select{
     text-align: center;
     font-size: 1em;
