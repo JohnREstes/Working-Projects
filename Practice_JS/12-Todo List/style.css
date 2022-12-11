@@ -26,7 +26,7 @@ body{
 }
 .inputItem{
     border: none;
-    width: 400px;
+    width: 800px;
     height: 40px;
     padding: 0 15px;
     position: relative;
@@ -38,7 +38,6 @@ body{
     bottom: 0;
     border: none;
     padding: 0 15px;
-
 }
 .todoItems{
     width: 80%;
