@@ -7,7 +7,7 @@ body{
 .container{
     width: 100vw;
     height: 100vh;
-    background-color: grey;
+    background-color: lightgray;
     position: relative;
 }
 .header{
@@ -30,11 +30,11 @@ body{
     height: 40px;
     padding: 0 15px;
     position: relative;
-
+    font-size: 1em;
 }
 .inputButton{
     position: absolute;
-    top: 5px;
+    top: 0px;
     bottom: 0;
     border: none;
     padding: 0 15px;
@@ -57,4 +57,17 @@ body{
 }
 .blue{
     color: blue;
+}
+.material-symbols-rounded{
+    cursor: pointer;
+}
+.inactive{
+    color: darkgray;
+    cursor: none;
+}
+.inputActive{
+    display:inline-block;
+}
+.inputInactive{
+    display: none;
 }

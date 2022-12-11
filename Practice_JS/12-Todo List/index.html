@@ -22,10 +22,11 @@
         <section class="todoItems">
             <div class="item index1">
                 <p class="indvidualItem">What needs Done
+                    <input type="text" class="inputInactive inputItem" placeholder="What needs Done">
                     <span class="right">
-                        <span class="material-symbols-rounded green">offline_pin</span>
-                        <span class="material-symbols-rounded blue">edit_note</span>
-                        <span class="material-symbols-rounded red" >cancel</span>
+                        <span onclick=buttonOp(this) data-name="approve" class="material-symbols-rounded inactive" id="1234">offline_pin</span>
+                        <span onclick=buttonOp(this) data-name="edit" class="material-symbols-rounded blue" id="2345">edit_note</span>
+                        <span onclick=buttonOp(this) data-name="delete" class="material-symbols-rounded red" id="3456">cancel</span>
                     </span>
                 </p>
             </div>
