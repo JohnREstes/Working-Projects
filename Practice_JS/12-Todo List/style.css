@@ -44,10 +44,17 @@ body{
     position: relative;
     left: 50%;
     transform: translateX(-50%);
+    margin-top: 25px;
+}
+.itemText{
+    display: inline-flex;
+    margin: 10px 0;
 }
 .right{
     position: absolute;
     right: 0;
+    display: inline-flex;
+    margin: 10px 0;
 }
 .green{
     color: green;
