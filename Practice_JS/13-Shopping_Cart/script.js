@@ -2,13 +2,19 @@ const buttons = document.querySelectorAll('.btn');
 const items = document.querySelectorAll('.item');
 const searchBar = document.querySelector('.searchBar');
 const modal = document.querySelector("#myModal");
-const closeX = document.querySelector(".close");
+const closeX = document.querySelectorAll(".close");
 const itemBkgrd = document.querySelectorAll(".itemBkgrd");
 const modalImg = document.querySelector('.modalImg');
 const arrows = document.querySelectorAll('.arrow');
+const headerCart = document.querySelector('.headerCart')
+const cartModal = document.querySelector('.cartModal');
 let backgroundImg, index, modalArry = [];
 
 processSort('');
+
+headerCart.onclick = (e)=>{
+    cartModal.style.display = "block";;
+}
 
 buttons.forEach(button => {
     button.onclick = (e) => {
@@ -62,11 +68,16 @@ function processSort(value){
         }  
     }
 }
-closeX.onclick = () => {
-    modal.style.display = "none";
-}
+closeX.forEach(close => {
+    close.onclick = () => {
+        modal.style.display = "none";
+        cartModal.style.display = "none";
+    }
+})
+
 window.onclick = (e) => {
     if (e.target == modal) {modal.style.display = "none";}
+    if (e.target == cartModal) {cartModal.style.display = "none";}
 }
 function addCart(item){
     console.log(item.target.parentElement.dataset.number)
