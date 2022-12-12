@@ -8,6 +8,7 @@ const modalImg = document.querySelector('.modalImg');
 const arrows = document.querySelectorAll('.arrow');
 const headerCart = document.querySelector('.headerCart')
 const cartModal = document.querySelector('.cartModal');
+const trash = document.querySelectorAll(".trash");
 let backgroundImg, index, modalArry = [];
 
 processSort('');
@@ -19,6 +20,11 @@ headerCart.onclick = (e)=>{
 buttons.forEach(button => {
     button.onclick = (e) => {
         btnClick(e.target.classList[1]);
+    }
+})
+trash.forEach(can => {
+    can.onclick = (e) => {
+        alert("deleted");
     }
 })
 items.forEach(item => {
