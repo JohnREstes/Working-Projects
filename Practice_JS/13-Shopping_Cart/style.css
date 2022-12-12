@@ -1,0 +1,150 @@
+
+body{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: antiquewhite;
+    font-size: larger;
+}
+.container{
+    width: 100vw;
+    height: 100vh;
+    background-color: grey;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+.header{
+    width: 100%;
+    text-align: center;
+}
+.searchBtns{
+    width: 100%;
+    text-align: center;
+    cursor: pointer;
+}
+.search{
+    width: 100%;
+    text-align: center;
+    padding: 1em;
+}
+.itemGrid{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: space-between;
+    overflow: scroll;
+    background-color: DodgerBlue;
+}
+.item{
+    width: 25%;
+    height: 250px;
+    margin: 20px;
+    text-align: center;
+    border: 1px solid black;
+    position: relative;
+    overflow: hidden;
+}
+.itemBkgrd {
+    width: 100%;
+    height: 80%;
+    background-color: aqua;
+    position: absolute;
+    background-size: cover;
+    background-position: center;
+    transition: transform .5s;
+}
+.cart{
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    background-size: cover;
+    background-position: center;
+    background-color: yellow;
+    border-radius: .5em;
+    padding: 10px;
+    bottom: 20%;
+    right: 0;
+    transform: translate(45px, 45px);
+    overflow: hidden;
+    transition: transform .5s;
+}
+.cart:hover{
+    transform: translate(0px, 0px);
+}
+.itemBkgrd:hover {
+    transform: scale(1.25);
+}
+.itemNamePrice{
+    width: 100%;
+    height: 20%;
+    background-color: blueviolet;
+    position: absolute;
+    bottom: 0;
+    border-top: 1px solid black;
+}
+.itemName{
+    position: absolute;
+    left: 5px;
+}
+.itemPrice{
+    position: absolute;
+    right: 5px;
+}
+.hidden{
+    display: none;
+}
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    padding-top: 100px; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgba(0,0,0,0.8); /* Black w/ opacity */
+}
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    height: 80%;
+}
+.modalImg{
+    background-image: URL("./IMG/sweet1.png");
+    background-size: cover;
+    background-position: center;
+}
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+.arrow {
+    width: 0; 
+    height: 0; 
+    border-top: 2em solid transparent;
+    border-bottom: 2em solid transparent; 
+    position: absolute;
+    top: 45%;
+}
+.arrow-left { 
+    border-right: 2em solid blue; 
+    left: 5%;
+}
+.arrow-right {
+    border-left:2em solid blue; 
+    right: 5%;
+}
