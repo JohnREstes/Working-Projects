@@ -1,3 +1,4 @@
+const root = document.querySelector(':root')
 const buttons = document.querySelectorAll('.btn');
 const items = document.querySelectorAll('.item');
 const itemName = document.querySelectorAll('.itemName');
@@ -10,8 +11,9 @@ const arrows = document.querySelectorAll('.arrow');
 const headerCart = document.querySelector('.headerCart')
 const cartModal = document.querySelector('.cartModal');
 const cartModalContent = document.querySelector('.cart-modal-content');
-const trash = document.querySelectorAll(".trash");
-let backgroundImg, index, modalArry = [];
+const cartList = document.querySelector('.cartList');
+//const trash = document.querySelectorAll(".trash");
+let backgroundImg, index, cartCount = 0, modalArry = [], shoppingCart = [];
 
 processSort('');
 
@@ -25,11 +27,14 @@ buttons.forEach(button => {
         btnClick(e.target.classList[1]);
     }
 })
-trash.forEach(can => {
-    can.onclick = (e) => {
-        alert("deleted");
+function trashCan(){
+    let trash = document.querySelectorAll(".trash");
+    trash[(trash.length - 1)].onclick = (e) => {
+        console.log(e.target.parentElement.parentElement);
+        e.target.parentElement.parentElement.remove();
     }
-})
+}
+
 items.forEach(item => {
     item.onclick = (e) => {
         if(e.target.classList.value === "cart") addCart(e);
@@ -93,5 +98,23 @@ window.onclick = (e) => {
     }
 }
 function addCart(item){
-    console.log(item.target.parentElement.dataset.number)
+    cartCount += 1
+    root.style.setProperty('--cart-content', '"'+cartCount+'"');
+    shoppingCart.push(item.srcElement.nextElementSibling.children);
+    let nextItem = item.srcElement.nextElementSibling.children;
+    build(nextItem);
+}
+function build(item){
+    let cartLi = document.createElement("li");
+    cartLi.className = 'cartItem';
+    var innerCartString = `            
+            <span class="cartItemName">${item[0].innerHTML}</span>
+            <span class="cartItemCost">${item[1].innerHTML}
+            <img src="./IMG/trash.png" alt="Delete Item" class="trash">
+            </span>
+    `
+    cartList.appendChild(cartLi);
+    cartList.lastChild.innerHTML = innerCartString;
+    trashCan();
+    return 
 }
