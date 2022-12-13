@@ -12,8 +12,9 @@ const headerCart = document.querySelector('.headerCart')
 const cartModal = document.querySelector('.cartModal');
 const cartModalContent = document.querySelector('.cart-modal-content');
 const cartList = document.querySelector('.cartList');
+const cartTotal = document.querySelector('#cartTotal');
 //const trash = document.querySelectorAll(".trash");
-let backgroundImg, index, cartCount = 0, modalArry = [], shoppingCart = [];
+let backgroundImg, index, cartCount = 0, cartSum = 0, modalArry = [], shoppingCart = [];
 
 processSort('');
 
@@ -30,8 +31,11 @@ buttons.forEach(button => {
 function trashCan(){
     let trash = document.querySelectorAll(".trash");
     trash[(trash.length - 1)].onclick = (e) => {
-        console.log(e.target.parentElement.parentElement);
         e.target.parentElement.parentElement.remove();
+        cartCount -= 1
+        root.style.setProperty('--cart-content', '"' + cartCount + '"');
+        cartSum = cartSum - digitsOnly(e.target.previousSibling.data);
+        cartTotal.innerHTML = `$${cartSum.toFixed(2)}`;
     }
 }
 
@@ -100,7 +104,8 @@ window.onclick = (e) => {
 function addCart(item){
     cartCount += 1
     root.style.setProperty('--cart-content', '"'+cartCount+'"');
-    shoppingCart.push(item.srcElement.nextElementSibling.children);
+    let number = digitsOnly(item.srcElement.nextElementSibling.children[1].innerHTML);
+    shoppingCart.push(Number(number));
     let nextItem = item.srcElement.nextElementSibling.children;
     build(nextItem);
 }
@@ -115,6 +120,13 @@ function build(item){
     `
     cartList.appendChild(cartLi);
     cartList.lastChild.innerHTML = innerCartString;
+    cartSum = shoppingCart.reduce((total, number)=>{
+        return total + number;
+    },0);
+    cartTotal.innerHTML = `$${cartSum.toFixed(2)}`;
     trashCan();
     return 
+}
+function digitsOnly(value){
+    return value.replace( /^\D+/g, '');   
 }

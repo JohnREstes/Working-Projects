@@ -91,12 +91,13 @@ body{
 .item{
     width: 25%;
     height: 250px;
-    margin: 20px;
+    margin: 30px;
     text-align: center;
     border: 1px solid black;
     position: relative;
     overflow: hidden;
     cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 }
 .itemBkgrd {
     width: 100%;
@@ -122,6 +123,7 @@ body{
     overflow: hidden;
     transition: transform .5s;
     cursor: pointer;
+
 }
 .cart:hover{
     transform: translate(0px, 0px);
@@ -206,15 +208,13 @@ body{
     position: absolute;
     right: 0;
 }
+#cartTotal{
+    right: .75em;
+}
 .trash{
     height: 15px;
     width: auto;
     cursor: pointer;
-}
-.spacing{
-    width: 15px;
-    height: 15px;
-    color: dodgerblue;
 }
 .cartItemTotal{
     border-top: black 2px solid;
@@ -252,4 +252,29 @@ body{
 .arrow-right {
     border-left:2em solid blueviolet; 
     right: 5%;
+}
+.orderDiv{
+    position: absolute;
+    width: 100%;
+    height: 60px;
+    bottom: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: translateX(-20px);
+}
+.orderBtn{
+    position: absolute;
+    width: 200px;
+    height: 40px;
+    text-align: center;
+    font-size: 2em;
+    background-color: hsl(210, 100%, 46%);
+    padding: 5px;
+    border-radius: .25em;
+    cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+.orderBtn:hover{
+    background-color: hsl(210, 100%, 36%); 
 }
