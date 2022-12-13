@@ -1,5 +1,6 @@
 const buttons = document.querySelectorAll('.btn');
 const items = document.querySelectorAll('.item');
+const itemName = document.querySelectorAll('.itemName');
 const searchBar = document.querySelector('.searchBar');
 const modal = document.querySelector("#myModal");
 const closeX = document.querySelectorAll(".close");
@@ -8,13 +9,15 @@ const modalImg = document.querySelector('.modalImg');
 const arrows = document.querySelectorAll('.arrow');
 const headerCart = document.querySelector('.headerCart')
 const cartModal = document.querySelector('.cartModal');
+const cartModalContent = document.querySelector('.cart-modal-content');
 const trash = document.querySelectorAll(".trash");
 let backgroundImg, index, modalArry = [];
 
 processSort('');
 
 headerCart.onclick = (e)=>{
-    cartModal.style.display = "block";;
+    cartModal.style.display = "block";
+    cartModalContent.classList.add("slide");
 }
 
 buttons.forEach(button => {
@@ -78,12 +81,16 @@ closeX.forEach(close => {
     close.onclick = () => {
         modal.style.display = "none";
         cartModal.style.display = "none";
+        cartModalContent.classList.remove("slide");
     }
 })
 
 window.onclick = (e) => {
     if (e.target == modal) {modal.style.display = "none";}
-    if (e.target == cartModal) {cartModal.style.display = "none";}
+    if (e.target == cartModal) {
+        cartModal.style.display = "none";
+        cartModalContent.classList.remove("slide");
+    }
 }
 function addCart(item){
     console.log(item.target.parentElement.dataset.number)
