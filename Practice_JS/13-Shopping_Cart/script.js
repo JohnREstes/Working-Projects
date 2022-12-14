@@ -13,7 +13,6 @@ const cartModal = document.querySelector('.cartModal');
 const cartModalContent = document.querySelector('.cart-modal-content');
 const cartList = document.querySelector('.cartList');
 const cartTotal = document.querySelector('#cartTotal');
-//const trash = document.querySelectorAll(".trash");
 let backgroundImg, index, cartCount = 0, cartSum = 0, modalArry = [], shoppingCart = [];
 
 processSort('');
@@ -76,8 +75,8 @@ searchBar.onkeyup = () => {
 function processSort(value){
     modalArry = [];
     for (let i of items) {
-        let item = i.classList[1].toLowerCase();
-        if (item.indexOf(value) == -1) { 
+        let itemName = i.children[2].children[0].innerHTML.toLowerCase();
+        if (itemName.indexOf(value) == -1) { 
             i.classList.add("hidden");
         }
         else { 
