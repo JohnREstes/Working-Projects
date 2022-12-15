@@ -19,11 +19,9 @@ body {
     background: var(--bg-color);
 }
 .nav{
-
     width: 100%;
     text-align: center;
     left: 0;
-    box-shadow: 0 5px 5px 2px rgba(0,0,0, .2);
 }
 .nav-bottom{
     position: absolute;
@@ -36,18 +34,24 @@ body {
 .nav ul li{
     list-style: none;
     display: inline-block;
-    padding: 10px;
+    padding: 5px;
 }
 .nav ul li .nav-link{
     text-decoration: none;
     color: #ccc;
     font-size: var(--font-size);
-    padding: 30px;
+    padding: 5px;
+    border-radius: .25em;
 }
 .nav ul li .nav-link:hover{
     color: #eee;
-    background: black;
+    background-color:  hsl(0, 0%, 18%);
 }
+.sticky {
+    position: fixed;
+    top: 0;
+    width: 100%
+  }
 .panel {
     width: 100vw;
     height: 100vh;
@@ -78,10 +82,10 @@ body {
     z-index: -10;
 }
 .third {
-    background: hsl(120, 100%, 25%);
+    background: grey;
 }
 .fourth {
-    background: hsl(0, 100%, 16%);
+    background: lightgray;
 }
 
 .header {

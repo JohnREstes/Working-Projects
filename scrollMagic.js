@@ -1,19 +1,25 @@
-const body = document.querySelector('.container');
-const nav = document.querySelector('.nav');
-let previousScrollPos = window.pageYOffset
+const body = document.querySelector('body');
+const container = document.querySelector('.container');
+const navbar = document.getElementById("navbar");
+const sticky = navbar.offsetTop;
 
-var offset = body.offsetHeight - nav.offsetHeight;
-console.log(body.offsetHeight);
-console.log(nav.offsetHeight);
-console.log(window.scrollY);
+console.log(sticky);
 
-window.onscroll = ()=>{
-    console.log(window.scrollY);
-    if(window.scrollY> offset){
-        nav.classList.remove('nav-bottom');
-        nav.classList.add('nav-top');
-    } else {
-        nav.classList.remove('nav-top');
-        nav.classList.add('nav-bottom');
-    }
+/*container.onscroll = (e)=>{
+    myFunction();
 }
+
+function myFunction() {
+    console.log("run");
+    console.log(window.pageYOffset);
+  if (window.pageYOffset >= sticky) {
+  navbar.classList.add("sticky")
+  } else {
+  navbar.classList.remove("sticky");
+  }
+}*/
+
+container.addEventListener("scroll", ()=>{
+    console.log(window.pageXOffset);
+    console.log(window.pageYOffset);   
+});
