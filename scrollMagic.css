@@ -4,6 +4,7 @@
     --font-size: clamp(1em, 2vw + .4em, 6em);
     --typeWriterSpeed: 2s;
     --numberOfSteps: 29;
+    --first-height: 100vh;
 }
 
 body {
@@ -26,10 +27,14 @@ body {
 .nav-bottom{
     position: absolute;
     bottom: 0;
+    z-index: 10;
 }
 .nav-top{
     position: fixed;
     top:0;
+}
+.nav ul{
+    margin: 0;
 }
 .nav ul li{
     list-style: none;
@@ -47,11 +52,6 @@ body {
     color: #eee;
     background-color:  hsl(0, 0%, 18%);
 }
-.sticky {
-    position: fixed;
-    top: 0;
-    width: 100%
-  }
 .panel {
     width: 100vw;
     height: 100vh;
@@ -82,9 +82,11 @@ body {
     z-index: -10;
 }
 .third {
+    position: relative;
     background: grey;
 }
 .fourth {
+    position: relative;
     background: lightgray;
 }
 
@@ -169,7 +171,6 @@ body {
         opacity: 0;
     }
 }
-
 .background{
     
     position: absolute;
@@ -178,4 +179,9 @@ body {
     object-fit: scale-down;
     z-index: -10;
     transform: translateZ(-5px) scale(1.5);
+}
+.sticky {
+    position: sticky;
+    top: 0;
+    background-color: grey;
 }
