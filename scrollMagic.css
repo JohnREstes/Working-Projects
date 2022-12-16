@@ -25,8 +25,9 @@ body {
     left: 0;
 }
 .nav-bottom{
-    position: absolute;
-    bottom: 0;
+    position: relative;
+    height: 59px;
+    background-color: var(--bg-color);
     z-index: 10;
 }
 .nav-top{
@@ -72,6 +73,7 @@ body {
 .first {
     position: relative;
     background: var(--bg-color);
+    height: calc(100vh - 59px);
 }
 .second {
     position: relative;
@@ -183,5 +185,4 @@ body {
 .sticky {
     position: sticky;
     top: 0;
-    background-color: grey;
 }

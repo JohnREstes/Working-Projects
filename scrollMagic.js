@@ -17,7 +17,7 @@ const observer = new IntersectionObserver(entries => {
     console.log(entries);
     navbar.classList.toggle("sticky", !(entries[0].isIntersecting));
 },{
-    rootMargin: (stickyNav - window.innerHeight + "px")
+    rootMargin: (stickyNav + "px")
 });
 
 observer.observe(first)
