@@ -1,10 +1,10 @@
 :root {
     --bg-color: hsl(0, 0%, 20%);
     --font-color: hsl(0, 0%, 96%);
-    --font-size: clamp(1em, 2vw + .4em, 6em);
+    --font-size: clamp(.95em, 2vw + .4em, 6em);
     --typeWriterSpeed: 2s;
     --numberOfSteps: 29;
-    --first-height: 100vh;
+    ---height: 0px;
 }
 
 body {
@@ -26,7 +26,8 @@ body {
 }
 .nav-bottom{
     position: relative;
-    height: 59px;
+    padding: 5px;
+    bottom: 0;
     background-color: var(--bg-color);
     z-index: 10;
 }
@@ -73,7 +74,7 @@ body {
 .first {
     position: relative;
     background: var(--bg-color);
-    height: calc(100vh - 59px);
+    height: calc(100vh - 65px);
 }
 .second {
     position: relative;
