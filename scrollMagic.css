@@ -87,7 +87,8 @@ body {
 .third {
     position: relative;
     background: grey;
-    height: auto;
+    overflow: visible;
+    height: max-content;
 }
 .projectGrid{
     width: 100vw;
