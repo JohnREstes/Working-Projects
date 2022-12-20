@@ -4,17 +4,14 @@ const userDetailsElement = document.querySelector('#user-details');
 const authBarElement = document.querySelector("#authentication-bar");
 
 // Elements for GPIO states
-const stateElement1 = document.getElementById("state1");
-const stateElement2 = document.getElementById("state2");
-const stateElement3 = document.getElementById("state3");
+const stateElement1 = document.querySelector("#state1");
+const stateElement2 = document.querySelector("#state2");
+const stateElement3 = document.querySelector("#state3");
 
 // Button Elements
 const btn1On = document.getElementById('btn1On');
-const btn1Off = document.getElementById('btn1Off');
 const btn2On = document.getElementById('btn2On');
-const btn2Off = document.getElementById('btn2Off');
 const btn3On = document.getElementById('btn3On');
-const btn3Off = document.getElementById('btn3Off');
 
 // Database path for GPIO states
 var dbPathOutput1 = 'board1/outputs/digital/12';
@@ -37,13 +34,23 @@ const setupUI = (user) => {
     userDetailsElement.innerHTML = user.email;
 
     //Update states depending on the database value
+    let btn1 = false;
+    let btn2 = false;
+    let btn3 = false;
+
+    let btn1State = true;
+    let btn2State = true;
+    let btn3State = true;
+
     dbRefOutput1.on('value', snap => {
         if(snap.val()==1) {
             stateElement1.innerText="ON";
         }
         else{
             stateElement1.innerText="OFF";
+            if(btn1State)btn1 = true;
         }
+        btn1State = false;
     });
     dbRefOutput2.on('value', snap => {
         if(snap.val()==1) {
@@ -51,7 +58,9 @@ const setupUI = (user) => {
         }
         else{
             stateElement2.innerText="OFF";
+            if(btn2State)btn2 = true;
         }
+        btn2State = false;
     });
     dbRefOutput3.on('value', snap => {
         if(snap.val()==1) {
@@ -59,31 +68,25 @@ const setupUI = (user) => {
         }
         else{
             stateElement3.innerText="OFF";
+            if(btn3State)btn3 = true;
         }
+        btn3State = false;
     });
 
     // Update database uppon button click
+
     btn1On.onclick = () =>{
-        dbRefOutput1.set(1);
+        btn1 ? dbRefOutput1.set(1) : dbRefOutput1.set(0);
+        btn1 = !btn1;
     }
-    btn1Off.onclick = () =>{
-        dbRefOutput1.set(0);
-    }
-
     btn2On.onclick = () =>{
-        dbRefOutput2.set(1);
+        btn2 ? dbRefOutput2.set(1) : dbRefOutput2.set(0);
+        btn2 = !btn2;
     }
-    btn2Off.onclick = () =>{
-        dbRefOutput2.set(0);
-    }
-
     btn3On.onclick = () =>{
-        dbRefOutput3.set(1);
+        btn3 ? dbRefOutput3.set(1) : dbRefOutput3.set(0);
+        btn3 = !btn3;
     }
-    btn3Off.onclick = () =>{
-        dbRefOutput3.set(0);
-    }
-
   // if user is logged out
   } else{
     // toggle UI elements

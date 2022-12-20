@@ -43,7 +43,7 @@ const firebaseConfig = {
 <body>
   <!--TOP BAR-->
   <div class="topnav">
-    <h1>ESP GPIO Control <i class="fas fa-lightbulb"></i></h1>
+    <h1>Yolanda Generator<i class="fas fa-lightbulb"></i></h1>
   </div>
 
   <!--AUTHENTICATION BAR (USER DETAILS/LOGOUT BUTTON)-->
@@ -75,30 +75,24 @@ const firebaseConfig = {
       <div class="card">
         <p class="card-title"><i class="fas fa-lightbulb"></i> GPIO 12</p>
         <p>
-          <button class="button-on" id="btn1On">ON</button>
-          <button class="button-off" id="btn1Off">OFF</button>
+          <button class="button-on" id="btn1On"><span id="state1"></span></button>
         </p>
-        <p class="state">State:<span id="state1"></span></p>
       </div>
 
       <!--CARD FOR GPIO 13-->
       <div class="card">
         <p class="card-title"><i class="fas fa-lightbulb"></i> GPIO 13</p>
         <p>
-          <button class="button-on" id="btn2On">ON</button>
-          <button class="button-off" id="btn2Off">OFF</button>
+          <button class="button-on" id="btn2On"><span id="state2"></span></button>
         </p>
-        <p class="state">State:<span id="state2"></span></p>
       </div>
 
       <!--CARD FOR GPIO 14-->
       <div class="card">
         <p class="card-title"><i class="fas fa-lightbulb"></i> GPIO 14</p>
         <p>
-          <button class="button-on" id="btn3On">ON</button>
-          <button class="button-off" id="btn3Off">OFF</button>
+          <button class="button-on" id="btn3On"><span id="state3"></span></button>
         </p>
-        <p class="state">State:<span id="state3"></span></p>
       </div>
     </div>
   </div>
