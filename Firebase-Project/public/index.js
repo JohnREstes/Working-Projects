@@ -17,11 +17,15 @@ const btn3On = document.getElementById('btn3On');
 var dbPathOutput1 = 'board1/outputs/digital/12';
 var dbPathOutput2 = 'board1/outputs/digital/13';
 var dbPathOutput3 = 'board1/outputs/digital/14';
+var dbPathOutput4 = 'board1/outputs/analog/Voltage';
+var dbPathOutput5 = 'board1/outputs/analog/Amperage';
 
 // Database references
 var dbRefOutput1 = firebase.database().ref().child(dbPathOutput1);
 var dbRefOutput2 = firebase.database().ref().child(dbPathOutput2);
 var dbRefOutput3 = firebase.database().ref().child(dbPathOutput3);
+var dbRefOutput4 = firebase.database().ref().child(dbPathOutput4);
+var dbRefOutput5 = firebase.database().ref().child(dbPathOutput5);
 
 // MANAGE LOGIN/LOGOUT UI
 const setupUI = (user) => {
@@ -71,6 +75,12 @@ const setupUI = (user) => {
             if(btn3State)btn3 = true;
         }
         btn3State = false;
+    });
+    dbRefOutput4.on('value', snap => {
+        console.log(snap.val())
+    });
+    dbRefOutput5.on('value', snap => {
+        console.log(snap.val())
     });
 
     // Update database uppon button click
