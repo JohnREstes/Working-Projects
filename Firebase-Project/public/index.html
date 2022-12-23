@@ -71,9 +71,18 @@ const firebaseConfig = {
   <!--CONTENT (SENSOR READINGS)-->
   <div class="content-sign-in" id="content-sign-in" style="display: none;">
     <div class="card-grid">
+
+      <!--CARD FOR GPIO 14-->
+      <div class="card">
+        <p class="card-title"><i class="fas fa-lightbulb"></i> D5 </p>
+        <p>
+          <button class="button-on" id="btn3On"><span id="state3"></span></button>
+        </p>
+      </div>
+
       <!--CARD FOR GPIO 12-->
       <div class="card">
-        <p class="card-title"><i class="fas fa-lightbulb"></i> GPIO 12</p>
+        <p class="card-title"><i class="fas fa-lightbulb"></i> D6 </p>
         <p>
           <button class="button-on" id="btn1On"><span id="state1"></span></button>
         </p>
@@ -81,18 +90,28 @@ const firebaseConfig = {
 
       <!--CARD FOR GPIO 13-->
       <div class="card">
-        <p class="card-title"><i class="fas fa-lightbulb"></i> GPIO 13</p>
+        <p class="card-title"><i class="fas fa-lightbulb"></i> D7 </p>
         <p>
           <button class="button-on" id="btn2On"><span id="state2"></span></button>
         </p>
       </div>
 
-      <!--CARD FOR GPIO 14-->
+      <!--CARD FOR Voltage-->
       <div class="card">
-        <p class="card-title"><i class="fas fa-lightbulb"></i> GPIO 14</p>
-        <p>
-          <button class="button-on" id="btn3On"><span id="state3"></span></button>
-        </p>
+        <p class="card-title"></i> Generator Voltage </p>  
+        <p class="card-title" id="voltage"></i> 0 volts </p>
+      </div>
+
+      <!--CARD FOR Amperage-->
+      <div class="card">
+        <p class="card-title"></i> Generator Amperage </p>  
+        <p class="card-title" id="amperage"></i> 0 amps </p>
+      </div>
+
+      <!--CARD FOR Generator State-->
+      <div class="card">
+        <p class="card-title"></i> Generator Status </p>        
+        <p class="card-title" id="genState"></i> Stopped </p>
       </div>
     </div>
   </div>
