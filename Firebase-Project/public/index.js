@@ -114,6 +114,7 @@ setTimeout(() => {
 function updateInfoCards(){
     dbRefOutput4.on('value', snap => {
         voltage.innerHTML = (snap.val()).toFixed(2) + " volts";
+        (snap.val() > 1) ? dbRefOutput6.set(true) : dbRefOutput6.set(false);
     });
     dbRefOutput5.on('value', snap => {
         amperage.innerHTML = (snap.val()).toFixed(2) + " amps";
