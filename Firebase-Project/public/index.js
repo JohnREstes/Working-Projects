@@ -7,11 +7,13 @@ const authBarElement = document.querySelector("#authentication-bar");
 const stateElement1 = document.querySelector("#state1");
 const stateElement2 = document.querySelector("#state2");
 const stateElement3 = document.querySelector("#state3");
+const stateGen = document.querySelector("#stateGen");
 
 // Button Elements
-const btn1On = document.getElementById('btn1On');
-const btn2On = document.getElementById('btn2On');
-const btn3On = document.getElementById('btn3On');
+const btnD6 = document.getElementById('btnD6');
+const btnD7 = document.getElementById('btnD7');
+const btnD5 = document.getElementById('btnD5');
+const btnGenStart = document.getElementById('btnGenStart');
 
 // Elements Voltage, Amperage, and Generator State
 const voltage = document.querySelector('#voltage');
@@ -86,15 +88,15 @@ const setupUI = (user) => {
 
     // Update database uppon button click
 
-    btn1On.onclick = () =>{
+    btnD6.onclick = () =>{
         btn1 ? dbRefOutput1.set(1) : dbRefOutput1.set(0);
         btn1 = !btn1;
     }
-    btn2On.onclick = () =>{
+    btnD7.onclick = () =>{
         btn2 ? dbRefOutput2.set(1) : dbRefOutput2.set(0);
         btn2 = !btn2;
     }
-    btn3On.onclick = () =>{
+    btnD5.onclick = () =>{
         btn3 ? dbRefOutput3.set(1) : dbRefOutput3.set(0);
         btn3 = !btn3;
     }
@@ -123,6 +125,10 @@ function updateInfoCards(){
         snap.val() ? genState.innerHTML = "Running" : genState.innerHTML = "Stopped";
 
     });
-
+}
+function generatorStart(){
+    var counter = 0;
+    var averageVoltage = 0;
+    var isGeneratorRunning = false;
 
 }

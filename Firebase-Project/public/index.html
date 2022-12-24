@@ -72,27 +72,35 @@ const firebaseConfig = {
   <div class="content-sign-in" id="content-sign-in" style="display: none;">
     <div class="card-grid">
 
-      <!--CARD FOR GPIO 14-->
+      <!--CARD FOR Start Bttin-->
       <div class="card">
-        <p class="card-title"><i class="fas fa-lightbulb"></i> D5 </p>
+        <p class="card-title"><i class="fas fa-lightbulb"></i> Start Generator</p>
         <p>
-          <button class="button-on" id="btn3On"><span id="state3"></span></button>
+          <button class="button-on" id="btnGenStart"><span id="stateGen"></span></button>
         </p>
       </div>
 
-      <!--CARD FOR GPIO 12-->
+      <!--CARD FOR GPIO 14 D5 Prime-->
       <div class="card">
-        <p class="card-title"><i class="fas fa-lightbulb"></i> D6 </p>
+        <p class="card-title"><i class="fas fa-lightbulb"></i> D5 - Prime </p>
         <p>
-          <button class="button-on" id="btn1On"><span id="state1"></span></button>
+          <button class="button-on" id="btnD5"><span id="state3"></span></button>
         </p>
       </div>
 
-      <!--CARD FOR GPIO 13-->
+      <!--CARD FOR GPIO 12 D6 Propane-->
       <div class="card">
-        <p class="card-title"><i class="fas fa-lightbulb"></i> D7 </p>
+        <p class="card-title"><i class="fas fa-lightbulb"></i> D6 - Propane </p>
         <p>
-          <button class="button-on" id="btn2On"><span id="state2"></span></button>
+          <button class="button-on" id="btnD6"><span id="state1"></span></button>
+        </p>
+      </div>
+
+      <!--CARD FOR GPIO 13 D7-->
+      <div class="card">
+        <p class="card-title"><i class="fas fa-lightbulb"></i> D7 - Off </p>
+        <p>
+          <button class="button-on" id="btnD7"><span id="state2"></span></button>
         </p>
       </div>
 
