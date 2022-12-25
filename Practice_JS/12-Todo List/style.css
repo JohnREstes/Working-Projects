@@ -4,6 +4,9 @@ body{
     box-sizing: border-box;
     font-size: 2em;
 }
+.hidden{
+    display: none;
+}
 .container{
     width: 100vw;
     height: 100vh;

@@ -74,3 +74,6 @@ function build(text){
     todoItems.lastChild.innerHTML = todoListString
     return 
 }
+if(document.readyState === 'complete') {
+    document.querySelector(body).style.classList.remove("hidden");
+}
