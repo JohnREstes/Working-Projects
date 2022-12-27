@@ -1,0 +1,80 @@
+body{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-size: 2em;
+}
+.container{
+    width: 100vw;
+    height: 100vh;
+    background-color: lightgray;
+    position: relative;
+}
+.header{
+    margin: 0;
+    text-align: center;
+    padding: 1em;
+}
+.inputs{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+.inputBox{
+    position: relative;
+}
+.inputItem{
+    border: none;
+    width: 800px;
+    height: 40px;
+    padding: 0 15px;
+    position: relative;
+    font-size: 1em;
+}
+.inputButton{
+    position: absolute;
+    top: 0px;
+    bottom: 0;
+    border: none;
+    padding: 0 15px;
+}
+.todoItems{
+    width: 80%;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 25px;
+}
+.itemText{
+    display: inline-flex;
+    margin: 10px 0;
+}
+.right{
+    position: absolute;
+    right: 0;
+    display: inline-flex;
+    margin: 10px 0;
+}
+.green{
+    color: green;
+}
+.red{
+    color: red;
+}
+.blue{
+    color: blue;
+}
+.material-symbols-rounded{
+    cursor: pointer;
+}
+.inactive{
+    color: darkgray;
+    cursor: none;
+}
+.inputActive{
+    display:inline-block;
+}
+.inputInactive{
+    display: none;
+}
