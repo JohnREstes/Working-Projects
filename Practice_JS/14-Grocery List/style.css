@@ -78,3 +78,16 @@ body{
 .inputInactive{
     display: none;
 }
+.clear{
+    display: flex;
+    width: 100%;
+    height: auto;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+}
+#clearAll{
+    font-size: 2rem;
+    padding: .5rem;
+    margin: .5rem;
+}
