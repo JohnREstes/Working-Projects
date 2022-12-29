@@ -1,0 +1,109 @@
+
+body{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: antiquewhite;
+    font-size: larger;
+}
+.container{
+    width: 100vw;
+    height: 100vh;
+    background-color: grey;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+.header{
+    width: 100%;
+    text-align: center;
+}
+.searchBtns{
+    width: 100%;
+    text-align: center;
+    cursor: pointer;
+}
+.search{
+    width: 100%;
+    text-align: center;
+    padding: 1em;
+}
+.itemGrid{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: space-between;
+    overflow: scroll;
+    background-color: DodgerBlue;
+}
+.item{
+    width: 25%;
+    height: 250px;
+    margin: 20px;
+    text-align: center;
+    border: 1px solid black;
+    position: relative;
+}
+.itemBkgrd {
+    width: 100%;
+    height: 80%;
+    background-color: aqua;
+    position: absolute;
+    background-size: cover;
+}
+.itemNamePrice{
+    width: 100%;
+    height: 20%;
+    background-color: blueviolet;
+    position: absolute;
+    bottom: 0;
+    border-top: 1px solid black;
+}
+.itemName{
+    position: absolute;
+    left: 5px;
+}
+.itemPrice{
+    position: absolute;
+    right: 5px;
+}
+.hidden{
+    display: none;
+}
+[data-number="one"] > .itemBkgrd {
+    background-image: URL("./IMG/sweet1.png");
+}
+[data-number="two"] > .itemBkgrd {
+    background-image: URL("./IMG/sweet2.png");
+}
+[data-number="three"] > .itemBkgrd {
+    background-image: URL("./IMG/sweet3.jpeg");
+}
+[data-number="four"] > .itemBkgrd {
+    background-image: URL("./IMG/cupcake1.png");
+}
+[data-number="five"] > .itemBkgrd {
+    background-image: URL("./IMG/cupcake2.png");
+}
+[data-number="six"] > .itemBkgrd {
+    background-image: URL("./IMG/cupcake3.png");
+}
+[data-number="seven"] > .itemBkgrd {
+    background-image: URL("./IMG/cake1.png");
+}
+[data-number="eight"] > .itemBkgrd {
+    background-image: URL("./IMG/cake2.jpeg");
+}
+[data-number="nine"] > .itemBkgrd {
+    background-image: URL("./IMG/cake3.jpeg");
+}
+[data-number="ten"] > .itemBkgrd {
+    background-image: URL("./IMG/donut1.jpg");
+}
+[data-number="eleven"] > .itemBkgrd {
+    background-image: URL("./IMG/donut2.png");
+}
+[data-number="twelve"] > .itemBkgrd {
+    background-image: URL("./IMG/donut3.png");
+}
