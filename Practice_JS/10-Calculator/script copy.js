@@ -1,10 +1,9 @@
 const grid = document.querySelectorAll('.grid');
-var problem = [0];
-var postition = 0;
-var active = false;
-var decimal = false;
-var trailingZero = 0;
-const digit = /^[0-9]+$/;
+var countDigit = 0, countOperator = ""; 
+var digit1 = null, digit2 = null, digit3 = null, operator1 = null, operator2 = null;
+const decimal = /[0-9]+\./;
+var float = false;
+var currentDigit;
 
 grid.forEach(item => {
     item.onclick = (btn) => {
@@ -12,100 +11,32 @@ grid.forEach(item => {
         process(button)
     }
 })
-function process(button) {
-    /*if(button.match(digit) == null ) return*/
-
-    if(button.match(digit)){
-        console.log(button);
-        console.log(decimal);
-        if (active){
-            clear()
-            active = false;
-        }
-        if(decimal) {trailingZero += 1};
-        problem[postition] += button;
-        grid[0].innerHTML = parseFloat(problem[postition]).toFixed(trailingZero);
+function process(button){
+    if (!isNaN(button)) {
+        if (operator1 === null) digitPress(button, "digit1");
+        else if (operator2 === null) digitPress(button, "digit2");
+        else digitPress(button, "digit3");
     } else {
-        decimal = false;
-        trailingZero = 0;
-        active = false;
-        problem.push(button)
-        postition = problem.length;
-        problem.push(0);
-    }
-    if (problem[(problem.length - 2)]==="ac") {
-        console.log("ac");
-        clear();
-        grid[0].innerHTML = 0;
-    }
-    if (problem[(problem.length - 2)]==="plusMinus") {
-        problem.pop();
-        problem.pop();
-        problem[(problem.length - 1)] = (parseFloat(problem[(problem.length - 1)]) * -1);
-        grid[0].innerHTML = problem[(problem.length - 1)];
-    }
-    if (problem[(problem.length - 2)]==="percentage") {
-        problem.pop();
-        problem.pop();
-        problem[(problem.length - 1)] = (parseFloat(problem[(problem.length - 1)]) * .01);
-        grid[0].innerHTML = problem[(problem.length - 1)];
-        console.log(problem);
-    }
-    if (problem[(problem.length - 2)]==="decimal") {
-        problem.pop();
-        problem.pop();
-        postition -= 2;
-        problem[postition] += '.';
-        decimal = true;
-        grid[0].innerHTML = parseFloat(problem[postition]) + ".";
-    }
-    if (problem[(problem.length - 2)]==="equal") {
-        let sol = 0;
-        switch (problem[1]){
-            case "plus": 
-                sol = add();
-                break;
-            case "minus":   
-                sol = subtract();
-                break;
-            case "times":   
-                sol = multiply();
-                break;
-            case "divides": 
-                sol = divide();
-                break;
-            default: 
-                grid[0].innerHTML = "ERROR";
-        }
-        grid[0].innerHTML = sol;
-        clear();
-        active = true;
-        problem[0] = sol
-        console.log(problem);
-    }
-    console.log(problem);
+        operatorPress(button);
+        console.log('other');
+    } 
+    float ? grid[0].innerHTML = parseFloat(currentDigit) + "." : grid[0].innerHTML = parseFloat(currentDigit);
+    float = false;
 }
+function operatorPress(button){
+    if (button === "decimal"){
+            if (currentDigit.match(decimal)) return;
+            currentDigit = currentDigit + ".";
+            float = true;
+    }
 
-function add(){
-    return parseFloat(problem[problem.length - 5]) + parseFloat(problem[problem.length - 3]);
 }
-function subtract(){
-    return parseFloat(problem[problem.length - 5]) - parseFloat(problem[problem.length - 3]);
-}
-function multiply(){
-    console.log(parseFloat(problem[problem.length - 5]) + " / " + parseFloat(problem[problem.length - 3]))
-    return parseFloat(problem[problem.length - 5]) * parseFloat(problem[problem.length - 3]);
-}
-function divide(){
-    let product = parseFloat(problem[problem.length - 5]) / parseFloat(problem[problem.length - 3]);
-    console.log(parseFloat(problem[problem.length - 5]) + " / " + parseFloat(problem[problem.length - 3]));
-    if (product === Infinity) product = "Not a Number";
-    return product;
-}
-function clear(){
-    problem = [0];
-    postition = 0;
-    decimal = false;
-    active = false;
-    trailingZero = 0;
+function digitPress(button, digit){
+    if (operator1 === null){
+        if(currentDigit === null) currentDigit = 0
+        currentDigit += button;
+        console.log(parseFloat(currentDigit));
+    } else if (operator1 === !null && operator2 === null){  
+        digit2 = currentDigit;
+    } 
 }
