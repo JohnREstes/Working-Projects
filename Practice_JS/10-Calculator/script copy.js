@@ -1,11 +1,12 @@
 const grid = document.querySelectorAll('.grid');
 var countDigit = 0, countOperator = ""; 
 var digit1 = null, digit2 = null, digit3 = null, operator1 = null, operator2 = null;
-var problem = [0];
+var problem = [];
 const decimal = /[0-9]+\./;
 var float = false;
-var floatPostition = 0;
+var floatPostition;
 var currentPosition = 0;
+var solved = false;
 
 grid.forEach(item => {
     item.onclick = (btn) => {
@@ -20,45 +21,96 @@ function process(button){
         operatorPress(button);
         console.log(button);
     } 
-    float ? grid[0].innerHTML = parseFloat(problem[currentPosition]) + "." : grid[0].innerHTML = parseFloat(problem[currentPosition]).toFixed(floatPostition);
+    float ? 
+        grid[0].innerHTML = parseFloat(problem[currentPosition]) + "." : 
+        isNaN(problem[currentPosition]) ? 
+            grid[0].innerHTML = 0:
+            grid[0].innerHTML = parseFloat(problem[currentPosition]).toFixed(floatPostition);
     float = false;
+    console.log(problem);
 }
 function operatorPress(button){
+    if(problem.length === 0) return;
     if (button === "decimal"){
             if (problem[currentPosition].match(decimal)) return;
             problem[currentPosition] = problem[currentPosition] + ".";
             float = true;
             return;
     }
-    if (button === "ac") clear();
-    if ( currentPosition === 1 || currentPosition === 3 ) {currentPosition += 1;}
+    if (button === "plusMinus"){
+        currentDigit = parseFloat(problem[currentPosition])
+        problem[currentPosition] = (currentDigit * -1);
+        return;
+    }
+    if (button === "ac") {
+        clear();
+        return;
+    }   
+    if(isNaN(problem[(problem.length - 1)])) {
+        problem.pop();
+    }
     problem.push(button);
+    orderOfOperations();
 }
 function digitPress(button){
-    console.log(problem.length);
-    if(problem.length === 1 ){
-        currentPosition = 0;
-        console.log("first");
-    } else if (problem.length === 3 ){
-        currentPosition = 3;       
-        console.log("third");
-    } else if (problem.length === 5 ){
-        currentPosition = 5;       
-        console.log("fifth");
+    if(solved === true) {
+        problem[0] = 0;
+        solved = false;
     }
+    if(problem.length === 0 ) nextDigit(0)
+    else if (problem.length === 2 ) nextDigit(2)
+    else if (problem.length === 4 ) nextDigit(4)
     addDigit(button, currentPosition);
+}
+function nextDigit(position){
+    problem.push(0);
+    currentPosition = position;  
+    floatPostition = 0;  
 }
 function addDigit(data, position){
     problem[position] = (problem[position] + data)
     if((problem[currentPosition].match(decimal))) floatPostition +=1;
 }
 function clear(){
-    problem = [0];
+    problem = [];
     float = false;
     floatPostition = 0;
     currentPosition = 0;   
     grid[0].innerHTML = 0;
 }
-function add(){
+function orderOfOperations(){
+    let operation, answer;
+    if(problem[1] === "equal"){  
+        problem.pop();
+        return;
+    }
+    if(problem[3] === "equal"){     
+        operation = problem[1];
+        answer = solve(operation);
+    clear()
+    solved = true;
+    problem[0] = answer;
+    console.log(answer);
+    console.log(String(answer));    
+    if(String(answer).match(/\W/)) floatPostition = answer.toString().split('.')[1].length;
+    }
 
+}
+function solve(operation){
+    let answer;
+    switch(operation){
+        case "plus":
+            answer = parseFloat(problem[currentPosition - 2]) + parseFloat(problem[currentPosition]);
+            break;
+        case "minus":
+            answer = parseFloat(problem[currentPosition - 2]) - parseFloat(problem[currentPosition]);
+            break;
+        case "times":
+            answer = parseFloat(problem[currentPosition - 2]) * parseFloat(problem[currentPosition]);
+            break;
+        case "divides":
+            answer = parseFloat(problem[currentPosition - 2]) / parseFloat(problem[currentPosition]);
+            break;
+    }
+    return answer;
 }
