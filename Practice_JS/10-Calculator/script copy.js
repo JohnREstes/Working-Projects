@@ -23,7 +23,7 @@ function process(button){
     } 
     float ? 
         grid[0].innerHTML = parseFloat(problem[currentPosition]) + "." : 
-        isNaN(problem[currentPosition]) ? 
+        (problem.length === 0) ? 
             grid[0].innerHTML = 0:
             grid[0].innerHTML = parseFloat(problem[currentPosition]).toFixed(floatPostition);
     float = false;
@@ -31,6 +31,10 @@ function process(button){
 }
 function operatorPress(button){
     if(problem.length === 0) return;
+    if(solved === true) {
+        currentPosition = 2;
+        solved = false;
+    }
     if (button === "decimal"){
             if (problem[currentPosition].match(decimal)) return;
             problem[currentPosition] = problem[currentPosition] + ".";
@@ -89,10 +93,9 @@ function orderOfOperations(){
         answer = solve(operation);
     clear()
     solved = true;
-    problem[0] = answer;
-    console.log(answer);
-    console.log(String(answer));    
-    if(String(answer).match(/\W/)) floatPostition = answer.toString().split('.')[1].length;
+    problem[0] = answer; 
+
+    if(answer.toString().match(/\./)) floatPostition = answer.toString().split('.')[1].length;
     }
 
 }
