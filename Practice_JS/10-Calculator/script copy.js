@@ -32,7 +32,7 @@ function process(button){
 function operatorPress(button){
     if(problem.length === 0) return;
     if(solved === true) {
-        currentPosition = 2;
+        currentPosition = 0;
         solved = false;
     }
     if (button === "decimal"){
