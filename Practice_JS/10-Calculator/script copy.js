@@ -94,8 +94,14 @@ function orderOfOperations(){
     clear()
     solved = true;
     problem[0] = answer; 
-
     if(answer.toString().match(/\./)) floatPostition = answer.toString().split('.')[1].length;
+    }
+    if(problem[3] === "times" || problem[3] === "divides" && !isNaN(problem[4])){
+        console.log(currentPosition);
+        let currentSolution = solve(problem[3]);
+        problem.slice(1);
+        console.log(problem);
+        problem.push(currentSolution);
     }
 
 }
