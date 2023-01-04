@@ -65,6 +65,8 @@ function digitPress(button){
     else if (problem.length === 2 ) nextDigit(2)
     else if (problem.length === 4 ) nextDigit(4)
     addDigit(button, currentPosition);
+    orderOfOperations();
+    
 }
 function nextDigit(position){
     problem.push(0);
@@ -96,13 +98,15 @@ function orderOfOperations(){
     problem[0] = answer; 
     if(answer.toString().match(/\./)) floatPostition = answer.toString().split('.')[1].length;
     }
-    if(problem[3] === "times" || problem[3] === "divides" && !isNaN(problem[4])){
+    if(problem[3] === "times" || problem[3] === "divides"){
+    if (!isNaN(problem[4])){
         console.log(currentPosition);
         let currentSolution = solve(problem[3]);
-        problem.slice(1);
+        problem = problem.slice(0,2);
         console.log(problem);
         problem.push(currentSolution);
-    }
+        currentPosition = 2;
+    }}
 
 }
 function solve(operation){
