@@ -11,26 +11,29 @@
 <body>
     <div class="container">
         <div class="calc">
-            <div class="grid total" data-btn="total">0</div>
-            <dic class="grid ac dark" data-btn="ac">AC</dic>
-            <div class="grid plusMinus dark" data-btn="plusMinus">+/-</div>
-            <div class="grid percentage dark" data-btn="percentage">%</div>
-            <div class="grid divides orange" data-btn="divides">÷</div>
-            <div class="grid seven" data-btn=7>7</div>
-            <div class="grid eight" data-btn=8>8</div>
-            <div class="grid nine" data-btn=9>9</div>
-            <div class="grid times orange" data-btn="times">X</div>
-            <div class="grid four" data-btn=4>4</div>
-            <div class="grid five" data-btn=5>5</div>
-            <div class="grid six" data-btn=6>6</div>
-            <div class="grid minus orange" data-btn="minus">-</div>
-            <div class="grid one" data-btn=1>1</div>
-            <div class="grid two" data-btn=2>2</div>
-            <div class="grid three" data-btn=3>3</div>
-            <div class="grid plus orange" data-btn="plus">+</div>
-            <div class="grid zero" data-btn=0>0</div>
-            <div class="grid decimal" data-btn="decimal">.</div>
-            <div class="grid equal orange" data-btn="equal">=</div>
+            <div class="grid total">
+                <div class="previous-operand" data-previous-operand></div>
+                <div class="current-operand" data-current-operand></div>
+            </div>
+            <button class="grid dark" data-all-clear>AC</button>
+            <button class="grid dark" data-number>+/-</button>
+            <button class="grid delete dark" data-deletes>DEL</button>
+            <button class="grid orange" data-operation>÷</button>
+            <button class="grid seven" data-number>7</button>
+            <button class="grid eight" data-number>8</button>
+            <button class="grid nine" data-number>9</button>
+            <button class="grid orange" data-operation>X</button>
+            <button class="grid four" data-number>4</button>
+            <button class="grid five" data-number>5</button>
+            <button class="grid six" data-number>6</button>
+            <button class="grid orange" data-operation>-</button>
+            <button class="grid one" data-number>1</button>
+            <button class="grid two" data-number>2</button>
+            <button class="grid three" data-number>3</button>
+            <button class="grid orange" data-operation>+</button>
+            <button class="grid zero" data-number>0</button>
+            <button class="grid decimal" data-number>.</button>
+            <button class="grid orange" data-equals>=</button>
         </div>
     </div>  
 </body>
