@@ -50,7 +50,7 @@ body{
     word-break: break-all;
 }
 .total .previous-operand{
-    color: rgba(255,255,255, .55);
+    color: rgba(255,255,255, .50);
     font-size: 1.5rem;
 }
 .total .current-operand{
