@@ -26,3 +26,7 @@ input {
     font-size: 1.5rem;
     margin: 10px;
 }
+.grid{
+    display: grid;
+    grid-template-columns: auto;
+}
