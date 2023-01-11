@@ -39,3 +39,8 @@ input {
     height: 400px;
     background-color: aqua;
 }
+.image{
+    height: 70%;
+    width: 100%;
+    background-color: antiquewhite;
+}
