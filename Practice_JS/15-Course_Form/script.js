@@ -6,7 +6,7 @@ const coursePhoto = document.querySelectorAll('.coursePhoto')
 const url = 'https://api.unsplash.com/photos/random?query=person&orientation=landscape&client_id=RazJYuaxnGXQlXDYzgF3rKLAt6d0Xz8XeQ3JC6vive8';
 let photoUrl = './IMG/donut1.jpg';
 
-async function fetchImage() {
+async function fetchImage(photo) {
     let response = await fetch(url);
     if (response.status === 403) {
         let data = await response.text();
@@ -14,7 +14,7 @@ async function fetchImage() {
     } else {
         let data = await response.json();
         console.log(data.urls.small);
-        photoUrl = data.urls.small
+        photo.src = `${data.urls.small}`;
     }
 }
 function newImage(){
@@ -24,6 +24,5 @@ function newImage(){
     .catch((error) => console.log(error));
 }
 coursePhoto.forEach(photo =>{
-    fetchImage();
-    photo.src = `${photoUrl}`;
+    fetchImage(photo);
 })
