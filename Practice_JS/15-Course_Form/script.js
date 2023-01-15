@@ -9,6 +9,10 @@ const url = 'https://api.unsplash.com/photos/random?query=person&orientation=lan
 
 
 submit.addEventListener('click', ()=>{
+    if(customer.value === '' || course.value === '' || author.value === ''){
+        errorCheck();
+        return;
+    }
     buildCourse();
     clearInputs();
 })
@@ -40,12 +44,17 @@ function buildCourse(){
         <p class="authorText">${author.value}</p>
     </div>
     `;
-    fetchImage(newID);
     grid.appendChild(cartDiv);
     grid.lastChild.innerHTML = newCourse;
+    fetchImage(newID);
 }
 function clearInputs(){
     customer.value = '';
     course.value = '';
     author.value = '';
+}
+function errorCheck(){
+    if(customer.value === '' || course.value === '' || author.value === ''){
+
+    }
 }
