@@ -39,9 +39,9 @@ function buildCourse(){
         <img class="coursePhoto" id="${newID}" src="" alt="Person" srcset="">
     </div>
     <div class="text">
-        <p class="customerText">${customer.value}</p>
-        <p class="courseText">${course.value}</p>
-        <p class="authorText">${author.value}</p>
+        <p class="customerText"><span class="span spanName">Name : </span>  ${customer.value}</p>
+        <p class="courseText"><span class="span spanCourse">Course : </span>  ${course.value}</p>
+        <p class="authorText"><span class="span spanAuthor">Author : </span>  ${author.value}</p>
     </div>
     `;
     grid.appendChild(cartDiv);
