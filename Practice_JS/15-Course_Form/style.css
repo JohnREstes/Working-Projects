@@ -15,16 +15,17 @@ body{
     position: relative;
 }
 .inputs{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
     padding-top: 20px;
 }
 input {
+    display:inline-block;
     width: 80%;
     font-size: 1.5rem;
     margin: 10px;
+}
+.fa-solid, .inline{
+    display:inline-block;
+    background-color: antiquewhite;
 }
 .grid{
     display: grid;
