@@ -18,14 +18,28 @@ body{
     padding-top: 20px;
 }
 input {
-    display:inline-block;
     width: 80%;
     font-size: 1.5rem;
-    margin: 10px;
-}
-.fa-solid, .inline{
-    display:inline-block;
+    margin: 10px 10px 10px 0px;
+}    
+.inline{
+    display: flex;
+    flex-direction: row;
     background-color: antiquewhite;
+}
+.icon{
+    width: 25px;
+    height: 53.5px;
+    color: black;
+    display: flex;
+    justify-content: right;
+    padding-right: .5rem;
+    align-items: center;
+    border: 1px black solid;
+}
+i{
+    font-size: 1.5rem;
+
 }
 .grid{
     display: grid;
