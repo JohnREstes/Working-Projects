@@ -25,6 +25,7 @@ input {
 .inline{
     display: flex;
     flex-direction: row;
+    justify-content: center;
     background-color: antiquewhite;
 }
 .icon{
@@ -35,7 +36,6 @@ input {
     justify-content: right;
     padding-right: .5rem;
     align-items: center;
-    border: 1px black solid;
 }
 i{
     font-size: 1.5rem;
@@ -75,7 +75,8 @@ p{
 }
 .error::placeholder{
     color: red;
-    opacity: 1;
+    background-color: black;
+    padding-left: 10px;
 }
 .span{
     border-radius: 5px;
@@ -89,4 +90,7 @@ p{
 }
 .spanAuthor{
     background-color: red;
+}
+.submitBtn{
+    width: 50%;
 }

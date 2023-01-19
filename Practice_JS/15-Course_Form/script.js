@@ -52,9 +52,18 @@ function clearInputs(){
     customer.value = '';
     course.value = '';
     author.value = '';
+    customer.classList.remove("error");
+    course.classList.remove("error");
+    author.classList.remove("error");
 }
 function errorCheck(){
-    if(customer.value === '' || course.value === '' || author.value === ''){
-
+    if(customer.value === ''){
+        customer.classList.add("error");
     }
+    if (course.value === ''){
+        course.classList.add("error");
+    } 
+    if (author.value === ''){
+        author.classList.add("error");
+    } 
 }
