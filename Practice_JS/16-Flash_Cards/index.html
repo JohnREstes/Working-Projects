@@ -15,7 +15,7 @@
             <h1 class="title">FLASHCARDS</h1>
             <button class="addNew" data-add>Add Question</button>
         </div>
-        <div class="cards">
+        <div class="cards" data-cards-container>
             <div class="cardContainer" id="123456CardCont">
                 <h2 class="text" id="123456Text">This is Your Question</h2>
                 <p class="showHide" id="123456ShowHide">Show/Hide Answer</p>
@@ -30,8 +30,8 @@
             </div>
 
         </div>
-        <div class="modal">
-            <div class="modalCont">
+        <div class="modal" data-modal>
+            <div class="modalCont" data-modal-content>
                 <div class="close" data-close>X</div>
                 <h2 class="question">Question</h2>
                 <textarea name="questionText" id="questionText" cols="40" rows="5"></textarea>
