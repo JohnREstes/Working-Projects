@@ -7,46 +7,39 @@
     <script src="script.js" defer></script>
     <link rel="stylesheet" href="style.css">
     <script src="https://kit.fontawesome.com/f4c4519de4.js" crossorigin="anonymous"></script>
-    <title>Course Form</title>
+    <title>Flash Cards</title>
 </head>
 <body>
     <div class="container">
-       <div class="inputs">
-        <h1>Sign-up Your Course</h1>
-        <div class="inline">
-            <div class="icon">
-                <i class="fa-solid fa-briefcase"></i>
-            </div> 
-            <input type="text" class="customer" placeholder="customer's name">
-        </div> 
-        <div class="inline">
-            <div class="icon">
-                <i class="fa-solid fa-book-atlas"></i>
-            </div> 
-            <input type="text" class="course" placeholder="course">
-        </div> 
-        <div class="inline">
-            <div class="icon">
-                <i class="fa-solid fa-person"></i>
-            </div> 
-            <input type="text" class="author" placeholder="author">
-        </div> 
-        <div class="inline">
-        <input type="button" value="submit" class="submitBtn">
-        </div>         
-       </div>
-       <div class="grid">
-        <div class="courseItem">
-            <div class="image">
-                <img class="coursePhoto" src="./IMG/donut1.jpg" alt="" srcset="">
+        <div class="header">
+            <h1 class="title">FLASHCARDS</h1>
+            <button class="addNew" data-add>Add Question</button>
+        </div>
+        <div class="cards">
+            <div class="cardContainer" id="123456CardCont">
+                <h2 class="text" id="123456Text">This is Your Question</h2>
+                <p class="showHide" id="123456ShowHide">Show/Hide Answer</p>
+                <button class="edit" data-edit id="123456Edit">Edit</button>
+                <button class="delete" data-delete id="123456Delete">Delete</button>
             </div>
-            <div class="text">
-                <p class="customerText"><i class="fa-duotone fa-people-simple"></i><span class="span spanName">Name :</span>  Amazon</p>
-                <p class="courseText"><span class="span spanCourse">Course :</span>  All About You</p>
-                <p class="authorText"><span class="span spanAuthor">Author :</span>  John Estes</p>
+            <div class="cardContainer" id="123456CardCont">
+                <h2 class="text" id="123456Text">This is Your Question</h2>
+                <p class="showHide" id="123456ShowHide">Show/Hide Answer</p>
+                <button class="edit" data-edit id="123456Edit">Edit</button>
+                <button class="delete" data-delete id="123456Delete">Delete</button>
+            </div>
+
+        </div>
+        <div class="modal">
+            <div class="modalCont">
+                <div class="close" data-close>X</div>
+                <h2 class="question">Question</h2>
+                <textarea name="questionText" id="questionText" cols="40" rows="5"></textarea>
+                <h2 class="answer">Answer</h2>
+                <textarea name="answerText" id="answerText" cols="40" rows="5"></textarea>
+                <button class="save" data-save>save</button>
             </div>
         </div>
-       </div>
-    </div>  
+    </div>
 </body>
 </html>

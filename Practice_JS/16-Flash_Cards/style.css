@@ -6,91 +6,81 @@ body{
     color: antiquewhite;
     font-size: larger;
 }
+button{
+    cursor: pointer;
+}
 .container{
     width: 100vw;
-    height: 100%;
+    height: 100vh;
     background-color: grey;
     display: flex;
     flex-direction: column;
     position: relative;
 }
-.inputs{
-    padding-top: 20px;
-}
-input {
-    width: 80%;
-    font-size: 1.5rem;
-    margin: 10px 10px 10px 0px;
-}    
-.inline{
+.header{
+    width: 100%;
     display: flex;
-    flex-direction: row;
-    justify-content: center;
-    background-color: antiquewhite;
-}
-.icon{
-    width: 25px;
-    height: 53.5px;
-    color: black;
-    display: flex;
-    justify-content: right;
-    padding-right: .5rem;
+    flex-direction: column;
     align-items: center;
 }
-i{
-    font-size: 1.5rem;
-
+.addNew{
+    width: 150px;
 }
-.grid{
+.cards{
     display: grid;
-    grid-template-columns: repeat(auto-fill, 500px);
+    grid-template-columns: repeat(auto-fill, 400px);
     grid-template-rows: auto;
     padding: 20px;
     gap: 20px;
     justify-content: center;
 }
-.courseItem{
-    width: 100%;
-    height: 500px;
-    background-color: white;
-}
-.image{
-    height: 80%;
-    width: 100%;
+.cardContainer{
     background-color: antiquewhite;
-    border-bottom: 1px darkgray solid;
-}
-.coursePhoto{
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-}
-
-p{
-    margin: 0;
-    padding: .25rem;
     color: black;
-    width: 100%;
-    margin-left: 10%;
+    padding: 10px;
 }
-.error::placeholder{
-    color: red;
+.text{
+    text-align: center;
+}
+.showHide{
+    font-size: medium;
+    color: blue;
+    cursor: pointer;
+}
+.modal{
+    display: none;
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    background-color: grey;
+    opacity: .98;
+}
+.modalCont{
+    position: relative;
+    margin: auto;
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    height: auto;
+    background-color: antiquewhite;
+    padding: 10px;
+    align-items: center;
+    color: black;
+}
+.save{
+    padding: 5px;
+    margin: 5px;
+}
+.close{
+    position: absolute;
+    right: 5px;
+    top: 5px;
     background-color: black;
-    padding-left: 10px;
+    color: antiquewhite;
+    padding: 2px;
+    cursor: pointer;
 }
-.span{
-    border-radius: 5px;
-    padding-left: 5px;
-    margin-right: 5px;
-}
-.spanName{
-    background-color: yellow;
-}.spanCourse{
-    background-color: green;
-}
-.spanAuthor{
-    background-color: red;
-}
-.submitBtn{
-    width: 50%;
+.show{
+    display: inline-block;
 }
