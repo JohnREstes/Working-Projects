@@ -45,7 +45,7 @@ function createNewCard(){
 }
 function checkLocSto(){
     let storage = mutateLocSto('','', "retrieve");
-    if(storage.length > 0){
+    if(storage !== null){
         storage.forEach(e => {
             build(e.id, e.item)
         });
@@ -67,7 +67,7 @@ function mutateLocSto(id, item = '', operation){
             cardList = grocList.filter(e => e.id !== id);
             break;
         case "edit":
-            cardList = grocList.filter(e => e.id !== id);
+            cardList = cardList.filter(e => e.id !== id);
             cardList.push(new FlashCard(id, item));
             break;
         case "retrieve":
@@ -82,27 +82,25 @@ function mutateLocSto(id, item = '', operation){
     window.localStorage.setItem('flashCards', JSON.stringify(cardList));
     console.log(JSON.parse(window.localStorage.getItem('flashCards')));
 }
-function build(randID, text){
+function build(randID, question, answer){
     if(randID == '') {
         randID = randomID()
         mutateLocSto(randID, text, "add");
     }
-    let newItemDiv = document.createElement("div");
-    newItemDiv.className = 'item';
-    newItemDiv.id = `${randID}item`;
+    let newCardDiv = document.createElement("div");
+    newCardDiv.className = 'cardContainer';
+    newCardDiv.id = `${randID}cardContainer`;
     var todoListString = `            
-                <span class="indvidualItem">
-                    <p class="itemText" id="${randID}text">${text}</p>
-                    <input type="text" class="inputInactive inputItem" placeholder="">
-                    <span class="right">
-                        <span onclick=buttonOp(this) data-name="approve" class="material-symbols-rounded inactive" id="${randID}approve">offline_pin</span>
-                        <span onclick=buttonOp(this) data-name="edit" class="material-symbols-rounded blue" id="${randID}edit">edit_note</span>
-                        <span onclick=buttonOp(this) data-name="delete" class="material-symbols-rounded red" id="${randID}delete">cancel</span>
-                    </span>
-                </span>
-            </div>
+    <h2 class="text" id="${randID}Text">${question}</h2>
+    <h2 class="text hidden" id="${randID}Text">${answer}</h2>
+    <p class="showHide" id="${randID}ShowHide">Show/Hide Answer</p>
+    <button class="edit" data-edit id="${randID}Edit">Edit</button>
+    <button class="delete" data-delete id="${randID}Delete">Delete</button>
     `
-    todoItems.appendChild(newItemDiv);
+    todoItems.appendChild(newCardDiv);
     todoItems.lastChild.innerHTML = todoListString
     return 
+}
+function randomID(){
+    return self.crypto.randomUUID();
 }
