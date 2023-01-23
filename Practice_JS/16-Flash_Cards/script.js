@@ -4,13 +4,6 @@ class FlashCard {
         this.answer = answer;
         this.randID = randID;
     }
-    addCard(){
-        console.log(this.randID + " ok");
-
-    }
-    deleteCard(){
-
-    }
     flipCard(){
 
     }
@@ -21,7 +14,7 @@ const modal = document.querySelector('[data-modal]');
 const modalContent = document.querySelector('[data-modal-content]');
 const close = document.querySelector('[data-close]');
 const save = document.querySelector('[data-save]');
-const cardContainer = document.querySelector('[data-card-container]');
+const cards = document.querySelector('[data-cards]');
 const questionText = document.getElementById('questionText');
 const answerText = document.getElementById('answerText');
 
@@ -35,40 +28,55 @@ modal.addEventListener('click', (e)=>{
     if(e.target.dataset.modal === "") modal.classList.remove('show');
 })
 save.addEventListener('click', ()=>{
+    console.log("called Save");
     createNewCard();
+    modal.classList.remove('show');
+    questionText.value = '';
+    answerText.value = '';
 })
 function createNewCard(){
+    console.log("create");
     let randID = self.crypto.randomUUID();
-    let card = new FlashCard(questionText, answerText, randID);
-    console.log(card);
-    card.addCard();
+    let card = new FlashCard(questionText.value, answerText.value, randID);
+    mutateLocSto(card, 'add');
+    build(card);
 }
 function checkLocSto(){
-    let storage = mutateLocSto('','', "retrieve");
+    let storage = mutateLocSto('', "retrieve");
     if(storage !== null){
-        storage.forEach(e => {
-            build(e.id, e.item)
+        storage.forEach(card => {
+            build(card);
         });
     } else {
     window.localStorage.setItem('flashCards', JSON.stringify([]));
     }
 
 }
-
 checkLocSto();
 
-function mutateLocSto(id, item = '', operation){
+function mutateLocSto(card, operation){
+    console.log("Mutate");
     let cardList = JSON.parse(window.localStorage.getItem('flashCards'));
     switch(operation){
         case "add":
-            cardList.push(new FlashCard(id, item));
+            cardList.push(card);
             break;
-        case "remove":
-            cardList = grocList.filter(e => e.id !== id);
+        case "Delete":
+            console.log(card.randID + " DELETE");
+            cardList = cardList.filter(e => e.randID !== card.randID);
+            location.reload()
             break;
-        case "edit":
-            cardList = cardList.filter(e => e.id !== id);
-            cardList.push(new FlashCard(id, item));
+        case "Edit":
+            cardList = cardList.filter(e => e.randID !== card.randID);
+            cardList.push(card);
+            location.reload()
+            break;
+        case "ShowHide":
+            let currentQuestion = document.getElementById(`${card.randID}Question`);
+            let currentAnswer = document.getElementById(`${card.randID}Answer`);
+            currentQuestion.classList.toggle('hide');
+            currentAnswer.classList.toggle('hide');
+            
             break;
         case "retrieve":
             return cardList;
@@ -82,25 +90,27 @@ function mutateLocSto(id, item = '', operation){
     window.localStorage.setItem('flashCards', JSON.stringify(cardList));
     console.log(JSON.parse(window.localStorage.getItem('flashCards')));
 }
-function build(randID, question, answer){
-    if(randID == '') {
-        randID = randomID()
-        mutateLocSto(randID, text, "add");
-    }
+function build(card){
     let newCardDiv = document.createElement("div");
     newCardDiv.className = 'cardContainer';
-    newCardDiv.id = `${randID}cardContainer`;
+    newCardDiv.id = `${card.randID}cardContainer`;
     var todoListString = `            
-    <h2 class="text" id="${randID}Text">${question}</h2>
-    <h2 class="text hidden" id="${randID}Text">${answer}</h2>
-    <p class="showHide" id="${randID}ShowHide">Show/Hide Answer</p>
-    <button class="edit" data-edit id="${randID}Edit">Edit</button>
-    <button class="delete" data-delete id="${randID}Delete">Delete</button>
+    <h2 class="text" id="${card.randID}Question">${card.question}</h2>
+    <h2 class="text hide" id="${card.randID}Answer">${card.answer}</h2>
+    <p class="showHide" id="${card.randID}ShowHide">Show/Hide Answer</p>
+    <button class="edit" id="${card.randID}Edit">Edit</button>
+    <button class="delete" id="${card.randID}Delete">Delete</button>
     `
-    todoItems.appendChild(newCardDiv);
-    todoItems.lastChild.innerHTML = todoListString
+    cards.appendChild(newCardDiv);
+    cards.lastChild.innerHTML = todoListString;
+    newEventListener(card, 'Edit');
+    newEventListener(card, 'Delete');
+    newEventListener(card, 'ShowHide');
     return 
 }
-function randomID(){
-    return self.crypto.randomUUID();
-}
+function newEventListener(card, type){
+    let newButton = document.getElementById(`${card.randID}${type}`);
+        newButton.addEventListener('click', ()=>{
+            mutateLocSto(card, type);
+        })
+    }
