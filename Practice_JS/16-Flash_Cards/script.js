@@ -72,18 +72,13 @@ function mutateLocSto(card, operation){
             break;
         case "Edit":
             editCard(card);
-            /*let cardEdit =  cardList.filter(e => e.randID == card.randID);
-            cardList = cardList.filter(e => e.randID !== card.randID);
-            editCard(cardEdit);
-            */break;
+            break;
         case "saveEdit":
             const itemIndex = cardList.findIndex(e => e.randID == card.randID);
             cardList[itemIndex] = editingCard;
             location.reload();
-            /*cardList.push(editingCard[0]);
-            location.reload()
             editingCard = undefined;
-            */break;
+            break;
         case "ShowHide":
             let currentQuestion = document.getElementById(`${card.randID}Question`);
             let currentAnswer = document.getElementById(`${card.randID}Answer`);
@@ -111,7 +106,7 @@ function build(card){
     <h2 class="text hide" id="${card.randID}Answer">${card.answer}</h2>
     <p class="showHide" id="${card.randID}ShowHide">Show/Hide Answer</p>
     <button class="edit" id="${card.randID}Edit">Edit</button>
-    <button class="delete" id="${card.randID}Delete">Delete</button>
+    <button class="delete btn-right" id="${card.randID}Delete">Delete</button>
     `
     cards.appendChild(newCardDiv);
     cards.lastChild.innerHTML = todoListString;

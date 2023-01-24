@@ -7,7 +7,21 @@ body{
     font-size: larger;
 }
 button{
+    display: inline-block;
+    outline: none;
     cursor: pointer;
+    font-weight: 600;
+    border-radius: 3px;
+    padding: 6px 6px;
+    border: 0;
+    color: #3a4149;
+    background: #e7ebee;
+    line-height: 1.15;
+    font-size: 16px;
+}
+button:hover {
+    transition: all .1s ease;
+    box-shadow: 0 0 0 0 #fff, 0 0 0 3px grey;
 }
 .container{
     width: 100vw;
@@ -38,6 +52,8 @@ button{
     background-color: lightgray;
     color: black;
     padding: 10px;
+    border-radius: .5rem;
+    box-shadow: 10px 10px 5px black;
 }
 .text{
     text-align: center;
