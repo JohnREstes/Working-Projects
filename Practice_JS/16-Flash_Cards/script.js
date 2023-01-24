@@ -72,13 +72,13 @@ function mutateLocSto(card, operation){
             break;
         case "Edit":
             let cardEdit =  cardList.filter(e => e.randID == card.randID);
+            cardList = cardList.filter(e => e.randID !== card.randID);
             editCard(cardEdit);
             break;
         case "saveEdit":
-            console.log('save edit')
-            console.log(editingCard[0].randID);
-            let cardIndex = cardList.indexOf(editingCard[0].randID);
-            console.log(cardIndex);
+            cardList.push(editingCard[0]);
+            location.reload()
+            editingCard = undefined;
             break;
         case "ShowHide":
             let currentQuestion = document.getElementById(`${card.randID}Question`);
