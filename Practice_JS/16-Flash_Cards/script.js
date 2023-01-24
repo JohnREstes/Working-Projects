@@ -4,9 +4,6 @@ class FlashCard {
         this.answer = answer;
         this.randID = randID;
     }
-    flipCard(){
-
-    }
 }
 
 const add = document.querySelector('[data-add]');
@@ -17,6 +14,7 @@ const save = document.querySelector('[data-save]');
 const cards = document.querySelector('[data-cards]');
 const questionText = document.getElementById('questionText');
 const answerText = document.getElementById('answerText');
+let editingCard;
 
 add.addEventListener('click', ()=> {
     modal.classList.add('show');
@@ -28,14 +26,20 @@ modal.addEventListener('click', (e)=>{
     if(e.target.dataset.modal === "") modal.classList.remove('show');
 })
 save.addEventListener('click', ()=>{
-    console.log("called Save");
-    createNewCard();
+    if(questionText.value === '' || answerText.value === ''){
+        errorMessage();
+        return;
+    }
+    if(editingCard !== undefined) {
+        editingCard[0].question = questionText.value;
+        editingCard[0].answer = answerText.value;
+        mutateLocSto(editingCard, 'saveEdit');
+    } else createNewCard();
     modal.classList.remove('show');
     questionText.value = '';
     answerText.value = '';
 })
 function createNewCard(){
-    console.log("create");
     let randID = self.crypto.randomUUID();
     let card = new FlashCard(questionText.value, answerText.value, randID);
     mutateLocSto(card, 'add');
@@ -67,16 +71,20 @@ function mutateLocSto(card, operation){
             location.reload()
             break;
         case "Edit":
-            cardList = cardList.filter(e => e.randID !== card.randID);
-            cardList.push(card);
-            location.reload()
+            let cardEdit =  cardList.filter(e => e.randID == card.randID);
+            editCard(cardEdit);
+            break;
+        case "saveEdit":
+            console.log('save edit')
+            console.log(editingCard[0].randID);
+            let cardIndex = cardList.indexOf(editingCard[0].randID);
+            console.log(cardIndex);
             break;
         case "ShowHide":
             let currentQuestion = document.getElementById(`${card.randID}Question`);
             let currentAnswer = document.getElementById(`${card.randID}Answer`);
             currentQuestion.classList.toggle('hide');
             currentAnswer.classList.toggle('hide');
-            
             break;
         case "retrieve":
             return cardList;
@@ -113,4 +121,13 @@ function newEventListener(card, type){
         newButton.addEventListener('click', ()=>{
             mutateLocSto(card, type);
         })
-    }
+}
+function editCard(card){
+    modal.classList.add('show');
+    questionText.value = card[0].question;
+    answerText.value = card[0].answer;
+    editingCard = card;
+}
+function errorMessage(){
+    console.log('error');
+}
