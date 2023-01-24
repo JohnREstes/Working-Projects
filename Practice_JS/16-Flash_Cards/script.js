@@ -31,8 +31,8 @@ save.addEventListener('click', ()=>{
         return;
     }
     if(editingCard !== undefined) {
-        editingCard[0].question = questionText.value;
-        editingCard[0].answer = answerText.value;
+        editingCard.question = questionText.value;
+        editingCard.answer = answerText.value;
         mutateLocSto(editingCard, 'saveEdit');
     } else createNewCard();
     modal.classList.remove('show');
@@ -71,15 +71,19 @@ function mutateLocSto(card, operation){
             location.reload()
             break;
         case "Edit":
-            let cardEdit =  cardList.filter(e => e.randID == card.randID);
+            editCard(card);
+            /*let cardEdit =  cardList.filter(e => e.randID == card.randID);
             cardList = cardList.filter(e => e.randID !== card.randID);
             editCard(cardEdit);
-            break;
+            */break;
         case "saveEdit":
-            cardList.push(editingCard[0]);
+            const itemIndex = cardList.findIndex(e => e.randID == card.randID);
+            cardList[itemIndex] = editingCard;
+            location.reload();
+            /*cardList.push(editingCard[0]);
             location.reload()
             editingCard = undefined;
-            break;
+            */break;
         case "ShowHide":
             let currentQuestion = document.getElementById(`${card.randID}Question`);
             let currentAnswer = document.getElementById(`${card.randID}Answer`);
@@ -124,8 +128,8 @@ function newEventListener(card, type){
 }
 function editCard(card){
     modal.classList.add('show');
-    questionText.value = card[0].question;
-    answerText.value = card[0].answer;
+    questionText.value = card.question;
+    answerText.value = card.answer;
     editingCard = card;
 }
 function errorMessage(){

@@ -3,7 +3,7 @@ body{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    color: antiquewhite;
+    color: lightgray;
     font-size: larger;
 }
 button{
@@ -35,7 +35,7 @@ button{
     justify-content: center;
 }
 .cardContainer{
-    background-color: antiquewhite;
+    background-color: lightgray;
     color: black;
     padding: 10px;
 }
@@ -63,7 +63,7 @@ button{
     flex-direction: column;
     width: 400px;
     height: auto;
-    background-color: antiquewhite;
+    background-color: lightgray;
     padding: 10px;
     align-items: center;
     color: black;
