@@ -106,7 +106,7 @@ function build(card){
     <h2 class="text hide" id="${card.randID}Answer">${card.answer}</h2>
     <p class="showHide" id="${card.randID}ShowHide">Show/Hide Answer</p>
     <button class="edit" id="${card.randID}Edit">Edit</button>
-    <button class="delete btn-right" id="${card.randID}Delete">Delete</button>
+    <button class="delete" id="${card.randID}Delete">Delete</button>
     `
     cards.appendChild(newCardDiv);
     cards.lastChild.innerHTML = todoListString;

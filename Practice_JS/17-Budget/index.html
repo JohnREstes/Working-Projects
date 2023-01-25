@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+    <title>Budget</title>
+</head>
+<body>
+    <div class="container">
+        <header>BUDGET APP</header>
+        <div class="left">
+            <div class="budget">
+                <span>Please Enter Your Budget</span>
+                <input data-budget-dollar type="number">
+                <button data-calc class="calculate">Calculate</button>
+            </div>
+            <div class="expense">
+                <span>Please Enter Your Expense</span>
+                <input data-expense-type type="text">
+                <span>Please Enter Your Expense</span>
+                <input data-expense-dollar type="number">
+                <button data-add class="addExpense"></button>
+            </div>
+        </div>
+        <div class="right">
+            <div class="ledger">
+                <div class="Totals">
+                    <span>Budget</span>
+                    <span class="icon">$</span>
+                    <span data-budget-dollar-total class="budgetDollar"></span>
+                </div>
+                <div class="Totals">
+                    <span>Expenses</span>
+                    <span class="icon">$$</span>
+                    <span data-expense-dollar-total class="expenseDollar"></span>
+                </div>
+                <div class="Totals">
+                    <span>Balance</span>
+                    <span class="icon">$0</span>
+                    <span data-balance-dollar-total class="balanceDollar"></span>
+                </div>
+            </div>
+            <div class="runningTotal">
+                <span class="expenseTitle">Expense Title</span>
+                <span class="expenseValue">Expense Value</span>
+                <div data-running-total class="runningTotalField"></div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
