@@ -29,8 +29,14 @@ header{
     display: flex;
     flex-direction: column;
 }
-.right, .ledger{
+.right{
     grid-column: span 3;  
+}
+.ledger{
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: 100px;
 }
 .budget, .expense{
     display: flex;
@@ -49,14 +55,4 @@ header{
 input, button{
     margin: .25rem;
     font-size: 1.5rem;
-}
-.Totals1{
-    grid-column: 3/4;
-    display: flex;
-}
-.Totals2{
-    grid-column: 4/5;
-}
-.Totals3{
-    grid-column: 5/-1;
 }
