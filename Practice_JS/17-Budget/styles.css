@@ -36,23 +36,52 @@ header{
     width: 100%;
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    grid-template-rows: 100px;
+    grid-template-rows: 120px;
+    text-align: center;
 }
 .budget, .expense{
+    --border-color: black;
     display: flex;
     flex-direction: column;
     padding: 1rem;
     margin: .5rem;
+    text-align: center;
+    border: 1px solid var(--border-color);
 }
-.budget{
-    border: 1px solid green;
+.green{
+    --border-color: green;
     color: green;
 }
-.expense{
-    border: 1px solid red;
-    font: red;
+.red{
+    --border-color: red;   
+    color: red;
 }
 input, button{
     margin: .25rem;
     font-size: 1.5rem;
+}
+input{
+    border: none;
+    text-decoration: none;
+    background-color: transparent;
+    border-bottom: 1px black solid;
+}
+.total1, .total2, .total3{
+    display: flex;
+    flex-direction: column;
+}
+.runningTotal{
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr .5fr;
+    grid-template-rows: 50px;
+}
+.expenseTitle, .expenseValue, .editDelete{
+    column-span: 1;
+}
+.expenseTitle{
+    grid-column-start: 1;
+}
+.missing{
+    background-color: hsl(0, 100%, 80%);
 }
