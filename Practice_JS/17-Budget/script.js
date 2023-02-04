@@ -15,7 +15,7 @@ balanceDollarTotal.textContent = formatUSD(0);
 calcButton.onclick = ()=>{
     budgetDollarTotal.textContent = formatUSD(budgetDollar.value);
     budgetDollar.value = '';
-    balanceDollarTotal.textContent = formatUSD((parseFloat((budgetDollarTotal.textContent).replace(/[^0-9\.-]+/g,""))) - (parseFloat((expenseDollarTotal.textContent).replace(/[^0-9\.-]+/g,""))));
+    calcBalance();
 };
 expButton.onclick = ()=>{
     expenseType.value === '' ? expenseType.classList.add('missing') : expenseType.classList.remove('missing');
@@ -23,7 +23,8 @@ expButton.onclick = ()=>{
     if(expenseType.value === '' || expenseDollar.value === "") return;
     expenseDollarTotal.textContent = formatUSD(expenseDollar.value);
     expenseDollar.value = '';  
-    balanceDollarTotal.textContent = formatUSD((parseFloat((budgetDollarTotal.textContent).replace(/[^0-9\.-]+/g,""))) - (parseFloat((expenseDollarTotal.textContent).replace(/[^0-9\.-]+/g,""))));
+    expenseType.value = '';
+    calcBalance();
     let type = expenseType.value;
     let dollar = expenseDollar.value;
     //buildEntry(type, dollar);
@@ -32,7 +33,13 @@ expButton.onclick = ()=>{
 function formatUSD(amount){
     return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' } ).format(parseFloat(amount));
 }
-
+function calcBalance(){
+    balanceDollarTotal.textContent = formatUSD((parseFloat((budgetDollarTotal.textContent).replace(/[^0-9\.-]+/g,""))) - (parseFloat((expenseDollarTotal.textContent).replace(/[^0-9\.-]+/g,""))));
+    console.log((parseFloat((balanceDollarTotal.textContent).replace(/[^0-9\.-]+/g,""))) >= 0 );
+    (parseFloat((balanceDollarTotal.textContent).replace(/[^0-9\.-]+/g,""))) >= 0 ? 
+        balanceDollarTotal.classList.add('green') : 
+        balanceDollarTotal.classList.add('red');
+}
 
 function buildEntry(type, dollar){
     let newLine = 14;
