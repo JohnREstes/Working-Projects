@@ -1,87 +1,95 @@
-*, *::before, *::after {
-    box-sizing: border-box;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
-body{
-    margin: 0;
-    padding: 0;
-    font-size: 2rem;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+body {
+  margin: 0;
+  padding: 0;
+  font-size: 2rem;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
 }
-.container{
-    width: 100vw;
-    height: 100vh;
-    background-color: lightgray;
-    display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    grid-template-rows: 150px 150px 150px 150px;
+.container {
+  width: 100vw;
+  height: 100vh;
+  background-color: lightgray;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-rows: 150px 150px 150px 150px;
 }
-header{
-    width: 100%;
-    grid-column: span 5;
-    text-align: center;  
-    font-size: 3rem;
-    padding-top: 1rem;
-    height: 10%;
+header {
+  width: 100%;
+  grid-column: span 5;
+  text-align: center;
+  font-size: 3rem;
+  padding-top: 1rem;
+  height: 10%;
 }
-.left{
-    grid-column: span 2;
-    grid-row: span 3;
-    display: flex;
-    flex-direction: column;
+.left {
+  grid-column: span 2;
+  grid-row: span 3;
+  display: flex;
+  flex-direction: column;
 }
-.right{
-    grid-column: span 3;  
+.right {
+  grid-column: span 3;
 }
-.ledger{
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    grid-template-rows: 120px;
-    text-align: center;
+.ledger {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: 120px;
+  text-align: center;
 }
-.budget, .expense{
-    --border-color: black;
-    display: flex;
-    flex-direction: column;
-    padding: 1rem;
-    margin: .5rem;
-    text-align: center;
-    border: 1px solid var(--border-color);
+.budget,
+.expense {
+  --border-color: black;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  margin: 0.5rem;
+  text-align: center;
+  border: 1px solid var(--border-color);
 }
-.green{
-    --border-color: green;
-    color: green;
+.green {
+  --border-color: green;
+  color: green;
 }
-.red{
-    --border-color: red;   
-    color: red;
+.red {
+  --border-color: red;
+  color: red;
 }
-input, button{
-    margin: .25rem;
-    font-size: 1.5rem;
+input,
+button {
+  margin: 0.25rem;
+  font-size: 1.5rem;
 }
-input{
-    border: none;
-    text-decoration: none;
-    background-color: transparent;
-    border-bottom: 1px black solid;
+input {
+  border: none;
+  text-decoration: none;
+  background-color: transparent;
+  border-bottom: 1px black solid;
 }
-.total1, .total2, .total3{
-    display: flex;
-    flex-direction: column;
+.total1,
+.total2,
+.total3 {
+  display: flex;
+  flex-direction: column;
 }
-.runningTotal{
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr .5fr;
-    grid-template-rows: 50px;
+.runningTotal {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 0.5fr;
+  grid-template-rows: 50px;
 }
-.expenseTitle, .expenseValue, .editDelete{
-    column-span: 1;
+.expenseTitle,
+.expenseValue,
+.editDelete {
+  column-span: 1;
 }
-.expenseTitle{
-    grid-column-start: 1;
+.expenseTitle {
+  grid-column-start: 1;
 }
-.missing{
-    background-color: hsl(0, 100%, 80%);
+.missing {
+  background-color: hsl(0, 100%, 80%);
 }

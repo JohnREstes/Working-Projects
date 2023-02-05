@@ -1,61 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
     <script src="script.js" defer></script>
-    <script src="https://kit.fontawesome.com/f4c4519de4.js" crossorigin="anonymous"></script>
+    <script
+      src="https://kit.fontawesome.com/f4c4519de4.js"
+      crossorigin="anonymous"
+    ></script>
     <title>Budget</title>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <header>BUDGET APP</header>
-        <div class="left">
-            <div class="budget green">
-                <span>Please Enter Your Budget</span>
-                <input data-budget-dollar type="number" placeholder="Dollar Amount">
-                <button data-calc class="calculate">Calculate</button>
-            </div>
-            <div class="expense red">
-                <span>Please Enter Your Expense</span>
-                <input data-expense-type type="text" placeholder="Item Name">
-                <span>Please Enter Your Expense</span>
-                <input data-expense-dollar type="number" placeholder="Item Value">
-                <button data-add class="addExpense">Expense</button>
-            </div>
+      <header>BUDGET APP</header>
+      <div class="left">
+        <div class="budget green">
+          <span>Please Enter Your Budget</span>
+          <input data-budget-dollar type="number" placeholder="Dollar Amount" />
+          <button data-calc class="calculate">Calculate</button>
         </div>
-        <div class="right">
-            <div class="ledger">
-                <div class="total1">
-                    <span>Budget</span>
-                    <i class="fa-solid fa-money-bill"></i>
-                    <span data-budget-dollar-total class="budgetDollar green">$0</span>
-                </div>
-                <div class="total2">
-                    <span>Expenses</span>
-                    <i class="fa-solid fa-credit-card"></i>
-                    <span data-expense-dollar-total class="expenseDollar red">$0</span>
-                </div>
-                <div class="total3">
-                    <span>Balance</span>
-                    <i class="fa-solid fa-dollar-sign"></i>
-                    <span data-balance-dollar-total class="balanceDollar">$0</span>
-                </div>
-            </div>
-            <div class="runningTotal" data-running-total>
-                <span class="expenseTitle">Expense Title</span>
-                <span class="expenseValue">Expense Value</span>
-                <span class="expenseTitle 7865454">Dog Food</span>
-                <span class="expenseValue 7865454">$150</span>
-                <div class="editDelete 7865454">
-                    <i class="fa-solid fa-pen-to-square edit 7865454"></i>
-                    <i class="fa-solid fa-trash delete 7865454"></i>
-                </div>
-            </div>
+        <div class="expense red">
+          <span>Please Enter Your Expense</span>
+          <input data-expense-type type="text" placeholder="Item Name" />
+          <span>Please Enter Your Expense</span>
+          <input data-expense-dollar type="number" placeholder="Item Value" />
+          <button data-add class="addExpense">Expense</button>
         </div>
+      </div>
+      <div class="right">
+        <div class="ledger">
+          <div class="total1">
+            <span>Budget</span>
+            <i class="fa-solid fa-money-bill"></i>
+            <span data-budget-dollar-total class="budgetDollar green">$0</span>
+          </div>
+          <div class="total2">
+            <span>Expenses</span>
+            <i class="fa-solid fa-credit-card"></i>
+            <span data-expense-dollar-total class="expenseDollar red">$0</span>
+          </div>
+          <div class="total3">
+            <span>Balance</span>
+            <i class="fa-solid fa-dollar-sign"></i>
+            <span data-balance-dollar-total class="balanceDollar">$0</span>
+          </div>
+        </div>
+        <div class="runningTotal" data-running-total>
+          <span class="expenseTitle">Expense Title</span>
+          <span class="expenseValue">Expense Value</span>
+          <span class="expenseTitle 7865454">Dog Food</span>
+          <span class="expenseValue 7865454">$150</span>
+          <div class="editDelete 7865454">
+            <i class="fa-solid fa-pen-to-square edit 7865454"></i>
+            <i class="fa-solid fa-trash delete 7865454"></i>
+          </div>
+        </div>
+      </div>
     </div>
-
-</body>
+  </body>
 </html>
