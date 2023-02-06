@@ -6,10 +6,10 @@ class Expense {
     let newID = self.crypto.randomUUID();
     let expTil = document.createElement("span");
     expTil.classList.add(`expenseTitle`, `${newID}`);
-    expTil.textContent = this.type + " hi ";
+    expTil.textContent = this.type + " hello ";
     let expVal = document.createElement("span");
     expVal.classList.add(`expenseValue`, `${newID}`);
-    expVal.textContent = this.value + " hi ";
+    expVal.textContent = this.value + " hello ";
     let divEdDel = document.createElement("div");
     divEdDel.classList.add(`editDelete`, `${newID}`);
     divEdDel.innerHTML = `
