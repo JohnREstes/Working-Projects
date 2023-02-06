@@ -1,21 +1,22 @@
 class Expense {
   constructor(type, value) {
-    (this.type = type), (this.value = value);
+    this.type = type,
+    this.value = value;
   }
   createEl() {
     let newID = self.crypto.randomUUID();
     let expTil = document.createElement("span");
     expTil.classList.add(`expenseTitle`, `${newID}`);
-    expTil.textContent = this.type + " hello ";
+    expTil.textContent = this.type;
     let expVal = document.createElement("span");
     expVal.classList.add(`expenseValue`, `${newID}`);
-    expVal.textContent = this.value + " hello ";
+    expVal.textContent = this.value;
     let divEdDel = document.createElement("div");
     divEdDel.classList.add(`editDelete`, `${newID}`);
     divEdDel.innerHTML = `
             <i class="fa-solid fa-pen-to-square edit ${newID}"></i>
             <i class="fa-solid fa-trash delete ${newID}"></i>       
-        `;
+        `
     runningTotal.appendChild(expTil);
     runningTotal.appendChild(expVal);
     runningTotal.appendChild(divEdDel);
@@ -50,13 +51,12 @@ expButton.onclick = () => {
     : expenseDollar.classList.remove("missing");
   if (expenseType.value === "" || expenseDollar.value === "") return;
   expenseDollarTotal.textContent = formatUSD(expenseDollar.value);
-  expenseDollar.value = "";
-  expenseType.value = "";
   calcBalance();
   let type = expenseType.value;
-  let dollar = expenseDollar.value;
-  let newExpense = new Expense(type, dollar);
-  newExpense.createEl();
+  let dollar = formatUSD(expenseDollar.value);
+  new Expense(type, dollar).createEl();
+  expenseDollar.value = "";
+  expenseType.value = "";
 };
 
 function formatUSD(amount) {
@@ -66,12 +66,16 @@ function formatUSD(amount) {
   }).format(parseFloat(amount));
 }
 function calcBalance() {
+  balanceDollarTotal.classList.remove("green"); 
+  balanceDollarTotal.classList.remove("red");  
   balanceDollarTotal.textContent = formatUSD(
     parseFloat(budgetDollarTotal.textContent.replace(/[^0-9\.-]+/g, "")) -
       parseFloat(expenseDollarTotal.textContent.replace(/[^0-9\.-]+/g, ""))
   );
-  parseFloat(balanceDollarTotal.textContent.replace(/[^0-9\.-]+/g, "")) >= 0
-    ? balanceDollarTotal.classList.add("green")
+  console.log((parseFloat(balanceDollarTotal.textContent.replace(/[^0-9\.-]+/g, ""))));
+  console.log((parseFloat(balanceDollarTotal.textContent.replace(/[^0-9\.-]+/g, "")) >= 0));
+  (parseFloat(balanceDollarTotal.textContent.replace(/[^0-9\.-]+/g, "")) >= 0)
+    ? balanceDollarTotal.classList.add("green") 
     : balanceDollarTotal.classList.add("red");
 }
 function you(you) {
