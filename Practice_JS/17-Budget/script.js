@@ -11,15 +11,39 @@ class Expense {
     let expVal = document.createElement("span");
     expVal.classList.add(`expenseValue`, `${newID}`);
     expVal.textContent = this.value;
+    expVal.id = `item${newID}`;
     let divEdDel = document.createElement("div");
     divEdDel.classList.add(`editDelete`, `${newID}`);
     divEdDel.innerHTML = `
-            <i class="fa-solid fa-pen-to-square edit ${newID}"></i>
-            <i class="fa-solid fa-trash delete ${newID}"></i>       
+            <i class="fa-solid fa-pen-to-square ${newID}" id="edit${newID}"></i>
+            <i class="fa-solid fa-trash ${newID}" id="delete${newID}"></i>       
         `
     runningTotal.appendChild(expTil);
     runningTotal.appendChild(expVal);
     runningTotal.appendChild(divEdDel);
+    this.addClick(`edit${newID}`, newID);
+    this.addClick(`delete${newID}`, newID);
+    expenseDollarTotal.textContent = formatUSD(
+      parseFloat(expenseDollarTotal.textContent.replace(/[^0-9\.-]+/g, "")) +
+      parseFloat((document.getElementById(`item${newID}`).textContent).replace(/[^0-9\.-]+/g, ""))
+    );
+  }
+  addClick(id, uuid){
+    document.getElementById(id).addEventListener('click', ()=>{
+      if(!id.search('edit')){
+        alert('edit');
+      }else{
+        let elements = document.getElementsByClassName(uuid);
+        for(let i = 0; i < elements.length; i++){
+          elements[0].remove();
+          expenseDollarTotal.textContent = formatUSD(
+            parseFloat(expenseDollarTotal.textContent.replace(/[^0-9\.-]+/g, "")) -
+            parseFloat((document.getElementById(`item${uuid}`).textContent).replace(/[^0-9\.-]+/g, ""))
+          );
+          calcBalance();
+        }
+      }
+    })
   }
 }
 
@@ -70,10 +94,8 @@ function calcBalance() {
   balanceDollarTotal.classList.remove("red");  
   balanceDollarTotal.textContent = formatUSD(
     parseFloat(budgetDollarTotal.textContent.replace(/[^0-9\.-]+/g, "")) -
-      parseFloat(expenseDollarTotal.textContent.replace(/[^0-9\.-]+/g, ""))
+    parseFloat(expenseDollarTotal.textContent.replace(/[^0-9\.-]+/g, ""))
   );
-  console.log((parseFloat(balanceDollarTotal.textContent.replace(/[^0-9\.-]+/g, ""))));
-  console.log((parseFloat(balanceDollarTotal.textContent.replace(/[^0-9\.-]+/g, "")) >= 0));
   (parseFloat(balanceDollarTotal.textContent.replace(/[^0-9\.-]+/g, "")) >= 0)
     ? balanceDollarTotal.classList.add("green") 
     : balanceDollarTotal.classList.add("red");
