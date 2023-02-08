@@ -34,7 +34,8 @@ class Expense {
         alert('edit');
       }else{
         let elements = document.getElementsByClassName(uuid);
-        for(let i = 0; i < elements.length; i++){
+        let e = elements.length;
+        for(let i = 0; i < e; i++){
           elements[0].remove();
           expenseDollarTotal.textContent = formatUSD(
             parseFloat(expenseDollarTotal.textContent.replace(/[^0-9\.-]+/g, "")) -
