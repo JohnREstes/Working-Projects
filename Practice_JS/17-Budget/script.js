@@ -23,10 +23,7 @@ class Expense {
     runningTotal.appendChild(divEdDel);
     this.addClick(`edit${newID}`, newID);
     this.addClick(`delete${newID}`, newID);
-    expenseDollarTotal.textContent = formatUSD(
-      parseFloat(expenseDollarTotal.textContent.replace(/[^0-9\.-]+/g, "")) +
-      parseFloat((document.getElementById(`item${newID}`).textContent).replace(/[^0-9\.-]+/g, ""))
-    );
+    calcExpense(newID);
     calcBalance();
   }
   addClick(id, uuid){
@@ -34,14 +31,10 @@ class Expense {
       if(!id.search('edit')){
         alert('edit');
       }else{
-        expenseDollarTotal.textContent = formatUSD(
-          parseFloat(expenseDollarTotal.textContent.replace(/[^0-9\.-]+/g, "")) -
-          parseFloat((document.getElementById(`item${uuid}`).textContent).replace(/[^0-9\.-]+/g, ""))
-        );
+        calcExpense(uuid, 'add');
         calcBalance();
         let elements = document.getElementsByClassName(uuid);
-        let e = elements.length;
-        for(let i = 0; i < e; i++){
+        for(let i = 0; i <= elements.length; i++){
           elements[0].remove();
         }
       }
@@ -76,7 +69,6 @@ expButton.onclick = () => {
     ? expenseDollar.classList.add("missing")
     : expenseDollar.classList.remove("missing");
   if (expenseType.value === "" || expenseDollar.value === "") return;
-
   let type = expenseType.value;
   let dollar = formatUSD(expenseDollar.value);
   new Expense(type, dollar).createEl();
@@ -94,13 +86,24 @@ function calcBalance() {
   balanceDollarTotal.classList.remove("green"); 
   balanceDollarTotal.classList.remove("red");  
   balanceDollarTotal.textContent = formatUSD(
-    parseFloat(budgetDollarTotal.textContent.replace(/[^0-9\.-]+/g, "")) -
-    parseFloat(expenseDollarTotal.textContent.replace(/[^0-9\.-]+/g, ""))
-  );
-  (parseFloat(balanceDollarTotal.textContent.replace(/[^0-9\.-]+/g, "")) >= 0)
+      removeFormat(budgetDollarTotal.textContent) + 
+      removeFormat(expenseDollarTotal.textContent));
+  (removeFormat(balanceDollarTotal.textContent)  >= 0)
     ? balanceDollarTotal.classList.add("green") 
     : balanceDollarTotal.classList.add("red");
 }
-function you(you) {
-  console.log(you);
+function removeFormat(num){
+  return parseFloat(num.replace(/[^0-9.,-]+/g, ''));
+}
+function calcExpense(uuid, sign = ''){
+  if(sign === 'add'){
+    expenseDollarTotal.textContent = formatUSD(
+      removeFormat(expenseDollarTotal.textContent) +
+      removeFormat(document.getElementById(`item${uuid}`).textContent));
+  } else {
+  expenseDollarTotal.textContent = formatUSD(
+    removeFormat(expenseDollarTotal.textContent) -
+    removeFormat(document.getElementById(`item${uuid}`).textContent)
+  );
+}
 }
