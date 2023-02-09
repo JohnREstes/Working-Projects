@@ -8,10 +8,11 @@ class Expense {
     let expTil = document.createElement("span");
     expTil.classList.add(`expenseTitle`, `${newID}`);
     expTil.textContent = this.type;
+    expTil.id = `title${newID}`;
     let expVal = document.createElement("span");
     expVal.classList.add(`expenseValue`, `${newID}`);
     expVal.textContent = this.value;
-    expVal.id = `item${newID}`;
+    expVal.id = `value${newID}`;
     let divEdDel = document.createElement("div");
     divEdDel.classList.add(`editDelete`, `${newID}`);
     divEdDel.innerHTML = `
@@ -21,15 +22,20 @@ class Expense {
     runningTotal.appendChild(expTil);
     runningTotal.appendChild(expVal);
     runningTotal.appendChild(divEdDel);
-    this.addClick(`edit${newID}`, newID);
-    this.addClick(`delete${newID}`, newID);
+    this.addClick(newID, 'edit');
+    this.addClick(newID, 'delete');
     calcExpense(newID);
     calcBalance();
   }
-  addClick(id, uuid){
-    document.getElementById(id).addEventListener('click', ()=>{
-      if(!id.search('edit')){
-        alert('edit');
+  addClick(uuid, type){
+    document.getElementById(`${type}${uuid}`).addEventListener('click', ()=>{
+      if(type === 'edit'){     
+        editing = true;
+        currentID = uuid;
+        expenseType.value = document.getElementById(`title${uuid}`).textContent;
+        expenseDollar.value = removeFormat(document.getElementById(`value${uuid}`).textContent);
+        calcExpense(uuid, 'add');
+        calcBalance();   
       }else{
         calcExpense(uuid, 'add');
         calcBalance();
@@ -51,6 +57,7 @@ const budgetDollarTotal = document.querySelector("[data-budget-dollar-total]");
 const expenseDollarTotal = document.querySelector("[data-expense-dollar-total]");
 const balanceDollarTotal = document.querySelector("[data-balance-dollar-total]");
 const runningTotal = document.querySelector("[data-running-total]");
+let editing = false, currentID = '';
 
 budgetDollarTotal.textContent = formatUSD(0);
 expenseDollarTotal.textContent = formatUSD(0);
@@ -69,9 +76,18 @@ expButton.onclick = () => {
     ? expenseDollar.classList.add("missing")
     : expenseDollar.classList.remove("missing");
   if (expenseType.value === "" || expenseDollar.value === "") return;
-  let type = expenseType.value;
-  let dollar = formatUSD(expenseDollar.value);
-  new Expense(type, dollar).createEl();
+  if(!editing){
+    let type = expenseType.value;
+    let dollar = formatUSD(expenseDollar.value);
+    new Expense(type, dollar).createEl();
+  } else {
+    document.getElementById(`title${currentID}`).textContent = expenseType.value;
+    document.getElementById(`value${currentID}`).textContent = formatUSD(expenseDollar.value);   
+    calcExpense(currentID);
+    calcBalance();
+    currentID = '';
+    editing = false; 
+  }
   expenseDollar.value = "";
   expenseType.value = "";
 };
@@ -93,17 +109,19 @@ function calcBalance() {
     : balanceDollarTotal.classList.add("red");
 }
 function removeFormat(num){
-  return parseFloat(num.replace(/[^0-9.,-]+/g, ''));
+  return Number(num.replace(/[^0-9\.-]+/g,""));
+  //return parseFloat(num.replace(/[^0-9.,-]+/g, ''));
 }
 function calcExpense(uuid, sign = ''){
   if(sign === 'add'){
     expenseDollarTotal.textContent = formatUSD(
       removeFormat(expenseDollarTotal.textContent) +
-      removeFormat(document.getElementById(`item${uuid}`).textContent));
+      removeFormat(document.getElementById(`value${uuid}`).textContent));
   } else {
+    console.log(removeFormat(document.getElementById(`value${uuid}`).textContent));
   expenseDollarTotal.textContent = formatUSD(
     removeFormat(expenseDollarTotal.textContent) -
-    removeFormat(document.getElementById(`item${uuid}`).textContent)
+    removeFormat(document.getElementById(`value${uuid}`).textContent)
   );
 }
 }

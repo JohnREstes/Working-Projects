@@ -96,3 +96,6 @@ input {
 i{
   cursor: pointer;
 }
+.hidden{
+  display: none;
+}
