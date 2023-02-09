@@ -93,3 +93,6 @@ input {
 .missing {
   background-color: hsl(0, 100%, 80%);
 }
+i{
+  cursor: pointer;
+}

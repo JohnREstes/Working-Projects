@@ -27,21 +27,22 @@ class Expense {
       parseFloat(expenseDollarTotal.textContent.replace(/[^0-9\.-]+/g, "")) +
       parseFloat((document.getElementById(`item${newID}`).textContent).replace(/[^0-9\.-]+/g, ""))
     );
+    calcBalance();
   }
   addClick(id, uuid){
     document.getElementById(id).addEventListener('click', ()=>{
       if(!id.search('edit')){
         alert('edit');
       }else{
+        expenseDollarTotal.textContent = formatUSD(
+          parseFloat(expenseDollarTotal.textContent.replace(/[^0-9\.-]+/g, "")) -
+          parseFloat((document.getElementById(`item${uuid}`).textContent).replace(/[^0-9\.-]+/g, ""))
+        );
+        calcBalance();
         let elements = document.getElementsByClassName(uuid);
         let e = elements.length;
         for(let i = 0; i < e; i++){
           elements[0].remove();
-          expenseDollarTotal.textContent = formatUSD(
-            parseFloat(expenseDollarTotal.textContent.replace(/[^0-9\.-]+/g, "")) -
-            parseFloat((document.getElementById(`item${uuid}`).textContent).replace(/[^0-9\.-]+/g, ""))
-          );
-          calcBalance();
         }
       }
     })
@@ -75,8 +76,7 @@ expButton.onclick = () => {
     ? expenseDollar.classList.add("missing")
     : expenseDollar.classList.remove("missing");
   if (expenseType.value === "" || expenseDollar.value === "") return;
-  expenseDollarTotal.textContent = formatUSD(expenseDollar.value);
-  calcBalance();
+
   let type = expenseType.value;
   let dollar = formatUSD(expenseDollar.value);
   new Expense(type, dollar).createEl();
