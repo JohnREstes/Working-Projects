@@ -110,7 +110,6 @@ function calcBalance() {
 }
 function removeFormat(num){
   return Number(num.replace(/[^0-9\.-]+/g,""));
-  //return parseFloat(num.replace(/[^0-9.,-]+/g, ''));
 }
 function calcExpense(uuid, sign = ''){
   if(sign === 'add'){
@@ -118,7 +117,6 @@ function calcExpense(uuid, sign = ''){
       removeFormat(expenseDollarTotal.textContent) +
       removeFormat(document.getElementById(`value${uuid}`).textContent));
   } else {
-    console.log(removeFormat(document.getElementById(`value${uuid}`).textContent));
   expenseDollarTotal.textContent = formatUSD(
     removeFormat(expenseDollarTotal.textContent) -
     removeFormat(document.getElementById(`value${uuid}`).textContent)
