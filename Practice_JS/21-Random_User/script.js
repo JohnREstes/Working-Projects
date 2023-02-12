@@ -9,11 +9,6 @@ class User {
     this.password = password;
   }
   addUser(){
-    console.log(this.email);
-    console.log(this.dob);
-    console.log(this.location);
-    console.log(this.cell);
-    console.log(this.password);
     profile[0].style.backgroundImage = `url('${this.picture}')`;
     profile[1].textContent = "Name:";
     profile[2].textContent = `${this.name.title} ${this.name.first} ${this.name.last}`
@@ -27,7 +22,7 @@ let currentUser;
 
 icon.forEach(icon =>{
   icon.addEventListener("click", (e)=>{
-    iconClick(e.target.dataset.icon);
+    iconClick(e.target);
   })
 })
 
@@ -36,35 +31,44 @@ changeButton.addEventListener("click", ()=>{
  });
 
  function iconClick(target){
-  switch (target) {
+  let dataTarget = (target.dataset.icon)
+  icon.forEach(icon =>{
+    icon.classList.remove('selected');
+  })
+  switch (dataTarget) {
     case 'name':
       profile[1].textContent = "Name:";
       profile[2].textContent = `${currentUser.name.title} ${currentUser.name.first} ${currentUser.name.last}`
+      target.classList.add('selected');
       break;
     case 'email':
       profile[1].textContent = "Email:";
       profile[2].textContent = `${currentUser.email}`
+      target.classList.add('selected');
       break;
     case 'birthday':
       let dob = new Date(currentUser.dob);
       var mm = dob.getMonth() + 1;
       var dd = dob.getDate();
       var yy = dob.getFullYear();
-      console.log(`${mm}/${dd}/${yy}`);
       profile[1].textContent = "Birthday:";
       profile[2].textContent = `${mm}/${dd}/${yy}`
+      target.classList.add('selected');
       break;
     case 'address':
       profile[1].textContent = "Address:";
       profile[2].textContent = `${currentUser.location.city}, ${currentUser.location.country}`
+      target.classList.add('selected');
       break;
     case 'phone':
       profile[1].textContent = "Cell Phone Number:";
       profile[2].textContent = `${currentUser.cell}`
+      target.classList.add('selected');
       break;
     case 'password':
       profile[1].textContent = "Password";
       profile[2].textContent = `${currentUser.password}`
+      target.classList.add('selected');
       break;
 }
  }
@@ -78,9 +82,15 @@ async function newUser() {
     throw new Error(message);
   }
   const user = await response.json();
-  console.log(user.results[0]);
-  currentUser = new User(user.results[0].picture.large, user.results[0].name, user.results[0].email, user.results[0].dob.date, user.results[0].location, user.results[0].cell, user.results[0].login.password);
-  console.log(currentUser);
+  currentUser = new User(
+    user.results[0].picture.large, 
+    user.results[0].name, 
+    user.results[0].email, 
+    user.results[0].dob.date, 
+    user.results[0].location, 
+    user.results[0].cell, 
+    user.results[0].login.password
+    );
   currentUser.addUser();
 }
 newUser().catch(error => {
