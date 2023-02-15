@@ -43,6 +43,7 @@ const answerList = ['Eiffle Tower', 'The Colosseum', 'Statue of Liberty', 'Machu
 const hangman = document.querySelectorAll('.man');
 const answerGrid = document.querySelector('.answerGrid');
 const dataKey = document.querySelectorAll('.key');
+const modal = document.querySelector('.modal');
 let count = 0;
 
 buildBoard();
@@ -67,9 +68,27 @@ function checkKey(e){
       currentAnswerArray[i].classList.remove('transparent');
       modArray = modArray.splice(i, 1);
     } 
+    e.target.classList.add('correctBtn');
   }
   if(modArray.length == currentAnswerArray.length){
     hangman[count].classList.remove('hidden');
     count++;
+    e.target.classList.add('incorrectBtn');
+  }
+  e.target.classList.add('no-click');
+  checkWin();
+}
+function checkWin(){
+  let shown = document.querySelectorAll('.transparent');
+  if (shown.length == null || shown.length == 0){
+    modal.children[0].children[0].textContent = "You Win!"
+    modal.classList.remove('hidden');
+  } else if (count == 7){
+    modal.children[0].children[0].textContent = "You Lose!"
+    modal.classList.remove('hidden');
   }
 }
+modal.addEventListener('click', ()=>{
+  modal.classList.add('hidden');
+  location.reload();
+})
