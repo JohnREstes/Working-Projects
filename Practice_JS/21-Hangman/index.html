@@ -6,27 +6,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="script.js" defer></script>
     <link rel="stylesheet" href="style.css">
-    <title>Clock</title>
+    <title>Hangman</title>
 </head>
 <body>
     <div class="container">
-        <div class="clock">
-        <div class="number num1">1</div>
-        <div class="number num2">2</div>
-        <div class="number num3">3</div>
-        <div class="number num4">4</div>
-        <div class="number num5">5</div>
-        <div class="number num6">6</div>
-        <div class="number num7">7</div>
-        <div class="number num8">8</div>
-        <div class="number num9">9</div>
-        <div class="number num10">10</div>
-        <div class="number num11">11</div>
-        <div class="number num12">12</div>
-        <div class="hand second"></div>
-        <div class="hand minute"></div>
-        <div class="hand hour"></div>
-        <div class="middle"></div>
+        <div class="hangman">
+            <div class="gallows"></div>
+            <div class="gallowsBase"></div>
+            <div class="man rope hidden"></div>
+            <div class="man head hidden"></div>
+            <div class="man body hidden"></div>
+            <div class="man leftLeg hidden"></div>
+            <div class="man rightLeg hidden"></div>
+            <div class="man leftArm hidden"></div>
+            <div class="man rightArm hidden"></div>
+        </div>
+        <div class="answerGrid">
+            <div class="empty"></div>
+            <div class="empty"></div>
+            <div class="letter">A</div>
+            <div class="letter space"></div>
+            <div class="letter">B</div>
+        </div>
+        <div class="keyboard">
+            <button class="key" data-key="a">A</button>
+            <button class="key" data-key="b">B</button>
+            <button class="key" data-key="c">C</button>
+            <button class="key" data-key="d">D</button>
+            <button class="key" data-key="e">E</button>
+            <button class="key" data-key="f">F</button>
+            <button class="key" data-key="g">G</button>
+            <button class="key" data-key="h">H</button>
+            <button class="key" data-key="i">I</button>
+            <button class="key" data-key="j">J</button>
+            <button class="key" data-key="k">K</button>
+            <button class="key" data-key="l">L</button>
+            <button class="key" data-key="m">M</button>
+            <button class="key" data-key="n">N</button>
+            <button class="key" data-key="o">O</button>
+            <button class="key" data-key="p">P</button>
+            <button class="key" data-key="q">Q</button>
+            <button class="key" data-key="r">R</button>
+            <button class="key" data-key="s">S</button>
+            <button class="key" data-key="t">T</button>
+            <div class="key"></div>
+            <div class="key"></div>
+            <button class="key" data-key="u">U</button>
+            <button class="key" data-key="v">V</button>
+            <button class="key" data-key="w">W</button>
+            <button class="key" data-key="x">X</button>
+            <button class="key" data-key="y">Y</button>
+            <button class="key" data-key="z">Z</button>
         </div>
     </div>  
 </body>

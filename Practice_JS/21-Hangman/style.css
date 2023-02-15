@@ -1,9 +1,3 @@
-:root{
-    --secondDeg: 0;
-    --minuteDeg: 0;
-    --hourDeg: 0;
-}
-
 body{
     margin: 0;
     padding: 0;
@@ -15,89 +9,131 @@ body{
     width: 100vw;
     height: 100vh;
     position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+}
+.gallows{
+    height: 300px;
+    width: 10px;
+    background-color: black;
+    position: absolute;
+    top: 20px;
+    left: 50px;
+}
+.gallows::before{
+    content: '';
+    height: 10px;
+    width: 150px;
+    background-color: black;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+.gallows::after{
+    content: '';
+    height: 90px;
+    width: 10px;
+    background-color: black;
+    position: absolute;
+    left: 25px;
+    top: -15px;
+    rotate: 45deg;
+}
+.gallowsBase{
+    height: 10px;
+    width: 250px;
+    background-color: black;
+    position: absolute;
+    top: 320px;
+    left: 30px;
+}
+.man{
+    background-color: blue;
+    position: absolute; 
+}
+.rope{
+    height: 50px;
+    width: 5px;
+    top: 20px;
+    left: 200px; 
+}
+.head{
+    height: 50px;
+    width: 50px;
+    top: 68px;
+    left: 177.5px; 
+    border-radius: 50%;
+}
+.body{
+    height: 100px;
+    width: 10px;
+    top: 116px;
+    left: 197.5px; 
+}
+.leftLeg{
+    height: 50px;
+    width: 10px;
+    top: 100px;
+    left: 197.5px; 
+    transform-origin: bottom;
+    rotate: -45deg;
+}
+.rightLeg{
+    height: 50px;
+    width: 10px;
+    top: 100px;
+    left: 197.5px; 
+    transform-origin: bottom;
+    rotate: 45deg;
+}
+.leftArm{
+    height: 50px;
+    width: 10px;
+    top: 157.5px;
+    left: 197.5px; 
+    transform-origin: bottom;
+    rotate: -135deg;
+}
+.rightArm{
+    height: 50px;
+    width: 10px;
+    top: 157.5px;
+    left: 197.5px; 
+    transform-origin: bottom;
+    rotate: 135deg;
+}
+.answerGrid{
+    display: grid;
+    grid-template-columns: repeat(10, 3rem);
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+}
+.empty{
+    grid-column: 1 / span 10;  
+}
+.letter{
+    width: 2.5rem;
+    border-bottom: 1px solid black;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: end;
 }
-.clock, .number{
-    position: absolute;
-    width: 500px;
-    height: 500px;
-    border-radius: 50%;
+.space{
+    border-bottom: none;
+}
+.hidden{
+    display: none;
+}
+.keyboard{
+    grid-column: 1 / span 2;
+    display: grid;
+    grid-template-columns: repeat(10, 3.5rem);
+    grid-template-rows: repeat(3, 3.5rem);
+    margin: auto;
+}
+button{
+    font-size: 2rem;
+    width: 3rem;
+    height: 2.5rem;
     text-align: center;
-    transform-origin: center;
-}
-.clock{
-    background-color: grey;
-}
-.hand{
-    background-color: black;
-    position: absolute;
-    transform-origin: bottom;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-}
-.second{
-    left: calc(250px - (3px / 2));
-    width: 3px;
-    height: 215px;
-    margin-top: 35px;
-    rotate: calc(var(--secondDeg) * 1deg);
-}
-.minute{
-    left: calc(250px - (10px / 2));
-    width: 10px;
-    height: 150px;
-    margin-top: 100px;
-    rotate: calc(var(--minuteDeg) * 1deg);
-}
-.hour{
-    left: calc(250px - (12px / 2));
-    width: 12px;
-    height: 120px;
-    margin-top: 130px;
-    rotate: calc(var(--hourDeg) * 1deg);
-}
-.middle{
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background-color: black;
-}
-.num1{
-    rotate: 30deg;
-}
-.num2{
-    rotate: 60deg;
-}
-.num3{
-    rotate: 90deg;
-}
-.num4{
-    rotate: 120deg;
-}
-.num5{
-    rotate: 150deg;
-}
-.num6{
-    rotate: 180deg;
-}
-.num7{
-    rotate: 210deg;
-}
-.num8{
-    rotate: 240deg;
-}
-.num9{
-    rotate: 270deg;
-}
-.num10{
-    rotate: 300deg;
-}
-.num11{
-    rotate: 330deg;
 }
