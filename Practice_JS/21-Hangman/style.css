@@ -118,6 +118,9 @@ body{
     justify-content: center;
     align-items: end;
 }
+.transparent{
+    color: transparent;
+}
 .space{
     border-bottom: none;
 }
