@@ -127,9 +127,15 @@ body{
 .keyboard{
     grid-column: 1 / span 2;
     display: grid;
-    grid-template-columns: repeat(10, 3.5rem);
+    grid-template-columns: repeat(18, 1.75rem);
     grid-template-rows: repeat(3, 3.5rem);
     margin: auto;
+}
+.key{
+    grid-column: span 2;
+}
+.keyHalf{
+    grid-column: span 1;
 }
 button{
     font-size: 2rem;
