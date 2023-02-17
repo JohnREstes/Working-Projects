@@ -1,12 +1,43 @@
-const changeButton = document.querySelector('.changeButton');
+class Player {
+  constructor(type){
+    this.type = type
+  }
+  move(target){
+    target.classList.add(this.type);
+    setPlayer();
+  }
+}
 const root = document.documentElement;
-const backgroundColor = ['--rgb1', '--rgb2', '--rgb3'];
+const board = document.getElementById('board');
+const innerSquares = document.querySelectorAll('.square');
+const playerMove = document.querySelectorAll('[data-square]');
+const modal = document.getElementsByClassName('modal');
+let turnX = true;
 
-changeButton.addEventListener("click", ()=>{
-  backgroundColor.forEach(randomColorRBG);
- });
+let playerX = new Player('X');
+let playerO = new Player('O');
 
-function randomColorRBG(rgb){
-    var colorValue = Math.floor(Math.random() * (255 + 1));
-    root.style.setProperty(rgb, colorValue);
+setPlayer();
+
+innerSquares.forEach(square =>{
+  console.log(square);
+  square.addEventListener('click', (e)=>{
+    if(turnX){
+      playerX.move(e.target);
+    } else {
+      playerO.move(e.target)      
+    }
+    turnX = !turnX;
+    console.log(board.classList.value);
+    turnX ? board.classList.add('XTurn') : board.classList.remove('XTurn');
+    !turnX ? board.classList.add('OTurn') : board.classList.remove('OTurn');
+  }, {once: true});
+})
+
+
+function setPlayer(){
+    playerMove.forEach(square =>{
+      if (square.dataset.square == "taken") return;
+      square.dataset.square = turnX ? 'O' : 'X';
+    })
 }
