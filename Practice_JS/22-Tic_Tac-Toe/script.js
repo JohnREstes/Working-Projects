@@ -57,7 +57,6 @@ function checkWinner(type){
       winningPlayer = type;
     }
   })
-  console.log(winningPlayer);
   if(winningPlayer == null) return;
   modalShow(winningPlayer);
 }
@@ -69,13 +68,9 @@ function test(plays, type){
   return result;
 }
 modal[0].addEventListener('click', ()=>{
-  modal[0].classList.add('hidden');
   location.reload();
 })
 function modalShow(winner){
-  console.log('ran');
   modal[0].classList.remove('hidden');
-  console.log(winner);
-  console.log(modal);
   modal[0].children[0].children[0].textContent = `${winner} Wins!`
 }
