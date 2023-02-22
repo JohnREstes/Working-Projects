@@ -1,3 +1,5 @@
+import { handleChange } from "./firebase.js";
+
 const changeButton = document.querySelector(".changeButton");
 const root = document.documentElement;
 const backgroundColor = ["--rgb1", "--rgb2", "--rgb3"];
@@ -6,7 +8,7 @@ let color = [];
 changeButton.addEventListener("click", () => {
   color = [];
   backgroundColor.forEach(randomColorRBG);
-  handleChange()
+  handleChange(color);
 });
 
 function randomColorRBG(rgb) {

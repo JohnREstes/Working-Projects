@@ -13,10 +13,12 @@ const firebaseConfig = {
   // Initialize firebase
   firebase.initializeApp(firebaseConfig);
   
-  function handleChange(){
+  export function handleChange(color){
     //update players[playerId].value = ?
     //then set change
-    players[playerId].name = "John";
+    console.log('set color');
+    console.log(color);
+    players[playerId].color = color;
     playerRef.update(players[playerId]);
   }
   
