@@ -23,9 +23,6 @@ firebase.auth().onAuthStateChanged((user) => {
     playerId = user.uid;
     playerRef = firebase.database().ref(`players`);
 
-    console.log(playerId);
-    console.log(playerRef);
-
     const name = createName();
 
     playerRef.set({
@@ -56,13 +53,14 @@ firebase
     // log out error
     console.log(errorCode, errorMessage);
   });
-  function handleChange(plays){
-    //update players[playerId].value = ?
-    //then set change
-    console.log(players);
-    console.log(playerId);
-    //playerRef.set(players[playerId]);
-  }
+
+function handleChange(plays){
+  //update players[playerId].value = ?
+  //then set change
+  //console.log(playerRef);
+  //players[playerId].name = "John";
+  //playerRef.update(players[playerId]);
+}
     
 function initGame(){
   //get all players
@@ -88,7 +86,6 @@ function initGame(){
     }
     //render player to screen
     playerElements[addedPlayer.id] = addedPlayer;
-    console.log(playerElements);
   })
 }
     

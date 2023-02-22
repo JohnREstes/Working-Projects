@@ -1,3 +1,18 @@
+//Firebasesetup
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB_v-earqVaFFUGDtVLl_2BJpmB0NUeT_Q",
+  authDomain: "multiplayertest-jme.firebaseapp.com",
+  databaseURL: "https://multiplayertest-jme-default-rtdb.firebaseio.com",
+  projectId: "multiplayertest-jme",
+  storageBucket: "multiplayertest-jme.appspot.com",
+  messagingSenderId: "978643940788",
+  appId: "1:978643940788:web:cadbf245619611602b2ee1"
+};
+
+// Initialize firebase
+firebase.initializeApp(firebaseConfig);
+
 const changeButton = document.querySelector(".changeButton");
 const root = document.documentElement;
 const backgroundColor = ["--rgb1", "--rgb2", "--rgb3"];
@@ -19,7 +34,7 @@ function handleChange(){
   //update players[playerId].value = ?
   //then set change
   players[playerId].name = "John";
-  playerRef.set(players[playerId]);
+  playerRef.update(players[playerId]);
 }
 
 function initGame(){
