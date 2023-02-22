@@ -13,14 +13,57 @@ const firebaseConfig = {
 // Initialize firebase
 firebase.initializeApp(firebaseConfig);
 
+let playerId, playerRef;
+let players = {};
+let playerElements = {};
 
-function handleChange(){
-  //update players[playerId].value = ?
-  //then set change
-  players[playerId].name = "John";
-  playerRef.set(players[playerId]);
-}
+firebase.auth().onAuthStateChanged((user) => {
+  console.log(user);
+  if (user) {
+    playerId = user.uid;
+    playerRef = firebase.database().ref(`players`);
 
+    console.log(playerId);
+    console.log(playerRef);
+
+    const name = createName();
+
+    playerRef.set({
+      id: playerId,
+      name,
+      turnX,
+      modalDisplay,
+      plays
+    });
+
+    //removes player on browser close
+    playerRef.onDisconnect().remove();
+
+    //begin game
+    initGame();
+
+  } else {
+    //you are not logged in
+  }
+});
+
+firebase
+  .auth()
+  .signInAnonymously()
+  .catch((error) => {
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    // log out error
+    console.log(errorCode, errorMessage);
+  });
+  function handleChange(plays){
+    //update players[playerId].value = ?
+    //then set change
+    console.log(players);
+    console.log(playerId);
+    //playerRef.set(players[playerId]);
+  }
+    
 function initGame(){
   //get all players
   const allPlayersRef = firebase.database().ref('players');
@@ -31,9 +74,7 @@ function initGame(){
     players = snapshot.val() || {};
     //loop through player object and set dom elements
     Object.keys(players).forEach((key)=>{
-      const characterState = players[key];
-      let el = playerElements[key];
-      console.log(playerElements[key]);
+      console.log(players[key]);
       //update Dom
       //el.queryselector('.name/move') = characterState.name/move
     })
@@ -42,58 +83,15 @@ function initGame(){
   //callback when new child compared to what your browser knows
   allPlayersRef.on('child_added', (snapshot) => {
     const addedPlayer = snapshot.val();
-    const characterElement = document.createElement('div');
     if(addedPlayer.id === playerId.id){
       //this is you
     }
     //render player to screen
-    playerElements[addedPlayer.id] = characterElement;
+    playerElements[addedPlayer.id] = addedPlayer;
+    console.log(playerElements);
   })
-
-
 }
-
-  let playerId, playerRef;
-  let players = {};
-  let playerElements = {};
-
-  firebase.auth().onAuthStateChanged((user) => {
-    console.log(user);
-    if (user) {
-      playerId = user.uid;
-      playerRef = firebase.database().ref(`players/${playerId}`);
-
-      const name = createName();
-
-      playerRef.set({
-        id: playerId,
-        name,
-        turnX,
-        modalDisplay
-
-      });
-
-      //removes player on browser close
-      playerRef.onDisconnect().remove();
-
-      //begin game
-      initGame();
-
-    } else {
-      //you are not logged in
-    }
-  });
-  
-  firebase
-    .auth()
-    .signInAnonymously()
-    .catch((error) => {
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      // log out error
-      console.log(errorCode, errorMessage);
-    });
-
+    
 function randomFromArray(array){
   return array[Math.floor(Math.random() * array.length)];
 }

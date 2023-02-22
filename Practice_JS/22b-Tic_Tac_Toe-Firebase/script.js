@@ -44,6 +44,7 @@ function setPlayer(){
       if (square.dataset.square == "taken") return;
       square.dataset.square = turnX ? 'O' : 'X';
     })
+    handleChange(plays);
 }
 function checkWinner(type){
   plays = [];
@@ -79,3 +80,6 @@ function modalShow(winner){
   modal[0].classList.remove('hidden');
   modal[0].children[0].children[0].textContent = `${winner} Wins!`
 }
+
+
+
