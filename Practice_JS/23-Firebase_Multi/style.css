@@ -34,3 +34,11 @@ body{
     border-radius: 5px;
     font-family: inherit;
 }
+.modal{
+    position: absolute;
+    inset: 0 0 0 0;
+    background-color: darkgray;
+}
+.hidden{
+    display: none;
+}

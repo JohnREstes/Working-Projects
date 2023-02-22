@@ -4,6 +4,7 @@ import { playerState } from "./firebase.js";
 const changeButton = document.querySelector(".changeButton");
 const root = document.documentElement;
 const backgroundColor = ["--rgb1", "--rgb2", "--rgb3"];
+const modal = document.querySelector('.modal');
 let color = [];
 
 changeButton.addEventListener("click", () => {
@@ -17,3 +18,6 @@ function randomColorRBG(rgb) {
   root.style.setProperty(rgb, colorValue);
   color.push(colorValue);
 }
+modal.addEventListener('click', ()=>{
+  modal.classList.add('hidden');
+})

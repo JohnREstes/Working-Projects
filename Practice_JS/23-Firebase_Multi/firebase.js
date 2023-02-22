@@ -12,12 +12,15 @@ const firebaseConfig = {
   
   // Initialize firebase
   firebase.initializeApp(firebaseConfig);
-  
+  let index = 1
   export function handleChange(color){
     //update players[playerId].value = ?
     //then set change
+    index ++;
     players[playerId].color = color;
+    index === 3 ? players[playerId].modal = true : players[playerId].modal = false;    
     playerRef.update(players[playerId]);
+    console.log(index)
   }
   
   function initGame(){
@@ -36,6 +39,11 @@ const firebaseConfig = {
         if(playerState.id == playerId){
             let text = document.querySelector('.text');
             text.textContent = playerState.color;
+            if(playerState.modal){
+                let modalShown = document.querySelector('.modal');
+                modalShown.classList.remove('hidden');
+            }
+
         }
 
         //update Dom
@@ -74,7 +82,8 @@ const firebaseConfig = {
         playerRef.set({
           id: playerId,
           name,
-          color: 'default'
+          color: 'default',
+          modal: false
         });
   
         //removes player on browser close
