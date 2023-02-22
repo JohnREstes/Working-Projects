@@ -1,4 +1,5 @@
 import { handleChange } from "./firebase.js";
+import { playerState } from "./firebase.js";
 
 const changeButton = document.querySelector(".changeButton");
 const root = document.documentElement;

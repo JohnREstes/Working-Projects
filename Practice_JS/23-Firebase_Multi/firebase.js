@@ -16,8 +16,6 @@ const firebaseConfig = {
   export function handleChange(color){
     //update players[playerId].value = ?
     //then set change
-    console.log('set color');
-    console.log(color);
     players[playerId].color = color;
     playerRef.update(players[playerId]);
   }
@@ -32,8 +30,14 @@ const firebaseConfig = {
       players = snapshot.val() || {};
       //loop through player object and set dom elements
       Object.keys(players).forEach((key)=>{
-        const characterState = players[key];
+        playerState = players[key];
+        console.log(playerState);
         let el = playerElements[key];
+        if(playerState.id == playerId){
+            let text = document.querySelector('.text');
+            text.textContent = playerState.color;
+        }
+
         //update Dom
         //el.queryselector('.name/move') = characterState.name/move
       })
@@ -53,12 +57,14 @@ const firebaseConfig = {
   
   }
   
-    let playerId, playerRef;
+    let playerId;
+    let playerRef;
     let players = {};
     let playerElements = {};
+    export let playerState;
   
     firebase.auth().onAuthStateChanged((user) => {
-      console.log(user);
+      console.log(`User ${user.uid} is signed-in`);
       if (user) {
         playerId = user.uid;
         playerRef = firebase.database().ref(`players/${playerId}`);
