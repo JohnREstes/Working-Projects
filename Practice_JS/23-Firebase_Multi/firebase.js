@@ -12,13 +12,20 @@ const firebaseConfig = {
   
   // Initialize firebase
   firebase.initializeApp(firebaseConfig);
-  let index = 1
+
+
+  let index = 0
   export function handleChange(color){
     //update players[playerId].value = ?
     //then set change
     index ++;
     players[playerId].color = color;
-    index === 3 ? players[playerId].modal = true : players[playerId].modal = false;    
+    if(index === 3){
+      players[playerId].modal = true 
+    } else {
+      players[playerId].modal = false
+    };
+    if(index === 3) index = 0;   
     playerRef.update(players[playerId]);
     console.log(index)
   }
@@ -39,12 +46,9 @@ const firebaseConfig = {
         if(playerState.id == playerId){
             let text = document.querySelector('.text');
             text.textContent = playerState.color;
-            if(playerState.modal){
-                let modalShown = document.querySelector('.modal');
-                modalShown.classList.remove('hidden');
             }
-
-        }
+        let modalShown = document.querySelector('.modal');
+        playerState.modal ? modalShown.classList.remove('hidden') : modalShown.classList.add('hidden');
 
         //update Dom
         //el.queryselector('.name/move') = characterState.name/move
