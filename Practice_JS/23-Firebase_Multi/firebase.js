@@ -25,9 +25,11 @@ const firebaseConfig = {
     } else {
       players[playerId].modal = false
     };
+    console.log(players[playerId].modal);
+    console.log(index)
     if(index === 3) index = 0;   
     playerRef.update(players[playerId]);
-    console.log(index)
+
   }
   
   function initGame(){
@@ -41,13 +43,13 @@ const firebaseConfig = {
       //loop through player object and set dom elements
       Object.keys(players).forEach((key)=>{
         playerState = players[key];
-        console.log(playerState);
         let el = playerElements[key];
         if(playerState.id == playerId){
             let text = document.querySelector('.text');
             text.textContent = playerState.color;
             }
         let modalShown = document.querySelector('.modal');
+            console.log(playerState);
         playerState.modal ? modalShown.classList.remove('hidden') : modalShown.classList.add('hidden');
 
         //update Dom
