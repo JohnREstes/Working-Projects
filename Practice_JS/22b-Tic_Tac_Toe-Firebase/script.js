@@ -1,3 +1,6 @@
+import { handleChange } from "./firebase.js";
+import { playerState } from "./firebase.js";
+
 class Player {
   constructor(type){
     this.type = type
@@ -44,7 +47,9 @@ function setPlayer(){
       if (square.dataset.square == "taken") return;
       square.dataset.square = turnX ? 'O' : 'X';
     })
-    handleChange(plays);
+    handleChange();
+
+    
 }
 function checkWinner(type){
   plays = [];

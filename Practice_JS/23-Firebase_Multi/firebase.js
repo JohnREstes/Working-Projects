@@ -91,6 +91,7 @@ const firebaseConfig = {
           color: 'default',
           modal: false
         });
+        
   
         //removes player on browser close
         playerRef.onDisconnect().remove();
