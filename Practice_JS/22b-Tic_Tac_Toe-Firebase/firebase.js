@@ -21,22 +21,34 @@ export function handleChange(){
   index ++;
   
   console.log(players);
-  
+ 
 /*  if(index === 3){
     players[playerId].modal = true 
   } else {
     players[playerId].modal = false
   };
-  console.log(players[playerId].modal);*/
+  console.log(players[playerId].modal);
   console.log(index)
   if(index === 3) index = 0;   
-  //playerRef.update(players[playerId]);
-
+  playerRef.update(players[playerId]);
+*/
+}
+export function setBoard(){
+  playerMoves = [];
+  currentBoard.forEach(position =>{
+    playerMoves.push(position.classList.value);
+  })
+  console.log(playerMoves);
+  boardRef.update({
+    playerMoves,
+  });
 }
 
 function initGame(){
+  setBoard();
   //get all players
   const allPlayersRef = firebase.database().ref('players');
+  const allBoardRef = firebase.database().ref('board');
 
   //callback when allPlayersRef changes
   allPlayersRef.on('value', (snapshot) => {
@@ -57,7 +69,18 @@ function initGame(){
       //update Dom
       //el.queryselector('.name/move') = characterState.name/move
     })
+  })
 
+    //callback when allBoardRef changes
+  allBoardRef.on('value', (snapshot) => {
+    //set any player value change to player object
+    board = snapshot.val() || {};
+    //loop through player object and set dom elements
+    console.log('board value change');
+    console.log(board)
+    Object.keys(board).forEach((key)=>{
+      console.log(key);
+    })
   })
   //callback when new child compared to what your browser knows
   allPlayersRef.on('child_added', (snapshot) => {
@@ -78,6 +101,11 @@ function initGame(){
   let players = {};
   let playerElements = {};
   let boardRef = {};
+  let board;
+  let currentBoard = document.querySelectorAll('.innerSquare');
+  let playerMoves = [];
+
+
   export let playerState;
 
   firebase.auth().onAuthStateChanged((user) => {
@@ -91,11 +119,12 @@ function initGame(){
 
       playerRef.set({
         id: playerId,
-        name,
+        name
       });
 
       boardRef.set({
-        board: 'board'
+        playerMoves,
+        modal: false
       });
 
       //removes player on browser close
@@ -105,7 +134,7 @@ function initGame(){
       initGame();
 
     } else {
-      //you are not logged in
+      console.log('You are not logged in');
     }
   });
   

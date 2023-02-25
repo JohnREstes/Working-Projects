@@ -1,5 +1,5 @@
 import { handleChange } from "./firebase.js";
-import { playerState } from "./firebase.js";
+import { setBoard } from "./firebase.js";
 
 class Player {
   constructor(type){
@@ -8,6 +8,7 @@ class Player {
   move(target){
     target.classList.add(this.type);
     //checkWinner(this.type);
+    setBoard();
     checkWinner(this.type);
     setPlayer();
   }
@@ -47,9 +48,6 @@ function setPlayer(){
       if (square.dataset.square == "taken") return;
       square.dataset.square = turnX ? 'O' : 'X';
     })
-    handleChange();
-
-    
 }
 function checkWinner(type){
   plays = [];
@@ -85,6 +83,4 @@ function modalShow(winner){
   modal[0].classList.remove('hidden');
   modal[0].children[0].children[0].textContent = `${winner} Wins!`
 }
-
-
 
