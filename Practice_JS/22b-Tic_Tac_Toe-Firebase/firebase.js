@@ -1,4 +1,5 @@
 import { modalShow } from "./script.js";
+import { turnX } from "./script.js";
 
 //Firebasesetup
 
@@ -45,6 +46,17 @@ function initGame(){
   allPlayersRef.on('value', (snapshot) => {
     //set any player value change to player object
     players = snapshot.val() || {};
+    let firstPlayer = true;
+    let playerState;
+    Object.keys(players).forEach((key)=>{
+      playerState = players[key];
+      if(playerState.piece === "X") firstPlayer = false;
+    })
+    if(firstPlayer){
+      playerRef.update({
+        piece: 'X'
+      });
+    }
   })
 
     //callback when allBoardRef changes
@@ -53,6 +65,7 @@ function initGame(){
     board = (snapshot.val() || {});
     //loop through player object and set dom elements
     console.log(board.playerMoves);
+    if(board.playerMoves === undefined) return;
     board.playerMoves.forEach((move, index)=>{
       if(move === "")return;
       currentBoard[index].classList.add(move);
@@ -79,13 +92,15 @@ function initGame(){
 
       playerRef.set({
         id: playerId,
-        name
+        name,
+        piece: 'O'
       });
 
       boardRef.set({
         playerMoves,
         modal: false,
-        winner: null
+        winner: null,
+        turnX
       });
 
       //removes player on browser close
