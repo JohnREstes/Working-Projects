@@ -34,6 +34,14 @@ export function setModal(winner){
     winner
   }); 
 }
+export function clearBoard(){
+  boardRef.set({
+    playerMoves: [],
+    modal: false,
+    winner: "",
+    turnX
+  }); 
+}
 
 function initGame(){
   let displayModal = true;
@@ -70,6 +78,9 @@ function initGame(){
       if(move === "")return;
       currentBoard[index].classList.add(move);
     })
+    if(board.winner !== ""){
+      modalShow(board.winner);
+    }
   })
 }
 
@@ -99,7 +110,7 @@ function initGame(){
       boardRef.set({
         playerMoves,
         modal: false,
-        winner: null,
+        winner: "",
         turnX
       });
 

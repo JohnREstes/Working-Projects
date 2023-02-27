@@ -1,5 +1,6 @@
 import { setBoard } from "./firebase.js";
 import { setModal } from "./firebase.js";
+import { clearBoard } from "./firebase.js";
 
 class Player {
   constructor(type){
@@ -21,7 +22,6 @@ const innerSquares = document.querySelectorAll('.innerSquare');
 const playerMove = document.querySelectorAll('[data-square]');
 const modal = document.getElementsByClassName('modal');
 export let turnX = true;
-let modalDisplay = false;
 let plays = [];
 let winningPlayer = null;
 
@@ -75,7 +75,12 @@ function test(plays, type){
   return result;
 }
 modal[0].addEventListener('click', ()=>{
-  location.reload();
+  innerSquares.forEach(square => {
+    square.classList.remove('X', 'O');
+  })
+  clearBoard();
+  modal[0].classList.add('hidden');
+  turnX = true;
 })
 
 export function modalShow(winner){
