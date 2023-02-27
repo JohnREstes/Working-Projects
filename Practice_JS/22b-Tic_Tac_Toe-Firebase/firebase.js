@@ -53,7 +53,10 @@ function initGame(){
     board = (snapshot.val() || {});
     //loop through player object and set dom elements
     console.log(board.playerMoves);
-
+    board.playerMoves.forEach((move, index)=>{
+      if(move === "")return;
+      currentBoard[index].classList.add(move);
+    })
   })
 }
 
