@@ -1,3 +1,5 @@
+import { modalShow } from "./script.js";
+
 //Firebasesetup
 
 const firebaseConfig = {
@@ -13,38 +15,27 @@ const firebaseConfig = {
 // Initialize firebase
 firebase.initializeApp(firebaseConfig);
 
-
-let index = 0
-export function handleChange(){
-  //update players[playerId].value = ?
-  //then set change
-  index ++;
-  
-  console.log(players);
- 
-/*  if(index === 3){
-    players[playerId].modal = true 
-  } else {
-    players[playerId].modal = false
-  };
-  console.log(players[playerId].modal);
-  console.log(index)
-  if(index === 3) index = 0;   
-  playerRef.update(players[playerId]);
-*/
-}
 export function setBoard(){
   playerMoves = [];
-  currentBoard.forEach(position =>{
-    playerMoves.push(position.classList.value);
+  currentBoard.forEach((position) =>{
+    if(position.classList.length > 1){
+      playerMoves.push(position.classList[1])
+    } else playerMoves.push("");
+    
   })
-  console.log(playerMoves);
   boardRef.update({
     playerMoves,
   });
 }
+export function setModal(winner){
+  boardRef.update({
+    modal: true,
+    winner
+  }); 
+}
 
 function initGame(){
+  let displayModal = true;
   setBoard();
   //get all players
   const allPlayersRef = firebase.database().ref('players');
@@ -54,59 +45,27 @@ function initGame(){
   allPlayersRef.on('value', (snapshot) => {
     //set any player value change to player object
     players = snapshot.val() || {};
-    //loop through player object and set dom elements
-    Object.keys(players).forEach((key)=>{
-      playerState = players[key];
-      let el = playerElements[key];
-      if(playerState.id == playerId){
-          let text = document.querySelector('.text');
-          text.textContent = playerState.color;
-          }
-      let modalShown = document.querySelector('.modal');
-          console.log(playerState);
-      playerState.modal ? modalShown.classList.remove('hidden') : modalShown.classList.add('hidden');
-
-      //update Dom
-      //el.queryselector('.name/move') = characterState.name/move
-    })
   })
 
     //callback when allBoardRef changes
   allBoardRef.on('value', (snapshot) => {
     //set any player value change to player object
-    board = snapshot.val() || {};
+    board = (snapshot.val() || {});
     //loop through player object and set dom elements
-    console.log('board value change');
-    console.log(board)
-    Object.keys(board).forEach((key)=>{
-      console.log(key);
-    })
-  })
-  //callback when new child compared to what your browser knows
-  allPlayersRef.on('child_added', (snapshot) => {
-    const addedPlayer = snapshot.val();
-    const characterElement = document.createElement('div');
-    if(addedPlayer.id === playerId.id){
-      //this is you
-    }
-    //render player to screen
-    playerElements[addedPlayer.id] = characterElement;
-  })
+    console.log(board.playerMoves);
 
-
+  })
 }
 
   let playerId;
   let playerRef;
   let players = {};
-  let playerElements = {};
   let boardRef = {};
   let board;
   let currentBoard = document.querySelectorAll('.innerSquare');
   let playerMoves = [];
 
-
-  export let playerState;
+  let name = createName();
 
   firebase.auth().onAuthStateChanged((user) => {
     console.log(`User ${user.uid} is signed-in`);
@@ -115,8 +74,6 @@ function initGame(){
       playerRef = firebase.database().ref(`players/${playerId}`);
       boardRef = firebase.database().ref(`board/`);
 
-      const name = createName();
-
       playerRef.set({
         id: playerId,
         name
@@ -124,7 +81,8 @@ function initGame(){
 
       boardRef.set({
         playerMoves,
-        modal: false
+        modal: false,
+        winner: null
       });
 
       //removes player on browser close
@@ -144,7 +102,7 @@ function initGame(){
     .catch((error) => {
       var errorCode = error.code;
       var errorMessage = error.message;
-      // log out error
+      // error message
       console.log(errorCode, errorMessage);
     });
 

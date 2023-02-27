@@ -1,5 +1,5 @@
-import { handleChange } from "./firebase.js";
 import { setBoard } from "./firebase.js";
+import { setModal } from "./firebase.js";
 
 class Player {
   constructor(type){
@@ -64,9 +64,8 @@ function checkWinner(type){
       winningPlayer = type;
     }
   })
-  if(winningPlayer == null) return;
-  modalDisplay = true;
-  modalDisplay ? modalShow(winningPlayer) : null;
+  if(winningPlayer === null) return;
+  setModal(winningPlayer)
 }
 function test(plays, type){
   let result = [];
@@ -79,7 +78,7 @@ modal[0].addEventListener('click', ()=>{
   location.reload();
 })
 
-function modalShow(winner){
+export function modalShow(winner){
   modal[0].classList.remove('hidden');
   modal[0].children[0].children[0].textContent = `${winner} Wins!`
 }
