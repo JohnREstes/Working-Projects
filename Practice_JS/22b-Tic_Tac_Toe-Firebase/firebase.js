@@ -42,7 +42,7 @@ export function clearBoard(){
     turnX
   }); 
 }
-
+export let playerState;
 function initGame(){
   let displayModal = true;
   setBoard();
@@ -55,7 +55,7 @@ function initGame(){
     //set any player value change to player object
     players = snapshot.val() || {};
     let firstPlayer = true;
-    let playerState;
+    playerState;
     Object.keys(players).forEach((key)=>{
       playerState = players[key];
       if(playerState.piece === "X") firstPlayer = false;
@@ -78,6 +78,7 @@ function initGame(){
       if(move === "")return;
       currentBoard[index].classList.add(move);
     })
+    //if(board.)
     if(board.winner !== ""){
       modalShow(board.winner);
     }

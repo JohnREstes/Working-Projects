@@ -1,6 +1,7 @@
 import { setBoard } from "./firebase.js";
 import { setModal } from "./firebase.js";
 import { clearBoard } from "./firebase.js";
+import { playerState } from "./firebase.js";
 
 class Player {
   constructor(type){
@@ -32,7 +33,7 @@ setPlayer();
 
 squares.forEach(square =>{
   square.addEventListener('click', (e)=>{
-    if(turnX){
+    if(turnX && playerState.piece === "X"){
       playerX.move(e.target);
     } else {
       playerO.move(e.target)      
