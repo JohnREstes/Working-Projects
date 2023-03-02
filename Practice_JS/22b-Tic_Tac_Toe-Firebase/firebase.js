@@ -86,7 +86,7 @@ function initGame(){
 }
 
   let playerId;
-  let playerRef;
+  export let playerRef;
   let players = {};
   let boardRef = {};
   let board;

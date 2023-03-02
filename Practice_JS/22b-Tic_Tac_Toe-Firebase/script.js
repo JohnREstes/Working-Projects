@@ -2,6 +2,7 @@ import { setBoard } from "./firebase.js";
 import { setModal } from "./firebase.js";
 import { clearBoard } from "./firebase.js";
 import { playerState } from "./firebase.js";
+import { playerRef } from "./firebase.js";
 
 class Player {
   constructor(type){
@@ -23,6 +24,7 @@ const innerSquares = document.querySelectorAll('.innerSquare');
 const playerMove = document.querySelectorAll('[data-square]');
 const modal = document.getElementsByClassName('modal');
 export let turnX = true;
+let moveCount = 0;
 let plays = [];
 let winningPlayer = null;
 
@@ -33,7 +35,7 @@ setPlayer();
 
 squares.forEach(square =>{
   square.addEventListener('click', (e)=>{
-    if(turnX && playerState.piece === "X"){
+    if(turnX && playerRef.piece === "X"){
       playerX.move(e.target);
     } else {
       playerO.move(e.target)      
@@ -51,6 +53,8 @@ function setPlayer(){
     })
 }
 function checkWinner(type){
+  moveCount++;
+  if(moveCount === 9) modalShow("No One");
   plays = [];
   winningPlayer = null;
   innerSquares.forEach(innerSquare =>{
@@ -89,3 +93,8 @@ export function modalShow(winner){
   modal[0].children[0].children[0].textContent = `${winner} Wins!`
 }
 
+export function modalShowNotTurn(){
+  modal[0].classList.add('notTurn');
+  modal[0].classList.remove('hidden');
+  modal[0].children[0].children[0].textContent = `Please Wait your turn...`
+}

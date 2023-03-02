@@ -17,6 +17,7 @@ const innerSquares = document.querySelectorAll('.innerSquare');
 const playerMove = document.querySelectorAll('[data-square]');
 const modal = document.getElementsByClassName('modal');
 let turnX = true;
+let moveCount = 0;
 
 let playerX = new Player('X');
 let playerO = new Player('O');
@@ -43,6 +44,8 @@ function setPlayer(){
     })
 }
 function checkWinner(type){
+  moveCount++;
+  if(moveCount === 9) modalShow("No One");
   let plays = [];
   let winningPlayer = null;
   innerSquares.forEach(innerSquare =>{

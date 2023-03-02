@@ -111,3 +111,6 @@ position: relative;
 .hidden{
     display: none;
 }
+.notTurn{
+    opacity:.75;
+}
