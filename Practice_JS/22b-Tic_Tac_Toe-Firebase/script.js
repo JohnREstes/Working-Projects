@@ -2,7 +2,7 @@ import { setBoard } from "./firebase.js";
 import { setModal } from "./firebase.js";
 import { clearBoard } from "./firebase.js";
 import { playerState } from "./firebase.js";
-import { playerRef } from "./firebase.js";
+import { playerRef, playerId, players } from "./firebase.js";
 
 class Player {
   constructor(type){
@@ -35,10 +35,16 @@ setPlayer();
 
 squares.forEach(square =>{
   square.addEventListener('click', (e)=>{
-    if(turnX && playerRef.piece === "X"){
+    console.log(turnX);
+    console.log(players[playerId].piece);
+    if(turnX && players[playerId].piece === "X"){
+      modalShowNotTurn(false);
       playerX.move(e.target);
+      modalShowNotTurn(true);
     } else {
-      playerO.move(e.target)      
+      modalShowNotTurn(false);
+      playerO.move(e.target);
+      modalShowNotTurn(true);      
     }
     turnX = !turnX;
     turnX ? board.classList.add('XTurn') : board.classList.remove('XTurn');
@@ -93,8 +99,14 @@ export function modalShow(winner){
   modal[0].children[0].children[0].textContent = `${winner} Wins!`
 }
 
-export function modalShowNotTurn(){
-  modal[0].classList.add('notTurn');
-  modal[0].classList.remove('hidden');
-  modal[0].children[0].children[0].textContent = `Please Wait your turn...`
+export function modalShowNotTurn(truth){
+  if(truth){
+    modal[0].classList.add('notTurn');
+    modal[0].classList.remove('hidden');
+    modal[0].children[0].children[0].textContent = `Please Wait your turn...`
+  } else {
+    modal[0].classList.remove('notTurn');
+    modal[0].classList.add('hidden'); 
+  }
 }
+  

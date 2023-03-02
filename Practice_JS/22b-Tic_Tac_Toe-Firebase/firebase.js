@@ -85,9 +85,9 @@ function initGame(){
   })
 }
 
-  let playerId;
+  export let playerId;
   export let playerRef;
-  let players = {};
+  export let players = {};
   let boardRef = {};
   let board;
   let currentBoard = document.querySelectorAll('.innerSquare');
