@@ -44,7 +44,6 @@ export function clearBoard(){
 }
 export let playerState;
 function initGame(){
-  let displayModal = true;
   setBoard();
   //get all players
   const allPlayersRef = firebase.database().ref('players');
@@ -102,6 +101,8 @@ function initGame(){
       playerRef = firebase.database().ref(`players/${playerId}`);
       boardRef = firebase.database().ref(`board/`);
 
+      console.log((firebase.database().ref('board'))).exists();
+
       playerRef.set({
         id: playerId,
         name,
@@ -117,6 +118,7 @@ function initGame(){
 
       //removes player on browser close
       playerRef.onDisconnect().remove();
+      boardRef.onDisconnect().remove();
 
       //begin game
       initGame();
