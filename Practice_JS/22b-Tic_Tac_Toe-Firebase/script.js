@@ -38,11 +38,9 @@ squares.forEach(square =>{
     console.log(turnX);
     console.log(players[playerId].piece);
     if(turnX && players[playerId].piece === "X"){
-      modalShowNotTurn(false);
       playerX.move(e.target);
       modalShowNotTurn(true);
     } else {
-      modalShowNotTurn(false);
       playerO.move(e.target);
       modalShowNotTurn(true);      
     }
@@ -56,7 +54,8 @@ function setPlayer(){
     playerMove.forEach(square =>{
       if (square.dataset.square == "taken") return;
       square.dataset.square = turnX ? 'O' : 'X';
-    })
+    });
+    modalShowNotTurn(false);
 }
 function checkWinner(type){
   moveCount++;
