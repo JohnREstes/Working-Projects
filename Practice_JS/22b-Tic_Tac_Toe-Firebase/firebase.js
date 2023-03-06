@@ -101,7 +101,7 @@ function initGame(){
       playerRef = firebase.database().ref(`players/${playerId}`);
       boardRef = firebase.database().ref(`board/`);
 
-      console.log((firebase.database().ref('board'))).exists();
+      //console.log((firebase.database().ref('board')));
 
       playerRef.set({
         id: playerId,

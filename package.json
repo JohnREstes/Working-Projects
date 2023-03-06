@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "cardsJS": "^1.1.1",
     "firebase": "^9.17.1",
     "node-fetch": "^3.3.0",
     "unsplash-js": "^7.0.15"
