@@ -2,6 +2,8 @@ const deck = ['2S', '3S', '4S', '5S', '6S', '7S', '8S', '9S', '10S', 'JS', 'QS',
 
 const computerCard = document.getElementById('computerCard');
 const playerCard = document.getElementById('playerCard');
+const computerCount = document.querySelector('[data-computer-card-count]');
+const playerCount = document.querySelector('[data-player-card-count]');
 let playerHand, computerHand;
 
 function changeCard(player, deck){
@@ -30,10 +32,10 @@ function setDecks(){
   let middleIndex = Math.ceil(shuffledDeck.length / 2);
   playerHand = shuffledDeck.splice(0, middleIndex);
   computerHand = shuffledDeck.splice(-middleIndex);
-  console.log(playerHand);
-  console.log(computerHand);
   changeCard(computerCard, computerHand);
   changeCard(playerCard, playerHand);
+  computerCount.dataset.computerCardCount = computerHand.length;
+  playerCount.dataset.playerCardCount = playerHand.length;
 }
 
 setDecks();

@@ -22,6 +22,12 @@ body{
     grid-row: 2 / -1;
     grid-column: 2 / 3;
 }
+.playButtonDiv{
+    grid-row: 2 / -1;
+    grid-column: 1 / 2;  
+    width: 100%; 
+    position: relative;
+}
 #computerCardStack{
     grid-row: 1 / 2;
     grid-column: 3 / -1;
@@ -62,4 +68,47 @@ body{
 } 
 #playerCardStack::after{
     content: attr(data-player-card-count);
+}
+
+
+
+
+.playButton{
+    display:inline-block;
+    padding:0.35em 1.2em;
+    border:0.1em solid #FFFFFF;
+    margin:0 0.3em 0.3em 0;
+    border-radius:0.12em;
+    box-sizing: border-box;
+    text-decoration:none;
+    font-family:'Roboto',sans-serif;
+    font-weight:300;
+    color:#FFFFFF;
+    font-size: 1.5rem;
+    text-align:center;
+    transition: all 0.2s;
+    background-color: transparent;
+}
+.playButton:hover{
+    color:darkgray;
+    background-color:#FFFFFF;
+}
+@media all and (max-width:30em){
+    .playButton{
+    display:block;
+    margin:0.4em auto;
+    }
+}
+.bouncy{
+    animation:bouncy 5s infinite linear;
+    position:relative;
+}
+@keyframes bouncy {
+    0%{top:0em}
+    40%{top:0em}
+    43%{top:-0.9em}
+    46%{top:0em}
+    48%{top:-0.4em}
+    50%{top:0em}
+    100%{top:0em;}
 }
