@@ -14,16 +14,52 @@ body{
     text-align: center;
     align-items: center;
 }
-.playerOne{
-
-    grid-row: 1;
-    grid-column: 2;
+#computerCard{
+    grid-row: 1 / 2;
+    grid-column: 2 / 3;
 }
-.playerTwo{
-    grid-row: 2;
-    grid-column: 2;
+#playerCard{
+    grid-row: 2 / -1;
+    grid-column: 2 / 3;
+}
+#computerCardStack{
+    grid-row: 1 / 2;
+    grid-column: 3 / -1;
+    position: relative;
+    width: 150px;
+    height: 209.26px;
+}
+#playerCardStack{
+    grid-row: 2 / -1;
+    grid-column: 3 / -1;
+    position: relative;
+    width: 150px;
+    height: 209.26px;
 }
 .card{
     width: 150px;
-    height: 209.26px
+    height: 209.26px;
+}
+#computerCardStack::after, #playerCardStack::after{
+    content: '';
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 35px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: black;
+    bottom: -15px;
+    right: -15px;
+    background-color: whitesmoke;
+    border: 1px black solid;
+    border-radius: 50%;
+}
+#computerCardStack::after{
+    content: attr(data-computer-card-count);
+} 
+#playerCardStack::after{
+    content: attr(data-player-card-count);
 }
