@@ -2,18 +2,26 @@ const deck = ['2S', '3S', '4S', '5S', '6S', '7S', '8S', '9S', '10S', 'JS', 'QS',
 
 const computerCard = document.getElementById('computerCard');
 const playerCard = document.getElementById('playerCard');
+const computerCardStackDiv = document.getElementById('computerCardStack');
+const playerCardStackDiv = document.getElementById('playerCardStack');
 const computerCount = document.querySelector('[data-computer-card-count]');
 const playerCount = document.querySelector('[data-player-card-count]');
 const playTurn = document.getElementById('playTurn');
+const winner = document.getElementById('winner');
 let playerHand, computerHand
 let currentHand = [];
-let reg = /\d/;
+let currentRound = 0;
 
 setDecks();
 
 playTurn.addEventListener('click', ()=>{
+  currentHand = [];
   playGame();
+  if(currentRound > 0){
+    updateCardCount();
+  }
 })
+
 function playGame(){
   showCard(computerCard, computerHand);
   showCard(playerCard, playerHand);
@@ -25,11 +33,38 @@ function checkWin(){
   let computerPlay = cardToNumber(currentHand[0]);
   let playerPlay = cardToNumber(currentHand[1]);
   console.log(computerPlay, playerPlay); 
+  if(computerPlay === playerPlay) {
+    winner.innerText =  'War';
+    playWar();
+    return;
+  }
+  if(computerPlay > playerPlay){
+    winner.innerText =  'Computer Wins';
+    computerHand.push(computerPlay, playerPlay);
+  } else {
+    winner.innerText =  'Player Wins';
+    playerHand.push(computerPlay, playerPlay);
+  }
+  currentHand++;
+}
+
+function playWar(){
+  currentHand = [];
+  addWarCard(computerCard, computerHand);
+  addWarCard(playerCard, playerHand);
+  checkWin();
+}
+
+function addWarCard(player, deck){
+  currentHand.push(deck.splice(0 , 1));
+  let tempImg = document.createElement('img');
+  tempImg.classList.add('card');
+  tempImg.src = `./cards/${deck[0]}.svg` ;
+  player.appendChild(tempImg);
 }
 
 function cardToNumber(card){
-  if (!parseInt(card.toString().charAt(0))) {
-    console.log(card, "run NaN");
+  if (!parseInt(card)) {
     switch (card.toString().charAt(0)) {
       case 'J':
         return 11;
@@ -44,7 +79,6 @@ function cardToNumber(card){
     }
   }
   return parseInt(card)
-
 }
 
 function showCard(player, deck){
