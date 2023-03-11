@@ -48,6 +48,15 @@ body{
     width: 150px;
     height: 209.26px;
 }
+.cardArea{
+    position: relative;
+    display: flex;
+}
+#stackedCard{
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
 .card{
     width: 150px;
     height: 209.26px;
