@@ -19,14 +19,20 @@ let war = false;
 setDecks();
 
 playTurn.addEventListener('click', ()=>{
-  playGame();
-  if(currentRound > 0){
-    updateCardCount();
-  }
   if(war){
     computerCardArea.removeChild(computerCardArea.lastElementChild);
     playerCardArea.removeChild(playerCardArea.lastElementChild);
+    computerCardArea.removeChild(computerCardArea.lastElementChild);
+    playerCardArea.removeChild(playerCardArea.lastElementChild);
+    computerCardArea.removeChild(computerCardArea.lastElementChild);
+    playerCardArea.removeChild(playerCardArea.lastElementChild);
+    computerCardArea.removeChild(computerCardArea.lastElementChild);
+    playerCardArea.removeChild(playerCardArea.lastElementChild);
     war = false
+  }
+  playGame();
+  if(currentRound > 0){
+    updateCardCount();
   }
 })
 
@@ -57,19 +63,30 @@ function checkWin(cardArray){
 function playWar(){
   let tempHand = [...currentHand];
   currentHand = [];
-  addWarCard(computerCardArea, computerHand);
-  addWarCard(playerCardArea, playerHand);
-  currentHand = [...currentHand, ...tempHand];
+  let facedown = true;
+  for(let i = 0; i <= 3; i++){
+    if(i === 3) facedown = false;
+    addWarCard(computerCardArea, computerHand, facedown);
+    addWarCard(playerCardArea, playerHand, facedown);
+    tempHand = [...currentHand, ...tempHand]
+    currentHand = [];
+  }
+  currentHand = [...tempHand];
   checkWin(currentHand);
   war = true;
 }
 
-function addWarCard(area, deck){
+function addWarCard(area, deck, facedown){
   console.log('play war');
   let tempImg = document.createElement('img');
   tempImg.classList.add('card');
-  tempImg.id = "stackedCard";
-  tempImg.src = `./cards/${deck[0]}.svg` ;
+  tempImg.id = "stackedCards";
+  if(facedown === true){
+    tempImg.src = `./cards/Blue_Back.svg` ;
+  } else {
+    tempImg.src = `./cards/${deck[0]}.svg` ;
+  }
+
   area.appendChild(tempImg);
   currentHand.push(...deck.splice(0 , 1));
 }

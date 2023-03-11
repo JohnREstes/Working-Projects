@@ -57,6 +57,25 @@ body{
     top: 20px;
     left: 20px;
 }
+#stackedCards{
+    position: absolute;
+}
+img:nth-child(2){
+    top: 20px;
+    left: 20px;   
+}
+img:nth-child(3){
+    top: 30px;
+    left: 30px;   
+}
+img:nth-child(4){
+    top: 40px;
+    left: 40px;   
+}
+img:nth-child(5){
+    top: 50px;
+    left: 50px;   
+}
 .card{
     width: 150px;
     height: 209.26px;
