@@ -20,14 +20,10 @@ setDecks();
 
 playTurn.addEventListener('click', ()=>{
   if(war){
-    computerCardArea.removeChild(computerCardArea.lastElementChild);
-    playerCardArea.removeChild(playerCardArea.lastElementChild);
-    computerCardArea.removeChild(computerCardArea.lastElementChild);
-    playerCardArea.removeChild(playerCardArea.lastElementChild);
-    computerCardArea.removeChild(computerCardArea.lastElementChild);
-    playerCardArea.removeChild(playerCardArea.lastElementChild);
-    computerCardArea.removeChild(computerCardArea.lastElementChild);
-    playerCardArea.removeChild(playerCardArea.lastElementChild);
+    for (let i = 0; i <= computerCardArea.children.length + 1 ; i++){
+      computerCardArea.removeChild(computerCardArea.lastChild);
+      playerCardArea.removeChild(playerCardArea.lastChild);
+    }
     war = false
   }
   playGame();
@@ -110,8 +106,18 @@ function cardToNumber(card){
 }
 
 function showCard(player, deck){
-  player.src = `./cards/${deck[0]}.svg`  
-  currentHand.push(...deck.splice(0 , 1));
+  if(deck.length === 0){
+    let winneringPlayer;
+    winneringPlayer = player.id === 'computerCard' ? "Computer" : "Player" 
+    winner.innerText =  
+    `Game Over, 
+    ${winneringPlayer} WINS!`;
+    player.remove();
+    playTurn.removeEventListener('click');
+  } else {
+    player.src = `./cards/${deck[0]}.svg`  
+    currentHand.push(...deck.splice(0 , 1));
+  }
 }
 
 function updateCardCount(){
