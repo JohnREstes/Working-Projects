@@ -10,9 +10,11 @@ const computerCount = document.querySelector('[data-computer-card-count]');
 const playerCount = document.querySelector('[data-player-card-count]');
 const playTurn = document.getElementById('playTurn');
 const winner = document.getElementById('winner');
+const currentHandCount = document.getElementById('currentHand');
 let playerHand, computerHand
 let currentHand = [];
 let currentRound = 0;
+let war = false;
 
 setDecks();
 
@@ -21,17 +23,22 @@ playTurn.addEventListener('click', ()=>{
   if(currentRound > 0){
     updateCardCount();
   }
+  if(war){
+    computerCardArea.removeChild(computerCardArea.lastElementChild);
+    playerCardArea.removeChild(playerCardArea.lastElementChild);
+    war = false
+  }
 })
 
 function playGame(){
   showCard(computerCard, computerHand);
   showCard(playerCard, playerHand);
-  checkWin()
+  checkWin(currentHand)
 }
 
-function checkWin(){
-  let computerPlay = cardToNumber(currentHand[0]);
-  let playerPlay = cardToNumber(currentHand[1]);
+function checkWin(cardArray){
+  let computerPlay = cardToNumber(cardArray[0]);
+  let playerPlay = cardToNumber(cardArray[1]);
   if(computerPlay > playerPlay){
     winner.innerText =  'Computer Wins';
     computerHand = [...computerHand, ...currentHand];
@@ -43,7 +50,7 @@ function checkWin(){
     playWar();
   }
   currentRound++;
-  console.log(computerHand);
+  currentHandCount.innerText = `Hand #${currentRound}`;
   currentHand = [];
 }
 
@@ -52,7 +59,9 @@ function playWar(){
   currentHand = [];
   addWarCard(computerCardArea, computerHand);
   addWarCard(playerCardArea, playerHand);
-  checkWin();
+  currentHand = [...currentHand, ...tempHand];
+  checkWin(currentHand);
+  war = true;
 }
 
 function addWarCard(area, deck){
@@ -62,6 +71,7 @@ function addWarCard(area, deck){
   tempImg.id = "stackedCard";
   tempImg.src = `./cards/${deck[0]}.svg` ;
   area.appendChild(tempImg);
+  currentHand.push(...deck.splice(0 , 1));
 }
 
 function cardToNumber(card){
