@@ -15,7 +15,6 @@ let currentRound = 0;
 setDecks();
 
 playTurn.addEventListener('click', ()=>{
-  currentHand = [];
   playGame();
   if(currentRound > 0){
     updateCardCount();
@@ -25,7 +24,6 @@ playTurn.addEventListener('click', ()=>{
 function playGame(){
   showCard(computerCard, computerHand);
   showCard(playerCard, playerHand);
-  updateCardCount();
   checkWin()
 }
 
@@ -33,23 +31,21 @@ function checkWin(){
   let computerPlay = cardToNumber(currentHand[0]);
   let playerPlay = cardToNumber(currentHand[1]);
   console.log(computerPlay, playerPlay); 
-  if(computerPlay === playerPlay) {
-    winner.innerText =  'War';
-    playWar();
-    return;
-  }
+  console.log(computerHand, currentHand)
   if(computerPlay > playerPlay){
     winner.innerText =  'Computer Wins';
-    computerHand.push(computerPlay, playerPlay);
+    computerHand = [...computerHand, ...currentHand];
   } else {
     winner.innerText =  'Player Wins';
-    playerHand.push(computerPlay, playerPlay);
+    playerHand = [...playerHand, ...currentHand];
   }
-  currentHand++;
+  currentRound++;
+  console.log(computerHand);
+  currentHand = [];
 }
 
 function playWar(){
-  currentHand = [];
+  let tempHand = [...currentHand];
   addWarCard(computerCard, computerHand);
   addWarCard(playerCard, playerHand);
   checkWin();
@@ -83,7 +79,7 @@ function cardToNumber(card){
 
 function showCard(player, deck){
   player.src = `./cards/${deck[0]}.svg`  
-  currentHand.push(deck.splice(0 , 1));
+  currentHand.push(...deck.splice(0 , 1));
 }
 
 function updateCardCount(){
