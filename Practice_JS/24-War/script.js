@@ -2,6 +2,8 @@ const deck = ['2S', '3S', '4S', '5S', '6S', '7S', '8S', '9S', '10S', 'JS', 'QS',
 
 const computerCard = document.getElementById('computerCard');
 const playerCard = document.getElementById('playerCard');
+const computerCardArea = document.getElementById('computerCardArea');
+const playerCardArea = document.getElementById('playerCardArea');
 const computerCardStackDiv = document.getElementById('computerCardStack');
 const playerCardStackDiv = document.getElementById('playerCardStack');
 const computerCount = document.querySelector('[data-computer-card-count]');
@@ -30,14 +32,15 @@ function playGame(){
 function checkWin(){
   let computerPlay = cardToNumber(currentHand[0]);
   let playerPlay = cardToNumber(currentHand[1]);
-  console.log(computerPlay, playerPlay); 
-  console.log(computerHand, currentHand)
   if(computerPlay > playerPlay){
     winner.innerText =  'Computer Wins';
     computerHand = [...computerHand, ...currentHand];
-  } else {
+  } else if (computerPlay < playerPlay) {
     winner.innerText =  'Player Wins';
     playerHand = [...playerHand, ...currentHand];
+  } else { 
+    winner.innerText =  'WAR!';  
+    playWar();
   }
   currentRound++;
   console.log(computerHand);
@@ -46,17 +49,19 @@ function checkWin(){
 
 function playWar(){
   let tempHand = [...currentHand];
-  addWarCard(computerCard, computerHand);
-  addWarCard(playerCard, playerHand);
+  currentHand = [];
+  addWarCard(computerCardArea, computerHand);
+  addWarCard(playerCardArea, playerHand);
   checkWin();
 }
 
-function addWarCard(player, deck){
-  currentHand.push(deck.splice(0 , 1));
+function addWarCard(area, deck){
+  console.log('play war');
   let tempImg = document.createElement('img');
   tempImg.classList.add('card');
+  tempImg.id = "stackedCard";
   tempImg.src = `./cards/${deck[0]}.svg` ;
-  player.appendChild(tempImg);
+  area.appendChild(tempImg);
 }
 
 function cardToNumber(card){
