@@ -10,7 +10,31 @@
 </head>
 <body>
     <div class="container">
-
+        <header>Rock, Paper, Scissors, Lizard, Spock</header>
+        <div class="scoreArea">
+            <div class="score" id="playerScore">Player: 1</div>
+            <div class="score" id="whoWon">You Win!</div>
+            <div class="score" id="computerScore">Computer: 1</div>
+        </div>
+        <div class="playArea">
+            <div class="playerArea">
+                <div class="playerMoves">
+                    <img class='options' src="./img/Rock.svg" alt="Rock">
+                    <img class='options' src="./img/Paper.svg" alt="Paper">
+                    <img class='options' src="./img/Scissors.svg" alt="Scissors">
+                    <img class='options' src="./img/Lizard.svg" alt="Lizard">
+                    <img class='options' src="./img/Spock.svg" alt="Spock">
+                </div>
+            </div>
+            <div class="computerArea">
+                <div class="computerMoves">
+                    <img src="./img/Paper.svg" alt="Rock">  
+                </div>          
+            </div>
+        </div>
+        <div class="resetArea">
+            <button id="reset">RESET</button>
+        </div>
     </div>  
 </body>
 </html>
