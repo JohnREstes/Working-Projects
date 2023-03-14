@@ -18,8 +18,21 @@ function initGame(e){
 function checkWin(target){
     let computerPlay = computerMoves.children[0].id;
     let playerPlay = target.target.id;
-
+    let win = ''
+    if(computerPlay === playerPlay){
+        console.log("Tie");
+        return;
+    }
+    for(option of WINNING_COMBO){
+        if(option.includes(computerPlay) && option.includes(playerPlay)) win = option;
+    }
     console.log(computerPlay, playerPlay);
+    console.log(win);
+    if(computerPlay === win[0]){
+        console.log(`Computer Wins!  ${win[0].substring(0, win[0].length - 3)} ${win[2]} ${win[1].substring(0, win[1].length - 3)}`);
+    } else {
+        console.log(`Player Wins!  ${win[0].substring(0, win[0].length - 3)} ${win[2]} ${win[1].substring(0, win[1].length - 3)}`);
+    }
 }
 function computerRandom(){
     let random = Math.floor(Math.random() * 5);
