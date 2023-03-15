@@ -70,3 +70,7 @@ button{
 .options:hover{
     filter: invert(48%) sepia(63%) saturate(6228%) hue-rotate(216deg) brightness(94%) contrast(86%);
 }
+.larger{
+    width: 150px;
+    height: 150px;
+}
