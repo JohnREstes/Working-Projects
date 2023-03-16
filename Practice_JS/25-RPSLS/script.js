@@ -10,9 +10,17 @@ const winner = document.getElementById('whoWon');
 let score;
  
 storeLocal();
+updateScore(score);
+addPlayerClick();
 
-options.forEach(option =>{
-    option.addEventListener('click', initGame)
+function addPlayerClick (){
+    options.forEach(option =>{
+        option.addEventListener('click', initGame)
+    })
+}
+
+reset.addEventListener('click', ()=>{
+    resetGame();
 })
 function initGame(e){
     e.target.classList.add('larger');
@@ -35,18 +43,16 @@ function checkWin(target){
     console.log(win);
 
     if(computerPlay == win[0]){
-        score[1] = 1;
+        score[1] += 1;
         winner.innerText = (
             `Computer Wins!  
             ${capitalize(win[0].substring(0, win[0].length - 3))} ${win[2]} ${capitalize(win[1].substring(0, win[1].length - 3))}`);
     } else {
-        score[0] = 1;
+        score[0] += 1;
         winner.innerText = (
             `Player Wins!  
             ${capitalize(win[0].substring(0, win[0].length - 3))} ${win[2]} ${capitalize(win[1].substring(0, win[1].length - 3))}`);
     }
-    console.log(score[0]);
-    console.log(score[1]);
     updateScore(score);
 }
 function capitalize(word)
@@ -77,6 +83,15 @@ function storeLocal(){
     score = JSON.parse(localStorage.getItem('score'));
 }
 function updateScore(currentScore){
-    console.log(currentScore[0]);
-    console.log(currentScore[1]);
+    playerScore.innerText = currentScore[0];
+    computerScore.innerText = currentScore[1];
+    localStorage.setItem('score', JSON.stringify(currentScore));
+}
+function resetGame(){
+    computerMoves.removeChild(computerMoves.firstChild);
+    winner.innerText = "";
+    options.forEach(option =>{
+        option.classList.remove('larger');
+    })
+    addPlayerClick();
 }
