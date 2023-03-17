@@ -1,4 +1,4 @@
-const URL = 'https://api.open-meteo.com/v1/forecast?latitude=20.36&longitude=-87.59&hourly=temperature_2m,apparent_temperature,precipitation_probability,precipitation,weathercode,cloudcover,windspeed_10m&daily=weathercode,temperature_2m_max,apparent_temperature_max,apparent_temperature_min,precipitation_probability_max,windspeed_10m_max&current_weather=true&timezone=America%2FJamaica';
+const URL = 'https://api.open-meteo.com/v1/forecast?latitude=20.36&longitude=-87.59&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,precipitation_probability,precipitation,weathercode,surface_pressure,windspeed_10m,temperature_80m&daily=weathercode,temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,sunrise,sunset,precipitation_probability_max&current_weather=true&timezone=America%2FJamaica';
 const ICON_CODES = {
   0: "./img/day.svg", 
   1: "./img/cloudy-day-1.svg",
@@ -64,16 +64,41 @@ async function pullWeather(){
 
 function buildDay(){
   current.forEach(field =>{
-    if(field.dataset.current === 'icon'){
-      let weatherCode = json.current_weather.weathercode;
-      let srcTemp = Object.keys(ICON_CODES).find(key => key == weatherCode);
-      field.style.backgroundImage = `url('${ICON_CODES[srcTemp]}')`;
-    }
-    if(field.dataset.current === 'temp'){
-      field.innerHTML = `${json.current_weather.temperature} &#8451`;
-    }
-    if(field.dataset.current === 'wind'){
-      field.innerHTML = `${json.current_weather.windspeed} mps`; 
+    switch (field.dataset.current ) {
+      case 'icon':
+        let weatherCode = json.current_weather.weathercode;
+        let srcTemp = Object.keys(ICON_CODES).find(key => key == weatherCode);
+        field.style.backgroundImage = `url('${ICON_CODES[srcTemp]}')`;  
+        break;
+      case 'temp':
+        field.innerHTML = `${json.current_weather.temperature} &#8451`;
+        break;
+      case 'wind':
+        field.innerHTML = `${json.current_weather.windspeed} k/h`; 
+        break;
+      case 'fl-high':
+        field.innerHTML = `${json.daily.apparent_temperature_max[0]} &#8451`;
+        break;
+      case 'fl-low':
+        field.innerHTML = `${json.daily.apparent_temperature_min[0]} &#8451`;
+        break;
+      case 'high':
+        field.innerHTML = `${json.daily.temperature_2m_max[0]} &#8451`;
+        break;
+      case 'low':
+        field.innerHTML = `${json.daily.temperature_2m_min[0]} &#8451`;
+        break;
+      case 'precip':
+        field.innerHTML = `${json.daily.precipitation_probability_max[0]}%`;
+        break;
+      case 'sunrise':
+        field.innerHTML = `${json.daily.sunrise[0].slice(11)}`;
+        break;
+      case 'sunset':
+        field.innerHTML = `${json.daily.sunset[0].slice(11)}`;
+        break;
+      default:
+        break;
     }
   })
 }
