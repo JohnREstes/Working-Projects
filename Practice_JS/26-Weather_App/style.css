@@ -30,7 +30,7 @@ header{
     border-right: 1px lightgray solid;;
 }
 .currentWeatherIcon, .forecastIcon, #hourlyImg{
-    background-image: url("./img/cloudy-day-1.svg");
+    background-image: url("./img/thunder.svg");
     background-repeat: no-repeat;
     background-size: cover;
     width: 30%;
