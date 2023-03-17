@@ -6,23 +6,23 @@ const ICON_CODES = {
   3: "./img/cloudy-day-3.svg",
   45: "./img/fog.svg",
   48: "./img/fog.svg",  
-  51: "./img/rainy-1.svg.svg",
-  53: "./img/rainy-4.svg.svg",
-  55: "./img/rainy-7.svg.svg",
+  51: "./img/rainy-1.svg",
+  53: "./img/rainy-4.svg",
+  55: "./img/rainy-7.svg",
   56: "./img/snowy-1.svg",
   57: "./img/snowy-2.svg",
-  61: "./img/rainy-1.svg.svg",
-  63: "./img/rainy-4.svg.svg",
-  65: "./img/rainy-7.svg.svg", 
+  61: "./img/rainy-1.svg",
+  63: "./img/rainy-4.svg",
+  65: "./img/rainy-7.svg", 
   66: "./img/snowy-1.svg",
   67: "./img/snowy-2.svg",  
   71: "./img/snowy-4.svg",
   73: "./img/snowy-5.svg",  
   75: "./img/snowy-6.svg",
   77: "./img/snowy-7.svg",
-  80: "./img/rainy-1.svg.svg",
-  81: "./img/rainy-4.svg.svg",
-  82: "./img/rainy-7.svg.svg", 
+  80: "./img/rainy-1.svg",
+  81: "./img/rainy-4.svg",
+  82: "./img/rainy-7.svg", 
   85: "./img/snowy-1.svg",
   86: "./img/snowy-7.svg",
   95: "./img/thunder.svg",  
@@ -31,13 +31,7 @@ const ICON_CODES = {
 }
 
 const current = document.querySelectorAll(`[data-current]`);
-const forecastOne = document.querySelectorAll(`[data-forecast-one]`);
-const forecastTwo = document.querySelectorAll(`[data-forecast-two]`);
-const forecastThree = document.querySelectorAll(`[data-forecast-three]`);
-const forecastFour = document.querySelectorAll(`[data-forecast-four]`);
-const forecastFive = document.querySelectorAll(`[data-forecast-five]`);
-const forecastSix = document.querySelectorAll(`[data-forecast-six]`);
-const forecastSeven = document.querySelectorAll(`[data-forecast-seven]`);
+const forecast = document.querySelectorAll(`[data-forecast]`);
 let json;
 
 pullWeather();
@@ -58,17 +52,19 @@ async function pullWeather(){
       if (json) {
         console.log('Use the JSON here!', json);
         buildDay();
-        console.log(forecastOne);
+        buildForecast();
       }
 }
-
+function findKey(object, value){
+  return Object.keys(object).find(key => key == value);
+}
 function buildDay(){
   current.forEach(field =>{
     switch (field.dataset.current ) {
       case 'icon':
         let weatherCode = json.current_weather.weathercode;
-        let srcTemp = Object.keys(ICON_CODES).find(key => key == weatherCode);
-        field.style.backgroundImage = `url('${ICON_CODES[srcTemp]}')`;  
+        let weatherKey = findKey(ICON_CODES, weatherCode);
+        field.style.backgroundImage = `url('${ICON_CODES[weatherKey]}')`;  
         break;
       case 'temp':
         field.innerHTML = `${json.current_weather.temperature} &#8451`;
@@ -101,4 +97,27 @@ function buildDay(){
         break;
     }
   })
+}
+function buildForecast(){
+  forecast.forEach((day, index) =>{
+    let dailyForecast = day.children;
+    for(let i = 0; i < dailyForecast.length; i++){
+      switch (dailyForecast[i].dataset.forecastPart ) {
+        case 'icon':
+          let weatherCode = json.daily.weathercode[index];
+          let weatherKey = findKey(ICON_CODES, weatherCode);
+          dailyForecast[i].style.backgroundImage = `url('${ICON_CODES[weatherKey]}')`;  
+          break;
+        case 'temp':
+          dailyForecast[i].innerHTML = `${json.daily.temperature_2m_max[index]} &#8451`;
+          break;
+        case 'day':
+          let tempDate = new Date(`${json.daily.time[index]}, 12:00`).toLocaleString('en-US', { weekday: 'long',});
+          dailyForecast[i].innerHTML = `${tempDate}`;
+          break;
+        default:
+          break;
+      };
+    };
+  });
 }
