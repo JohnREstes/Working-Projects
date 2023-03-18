@@ -32,6 +32,7 @@ const ICON_CODES = {
 
 const current = document.querySelectorAll(`[data-current]`);
 const forecast = document.querySelectorAll(`[data-forecast]`);
+const hourly = document.querySelector(`[data-hourly]`);
 let json;
 
 pullWeather();
@@ -53,6 +54,7 @@ async function pullWeather(){
         console.log('Use the JSON here!', json);
         buildDay();
         buildForecast();
+        buildHourly();
       }
 }
 function findKey(object, value){
@@ -112,12 +114,42 @@ function buildForecast(){
           dailyForecast[i].innerHTML = `${json.daily.temperature_2m_max[index]} &#8451`;
           break;
         case 'day':
-          let tempDate = new Date(`${json.daily.time[index]}, 12:00`).toLocaleString('en-US', { weekday: 'long',});
-          dailyForecast[i].innerHTML = `${tempDate}`;
+          let tempDay = new Date(`${json.daily.time[index]}, 12:00`).toLocaleString('en-US', { weekday: 'long',});
+          dailyForecast[i].innerHTML = `${tempDay}`;
           break;
         default:
           break;
       };
     };
   });
+}
+function buildHourly(){
+  let nowTime = new Date();
+  let hoursShown = 48 + nowTime.getHours();
+  for(let i = nowTime.getHours(); i < hoursShown; i++){
+    let tempDay = new Date(json.hourly.time[i]).toLocaleString('en-US', { weekday: 'long',});
+    let tempTime = new Date(json.hourly.time[i]);
+    tempTime = tempTime.getHours();
+    if(tempTime > 12) {
+      tempTime = tempTime - 12;
+      tempTime = `${tempTime}:00 pm`;
+    } else {
+      tempTime = `${tempTime}:00 am`;
+    }
+    let tempLI = document.createElement('li');
+    let weatherCode = json.hourly.weathercode[i];
+    let weatherKey = findKey(ICON_CODES, weatherCode);
+    tempLI.innerHTML = `
+      <div class="hourlyBreakdown">
+        <span class="currentType">${tempDay}<span class="currentNumber">${tempTime}</span></span>
+        <div class="currentType" id="hourlyImg" ></div>
+        <span class="currentType">Temp<span class="currentNumber">${json.hourly.temperature_2m[i]}&#8451</span></span>
+        <span class="currentType">FL Temp<span class="currentNumber">${json.hourly.apparent_temperature[i]}&#8451</span></span>
+        <span class="currentType">Wind<span class="currentNumber">${json.hourly.windspeed_10m[i]} k/h</span></span>
+        <span class="currentType">Precip<span class="currentNumber">${json.hourly.precipitation[i]}mm</span></span>  
+      </div>
+    `;
+    hourly.appendChild(tempLI);
+    hourly.children[(i - nowTime.getHours())].children[0].children[1].style.backgroundImage = `url('${ICON_CODES[weatherKey]}')`
+  }
 }
