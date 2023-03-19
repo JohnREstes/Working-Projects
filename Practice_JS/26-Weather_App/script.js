@@ -90,10 +90,7 @@ async function pullWeather(){
         buildHourly();
       }
 }
-function findKey(value){
-  let object = nightTime();
-  return Object.keys(object).find(key => key == value);
-}
+
 function buildDay(){
   current.forEach(field =>{
     switch (field.dataset.current ) {
@@ -180,6 +177,10 @@ function buildHourly(){
     hourly.appendChild(tempLI);
     hourly.children[(i - nowTime.getHours())].children[0].children[1].style.backgroundImage = `url('${nightTime(new Date(json.hourly.time[i]))[weatherKey]}')`
   }
+}
+function findKey(value){
+  let object = nightTime();
+  return Object.keys(object).find(key => key == value);
 }
 function nightTime(nowTime = (new Date())){
   let sunrise = new Date(json.daily.sunrise[1]);
