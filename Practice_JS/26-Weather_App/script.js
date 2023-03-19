@@ -59,6 +59,7 @@ const ICON_CODES_NIGHT = {
   96: "./img/thunder.svg",  
   99: "./img/thunder.svg" 
 }
+const HOURS_SHOWN = 60;
 
 const current = document.querySelectorAll(`[data-current]`);
 const forecast = document.querySelectorAll(`[data-forecast]`);
@@ -88,7 +89,7 @@ async function pullWeather(){
       }
 }
 function findKey(value){
-  let object = nightTime(new Date());
+  let object = nightTime();
   return Object.keys(object).find(key => key == value);
 }
 function buildDay(){
@@ -121,10 +122,10 @@ function buildDay(){
         field.innerHTML = `${json.daily.precipitation_probability_max[0]}%`;
         break;
       case 'sunrise':
-        field.innerHTML = `${json.daily.sunrise[0].slice(11)}`;
+        field.innerHTML = `${timeFormat(new Date(json.daily.sunrise[0]))}`;
         break;
       case 'sunset':
-        field.innerHTML = `${json.daily.sunset[0].slice(11)}`;
+        field.innerHTML = `${timeFormat(new Date(json.daily.sunset[0]))}`;
         break;
       default:
         break;
@@ -156,18 +157,11 @@ function buildForecast(){
 }
 function buildHourly(){
   let nowTime = new Date();
-  let hoursShown = 48 + nowTime.getHours();
+  let hoursShown = HOURS_SHOWN + nowTime.getHours();
   for(let i = nowTime.getHours(); i < hoursShown; i++){
     let tempDay = new Date(json.hourly.time[i]).toLocaleString('en-US', { weekday: 'long',});
     let tempTime = new Date(json.hourly.time[i]);
-    tempTime = tempTime.getHours();
-    if (tempTime == 0) tempTime = `12:00 am`;
-    else if (tempTime < 12) tempTime = `${tempTime}:00 am`;
-    else if (tempTime == 12) tempTime = `${tempTime}:00 pm`;
-    else {
-      tempTime = tempTime - 12;
-      tempTime = `${tempTime}:00 pm`;
-    }
+    tempTime = timeFormat(tempTime);
     let tempLI = document.createElement('li');
     let weatherCode = json.hourly.weathercode[i];
     let weatherKey = findKey(weatherCode);
@@ -185,15 +179,24 @@ function buildHourly(){
     hourly.children[(i - nowTime.getHours())].children[0].children[1].style.backgroundImage = `url('${nightTime(new Date(json.hourly.time[i]))[weatherKey]}')`
   }
 }
-function nightTime(nowTime){
+function nightTime(nowTime = (new Date())){
   let sunrise = new Date(json.daily.sunrise[1]);
   let sunset = new Date(json.daily.sunset[0]);
-  console.log(sunrise.getHours(), 'rise');
-  console.log(nowTime.getHours(), 'now');
-  console.log(sunset.getHours(), 'set');
-  if(sunrise.getHours() < nowTime.getHours() && sunset.getHours() > nowTime.getHours() ) {
-    console.log('day');
-    return ICON_CODES;
-  }
+  if(sunrise.getHours() < nowTime.getHours() && sunset.getHours() > nowTime.getHours() ) return ICON_CODES;
   else return ICON_CODES_NIGHT;
+}
+function timeFormat(time){
+  let timeHours = time.getHours();
+  let timeMinutes = time.getMinutes();
+  if(timeMinutes.toString().length === 1){
+    timeMinutes = "0" + timeMinutes.toString();
+  }
+  if (timeHours == 0) time = `12:${timeMinutes} am`;
+  else if (timeHours < 12) time = `${timeHours}:${timeMinutes} am`;
+  else if (timeHours == 12) time = `${timeHours}:${timeMinutes} pm`;
+  else {
+    timeHours = timeHours - 12;
+    time = `${timeHours}:${timeMinutes} pm`;
+  }
+  return time;
 }
