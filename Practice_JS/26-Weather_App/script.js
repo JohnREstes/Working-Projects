@@ -29,6 +29,36 @@ const ICON_CODES = {
   96: "./img/thunder.svg",  
   99: "./img/thunder.svg" 
 }
+const ICON_CODES_NIGHT = {
+  0: "./img/night.svg", 
+  1: "./img/cloudy-night-1.svg",
+  2: "./img/cloudy-night-2.svg",
+  3: "./img/cloudy-night-3.svg",
+  45: "./img/fog.svg",
+  48: "./img/fog.svg",  
+  51: "./img/rainy-4.svg",
+  53: "./img/rainy-5.svg",
+  55: "./img/rainy-7.svg",
+  56: "./img/snowy-1.svg",
+  57: "./img/snowy-2.svg",
+  61: "./img/rainy-4.svg",
+  63: "./img/rainy-5.svg",
+  65: "./img/rainy-7.svg", 
+  66: "./img/snowy-1.svg",
+  67: "./img/snowy-2.svg",  
+  71: "./img/snowy-4.svg",
+  73: "./img/snowy-5.svg",  
+  75: "./img/snowy-6.svg",
+  77: "./img/snowy-7.svg",
+  80: "./img/rainy-4.svg",
+  81: "./img/rainy-5.svg",
+  82: "./img/rainy-7.svg", 
+  85: "./img/snowy-1.svg",
+  86: "./img/snowy-7.svg",
+  95: "./img/thunder.svg",  
+  96: "./img/thunder.svg",  
+  99: "./img/thunder.svg" 
+}
 
 const current = document.querySelectorAll(`[data-current]`);
 const forecast = document.querySelectorAll(`[data-forecast]`);
@@ -57,7 +87,8 @@ async function pullWeather(){
         buildHourly();
       }
 }
-function findKey(object, value){
+function findKey(value){
+  let object = nightTime();
   return Object.keys(object).find(key => key == value);
 }
 function buildDay(){
@@ -65,8 +96,8 @@ function buildDay(){
     switch (field.dataset.current ) {
       case 'icon':
         let weatherCode = json.current_weather.weathercode;
-        let weatherKey = findKey(ICON_CODES, weatherCode);
-        field.style.backgroundImage = `url('${ICON_CODES[weatherKey]}')`;  
+        let weatherKey = findKey(weatherCode);
+        field.style.backgroundImage = `url('${nightTime(new Date())[weatherKey]}')`;  
         break;
       case 'temp':
         field.innerHTML = `${json.current_weather.temperature} &#8451`;
@@ -107,8 +138,8 @@ function buildForecast(){
       switch (dailyForecast[i].dataset.forecastPart ) {
         case 'icon':
           let weatherCode = json.daily.weathercode[index];
-          let weatherKey = findKey(ICON_CODES, weatherCode);
-          dailyForecast[i].style.backgroundImage = `url('${ICON_CODES[weatherKey]}')`;  
+          let weatherKey = findKey(weatherCode);
+          dailyForecast[i].style.backgroundImage = `url('${nightTime(new Date())[weatherKey]}')`;  
           break;
         case 'temp':
           dailyForecast[i].innerHTML = `${json.daily.temperature_2m_max[index]} &#8451`;
@@ -130,15 +161,16 @@ function buildHourly(){
     let tempDay = new Date(json.hourly.time[i]).toLocaleString('en-US', { weekday: 'long',});
     let tempTime = new Date(json.hourly.time[i]);
     tempTime = tempTime.getHours();
-    if(tempTime > 12) {
+    if (tempTime == 0) tempTime = `12:00 am`;
+    else if (tempTime < 12) tempTime = `${tempTime}:00 am`;
+    else if (tempTime == 12) tempTime = `${tempTime}:00 pm`;
+    else {
       tempTime = tempTime - 12;
       tempTime = `${tempTime}:00 pm`;
-    } else {
-      tempTime = `${tempTime}:00 am`;
     }
     let tempLI = document.createElement('li');
     let weatherCode = json.hourly.weathercode[i];
-    let weatherKey = findKey(ICON_CODES, weatherCode);
+    let weatherKey = findKey(weatherCode);
     tempLI.innerHTML = `
       <div class="hourlyBreakdown">
         <span class="currentType">${tempDay}<span class="currentNumber">${tempTime}</span></span>
@@ -150,6 +182,13 @@ function buildHourly(){
       </div>
     `;
     hourly.appendChild(tempLI);
-    hourly.children[(i - nowTime.getHours())].children[0].children[1].style.backgroundImage = `url('${ICON_CODES[weatherKey]}')`
+    hourly.children[(i - nowTime.getHours())].children[0].children[1].style.backgroundImage = `url('${nightTime(new Date(json.hourly.time[i]))[weatherKey]}')`
   }
+}
+function nightTime(nowTime){
+  console.log(nowTime);
+  let sunrise = new Date(json.daily.sunrise[1]);
+  let sunset = new Date(json.daily.sunset[0]);
+  if(sunset <= nowTime && nowTime <= sunrise) return ICON_CODES_NIGHT;
+  else return ICON_CODES;
 }
