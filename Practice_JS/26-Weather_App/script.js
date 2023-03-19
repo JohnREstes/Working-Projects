@@ -7,12 +7,12 @@ const ICON_CODES = {
   45: "./img/fog.svg",
   48: "./img/fog.svg",  
   51: "./img/rainy-1.svg",
-  53: "./img/rainy-4.svg",
+  53: "./img/rainy-3.svg",
   55: "./img/rainy-7.svg",
   56: "./img/snowy-1.svg",
   57: "./img/snowy-2.svg",
   61: "./img/rainy-1.svg",
-  63: "./img/rainy-4.svg",
+  63: "./img/rainy-3.svg",
   65: "./img/rainy-7.svg", 
   66: "./img/snowy-1.svg",
   67: "./img/snowy-2.svg",  
@@ -21,7 +21,7 @@ const ICON_CODES = {
   75: "./img/snowy-6.svg",
   77: "./img/snowy-7.svg",
   80: "./img/rainy-1.svg",
-  81: "./img/rainy-4.svg",
+  81: "./img/rainy-3.svg",
   82: "./img/rainy-7.svg", 
   85: "./img/snowy-1.svg",
   86: "./img/snowy-7.svg",
@@ -88,7 +88,7 @@ async function pullWeather(){
       }
 }
 function findKey(value){
-  let object = nightTime();
+  let object = nightTime(new Date());
   return Object.keys(object).find(key => key == value);
 }
 function buildDay(){
@@ -186,9 +186,14 @@ function buildHourly(){
   }
 }
 function nightTime(nowTime){
-  console.log(nowTime);
   let sunrise = new Date(json.daily.sunrise[1]);
   let sunset = new Date(json.daily.sunset[0]);
-  if(sunset <= nowTime && nowTime <= sunrise) return ICON_CODES_NIGHT;
-  else return ICON_CODES;
+  console.log(sunrise.getHours(), 'rise');
+  console.log(nowTime.getHours(), 'now');
+  console.log(sunset.getHours(), 'set');
+  if(sunrise.getHours() < nowTime.getHours() && sunset.getHours() > nowTime.getHours() ) {
+    console.log('day');
+    return ICON_CODES;
+  }
+  else return ICON_CODES_NIGHT;
 }
