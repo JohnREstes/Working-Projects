@@ -61,6 +61,7 @@ const ICON_CODES_NIGHT = {
 }
 const HOURS_SHOWN = 60;
 
+const container = document.querySelector('.container');
 const current = document.querySelectorAll(`[data-current]`);
 const forecast = document.querySelectorAll(`[data-forecast]`);
 const hourly = document.querySelector(`[data-hourly]`);
@@ -83,6 +84,7 @@ async function pullWeather(){
       
       if (json) {
         console.log('Use the JSON here!', json);
+        container.classList.remove('blurry');
         buildDay();
         buildForecast();
         buildHourly();

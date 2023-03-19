@@ -11,6 +11,10 @@ body {
   flex-direction: column;
   justify-content: top;
   align-items: center;
+  position: relative;
+}
+.blurry{
+  filter: blur(15px);
 }
 header {
   width: 100%;
