@@ -1,4 +1,5 @@
-const URL = 'https://api.open-meteo.com/v1/forecast?latitude=20.36&longitude=-87.59&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,precipitation_probability,precipitation,weathercode,surface_pressure,windspeed_10m,temperature_80m&daily=weathercode,temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,sunrise,sunset,precipitation_probability_max&current_weather=true&timezone=America%2FJamaica';
+import { pullWeather } from "./API_CALL.js";
+
 const ICON_CODES = {
   0: "./img/day.svg", 
   1: "./img/cloudy-day-1.svg",
@@ -67,28 +68,16 @@ const forecast = document.querySelectorAll(`[data-forecast]`);
 const hourly = document.querySelector(`[data-hourly]`);
 let json;
 
-pullWeather();
+initApp();
 
-async function pullWeather(){
-    try {
-        const response = await fetch(URL);
-        json = await response.json();
-      } catch (error) {
-        if (error instanceof SyntaxError) {
-          // Unexpected token < in JSON
-          console.log('There was a SyntaxError', error);
-        } else {
-          console.log('There was an error', error);
-        }
-      }
-      
-      if (json) {
-        console.log('Use the JSON here!', json);
-        container.classList.remove('blurry');
-        buildDay();
-        buildForecast();
-        buildHourly();
-      }
+async function initApp(){
+  json = await pullWeather();
+  if (json) {
+    container.classList.remove('blurry');
+    buildDay();
+    buildForecast();
+    buildHourly();
+  }
 }
 
 function buildDay(){
@@ -162,8 +151,6 @@ function buildHourly(){
     let tempTime = new Date(json.hourly.time[i]);
     tempTime = timeFormat(tempTime);
     let tempLI = document.createElement('li');
-    let weatherCode = json.hourly.weathercode[i];
-    let weatherKey = findKey(weatherCode);
     tempLI.innerHTML = `
       <div class="hourlyBreakdown">
         <span class="currentType">${tempDay}<span class="currentNumber">${tempTime}</span></span>
@@ -175,6 +162,8 @@ function buildHourly(){
       </div>
     `;
     hourly.appendChild(tempLI);
+    let weatherCode = json.hourly.weathercode[i];
+    let weatherKey = findKey(weatherCode);
     hourly.children[(i - nowTime.getHours())].children[0].children[1].style.backgroundImage = `url('${nightTime(new Date(json.hourly.time[i]))[weatherKey]}')`
   }
 }
