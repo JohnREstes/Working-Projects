@@ -1,5 +1,9 @@
+require('dotenv').config();
+
 const URL = 'https://api.open-meteo.com/v1/forecast?hourly=temperature_2m,relativehumidity_2m,apparent_temperature,precipitation_probability,precipitation,weathercode,surface_pressure,windspeed_10m,temperature_80m&daily=weathercode,temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,sunrise,sunset,precipitation_probability_max&current_weather=true&';
 let json;
+
+const API_KEY = process.env.API_KEY;
 
 export async function pullWeather(){
     const url = (
@@ -26,3 +30,4 @@ export async function pullWeather(){
         return json;
       }
 }
+//console.log(API_KEY);
