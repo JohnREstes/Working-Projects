@@ -1,13 +1,15 @@
-require('dotenv').config();
+import { API_KEY } from "./key.js";
 
-const URL = 'https://api.open-meteo.com/v1/forecast?hourly=temperature_2m,relativehumidity_2m,apparent_temperature,precipitation_probability,precipitation,weathercode,surface_pressure,windspeed_10m,temperature_80m&daily=weathercode,temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,sunrise,sunset,precipitation_probability_max&current_weather=true&';
-let json;
+const URL_WEATHER = 'https://api.open-meteo.com/v1/forecast?hourly=temperature_2m,relativehumidity_2m,apparent_temperature,precipitation_probability,precipitation,weathercode,surface_pressure,windspeed_10m,temperature_80m&daily=weathercode,temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,sunrise,sunset,precipitation_probability_max&current_weather=true&';
 
-const API_KEY = process.env.API_KEY;
+const URL_LAT_LON = "http://api.positionstack.com/v1/forward?";
+
+let jsonWeather;
+let jsonLatLon;
 
 export async function pullWeather(){
     const url = (
-        URL + new URLSearchParams({ 
+        URL_WEATHER + new URLSearchParams({ 
             latitude: 20.36, 
             longitude: -87.59,
             timezone: 'America/Jamaica'
@@ -15,7 +17,7 @@ export async function pullWeather(){
       );
     try {
         const response = await fetch(url);
-        json = await response.json();
+        jsonWeather = await response.json();
       } catch (error) {
         if (error instanceof SyntaxError) {
           // Unexpected token < in JSON
@@ -25,9 +27,35 @@ export async function pullWeather(){
         }
       }
       
-      if (json) {
-        console.log('JSON returned!', json);
-        return json;
+      if (jsonWeather) {
+        console.log('JSON returned!', jsonWeather);
+        return jsonWeather;
       }
 }
-//console.log(API_KEY);
+
+export async function pullLatLon(location){
+    var requestOptions = {
+        method: 'GET',
+      };
+    const url = ("https://api.geoapify.com/v1/geocode/search?" 
+            + new URLSearchParams({ 
+                apiKey: API_KEY,
+                text: location
+        })
+      );
+    try {
+        const response = await fetch(url, requestOptions);
+        jsonLatLon = await response.json();
+      } catch (error) {
+        if (error instanceof SyntaxError) {
+          // Unexpected token < in JSON
+          console.log('There was a SyntaxError', error);
+        } else {
+          console.log('There was an error', error);
+        }
+      }
+      
+      if (jsonLatLon) {
+        console.log('JSON returned!', jsonLatLon);
+      }
+}

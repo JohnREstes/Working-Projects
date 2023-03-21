@@ -1,4 +1,4 @@
-import { pullWeather } from "./API_CALL.js";
+import { pullWeather, pullLatLon } from "./API_CALL.js";
 
 const ICON_CODES = {
   0: "./img/day.svg", 
@@ -66,7 +66,7 @@ const container = document.querySelector('.container');
 const current = document.querySelectorAll(`[data-current]`);
 const forecast = document.querySelectorAll(`[data-forecast]`);
 const hourly = document.querySelector(`[data-hourly]`);
-let json;
+let json, jsonLatLon;
 
 initApp();
 
@@ -77,6 +77,15 @@ async function initApp(){
     buildDay();
     buildForecast();
     buildHourly();
+  }
+}
+
+console.log(locationCords("311 Hialeah Drive, Cherry Hill, NJ 08002"));
+
+async function locationCords(location){
+  jsonLatLon = await pullLatLon(location);
+  if (jsonLatLon){
+    return jsonLatLon
   }
 }
 
