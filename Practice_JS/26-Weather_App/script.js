@@ -66,7 +66,9 @@ const container = document.querySelector('.container');
 const current = document.querySelectorAll(`[data-current]`);
 const forecast = document.querySelectorAll(`[data-forecast]`);
 const hourly = document.querySelector(`[data-hourly]`);
-let json, jsonLatLon;
+const submit = document.getElementById('submit');
+const searchText = document.querySelector('[data-search-text]');
+let json, jsonLatLon, newLocation;
 
 initApp();
 
@@ -80,7 +82,21 @@ async function initApp(){
   }
 }
 
-console.log(locationCords("311 Hialeah Drive, Cherry Hill, NJ 08002"));
+submit.addEventListener('click', ()=>{
+  if(searchText.value === '') return;
+  searchLocation(searchText.value);
+})
+
+async function searchLocation(location){
+  newLocation = await locationCords(location);
+  if(location){
+    console.log(newLocation.features[0].bbox[0]);
+    console.log(newLocation.features[0].bbox[1]);
+    console.log(newLocation.features[0].properties.city);
+    console.log(newLocation.features[0].properties.country_code);
+  }
+}
+
 
 async function locationCords(location){
   jsonLatLon = await pullLatLon(location);
