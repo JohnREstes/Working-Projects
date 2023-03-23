@@ -57,5 +57,6 @@ export async function pullLatLon(location){
       
       if (jsonLatLon) {
         console.log('JSON returned!', jsonLatLon);
+        return jsonLatLon;
       }
 }
