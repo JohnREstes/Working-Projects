@@ -68,7 +68,7 @@ const forecast = document.querySelectorAll(`[data-forecast]`);
 const hourly = document.querySelector(`[data-hourly]`);
 const submit = document.getElementById('submit');
 const searchText = document.querySelector('[data-search-text]');
-let json, jsonLatLon, newLocation;
+let json, jsonLatLon, newLocation, lat, lon, city, state, country_code;
 
 initApp();
 
@@ -90,10 +90,16 @@ submit.addEventListener('click', ()=>{
 async function searchLocation(location){
   newLocation = await locationCords(location);
   if(location){
-    console.log(newLocation.features[0].bbox[0]);
-    console.log(newLocation.features[0].bbox[1]);
-    console.log(newLocation.features[0].properties.city);
-    console.log(newLocation.features[0].properties.country_code);
+    lon = (newLocation.features[0].bbox[0]);
+    lat = (newLocation.features[0].bbox[1]);
+    city = (newLocation.features[0].properties.city);
+    state = (newLocation.features[0].properties.state);
+    country_code = (newLocation.features[0].properties.country_code.toUpperCase());
+    console.log('Longitude',lon);
+    console.log('Latitude',lat);
+    console.log(city);
+    console.log(state);
+    console.log(country_code);
   }
 }
 
