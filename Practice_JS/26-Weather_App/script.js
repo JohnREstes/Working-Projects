@@ -69,11 +69,13 @@ const hourly = document.querySelector(`[data-hourly]`);
 const submit = document.getElementById('submit');
 const searchText = document.querySelector('[data-search-text]');
 let json, jsonLatLon, newLocation, lat, lon, city, state, country_code;
+let latitude = 20.36; 
+let longitude = -87.59;
 
-initApp();
+initApp(latitude, longitude);
 
-async function initApp(){
-  json = await pullWeather();
+async function initApp(lat, lon){
+  json = await pullWeather(lat, lon);
   if (json) {
     container.classList.remove('blurry');
     buildDay();
@@ -90,13 +92,14 @@ submit.addEventListener('click', ()=>{
 async function searchLocation(location){
   newLocation = await locationCords(location);
   if(location){
-    lon = (newLocation.features[0].bbox[0]);
     lat = (newLocation.features[0].bbox[1]);
+    lon = (newLocation.features[0].bbox[0]);
     city = (newLocation.features[0].properties.city);
     state = (newLocation.features[0].properties.state);
     country_code = (newLocation.features[0].properties.country_code.toUpperCase());
-    console.log('Longitude',lon);
+    initApp(lat, lon);
     console.log('Latitude',lat);
+    console.log('Longitude',lon);
     console.log(city);
     console.log(state);
     console.log(country_code);

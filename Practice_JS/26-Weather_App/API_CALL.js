@@ -7,11 +7,11 @@ const URL_LAT_LON = "http://api.positionstack.com/v1/forward?";
 let jsonWeather;
 let jsonLatLon;
 
-export async function pullWeather(){
+export async function pullWeather(latitude = 20.36, longitude = -87.59){
     const url = (
         URL_WEATHER + new URLSearchParams({ 
-            latitude: 20.36, 
-            longitude: -87.59,
+            latitude: latitude, 
+            longitude: longitude,
             timezone: 'America/Jamaica'
         })
       );
