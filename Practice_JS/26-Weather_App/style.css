@@ -38,6 +38,7 @@ header {
 #hourlyImg {
   background-image: url("./img/thunder.svg");
   background-repeat: no-repeat;
+  background-position: center;
   background-size: cover;
   width: 30%;
   height: 100%;

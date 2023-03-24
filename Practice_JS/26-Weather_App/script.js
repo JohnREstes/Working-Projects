@@ -68,6 +68,7 @@ const forecast = document.querySelectorAll(`[data-forecast]`);
 const hourly = document.querySelector(`[data-hourly]`);
 const submit = document.getElementById('submit');
 const searchText = document.querySelector('[data-search-text]');
+const cityStateCountry = document.getElementById('cityStateCountry');
 let json, jsonLatLon, newLocation, lat, lon, city, state, country_code;
 let latitude = 20.36; 
 let longitude = -87.59;
@@ -87,6 +88,8 @@ async function initApp(lat, lon){
 submit.addEventListener('click', ()=>{
   if(searchText.value === '') return;
   searchLocation(searchText.value);
+  container.classList.add('blurry');
+  document.getElementById("checkbox").checked = false;
 })
 
 async function searchLocation(location){
@@ -98,11 +101,8 @@ async function searchLocation(location){
     state = (newLocation.features[0].properties.state);
     country_code = (newLocation.features[0].properties.country_code.toUpperCase());
     initApp(lat, lon);
-    console.log('Latitude',lat);
-    console.log('Longitude',lon);
-    console.log(city);
-    console.log(state);
-    console.log(country_code);
+    cityStateCountry.innerText = `${city}, ${state}, ${country_code}`;
+    searchText.value = '';
   }
 }
 
