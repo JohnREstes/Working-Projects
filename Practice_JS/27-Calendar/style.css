@@ -14,12 +14,33 @@ body{
 }
 .calendar{
     display: grid;
+    position: relative;
     grid-template-columns: repeat(7, 100px);
-    grid-template-rows: repeat(5, 100px);
+    grid-template-rows: repeat(2, max-content) repeat(5, 100px);
     border-top: 1px solid black;
     border-left: 1px solid black;
+    height: max-content;
 }
 .calendar > .square{
     border-bottom: 1px solid black;
     border-right: 1px solid black;
+    position: relative;
+}
+.square::after{
+    content: attr(data-calendar);
+    position: absolute;
+    right: 4px;
+    top: 2px;
+    color: black;
+    font-size: 1rem;
+}
+.day{
+    text-align: center;
+}
+.header{
+    grid-column: 1 / -1;
+    border-bottom: 1px solid black;
+    border-right: 1px solid black;
+    text-align: center;
+    font-size: 1.5rem;
 }
