@@ -6,7 +6,20 @@ body{
 .container{
     width: 100vw;
     height: 100vh;
-    background-color: rgb(var(--rgb1), var(--rgb2), var(--rgb3));
+    background-color: lightgray;
     position: relative;
-    text-align: center;
+    display: flex;
+    padding: 5px;
+    
+}
+.calendar{
+    display: grid;
+    grid-template-columns: repeat(7, 100px);
+    grid-template-rows: repeat(5, 100px);
+    border-top: 1px solid black;
+    border-left: 1px solid black;
+}
+.calendar > .square{
+    border-bottom: 1px solid black;
+    border-right: 1px solid black;
 }
