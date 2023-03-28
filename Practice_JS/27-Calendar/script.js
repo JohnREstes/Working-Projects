@@ -3,6 +3,7 @@ const DAYS_IN_MONTHS = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 const header = document.querySelector('[data-month]');
+const calYear = document.querySelector('[data-year]');
 const square = document.querySelectorAll('[data-calendar]');
 const arrow = document.querySelectorAll('[data-arrow]');
 let currentDate, month, year;
@@ -20,6 +21,7 @@ function fillMonth(today = new Date()){
     let day = firstOfMonth.getDay();
     let numberOfDays = getDays(year, month);
     header.innerText = MONTHS[month];
+    calYear.innerText = year;
     square.forEach((days, index) =>{
         days.dataset.calendar = '';
         if(index === day) firstDay = true;
