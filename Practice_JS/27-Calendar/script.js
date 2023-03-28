@@ -4,6 +4,7 @@ const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 
 
 const header = document.querySelector('[data-month]');
 const square = document.querySelectorAll('[data-calendar]');
+const arrow = document.querySelectorAll('[data-arrow]');
 
 fillMonth();
 
@@ -24,3 +25,9 @@ function fillMonth(){
         }
     })
 }
+
+arrow.forEach(direction =>{
+    direction.addEventListener('click', ()=>{
+        console.log(direction.dataset.arrow);
+    })
+})

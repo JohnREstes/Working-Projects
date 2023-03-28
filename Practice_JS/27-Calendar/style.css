@@ -44,3 +44,24 @@ body{
     text-align: center;
     font-size: 1.5rem;
 }
+.arrow{
+    content: '';
+    border: solid black;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+    cursor: pointer;
+}
+.right {
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+  }
+  
+.left {
+    transform: rotate(135deg);
+    -webkit-transform: rotate(135deg);
+}
+.arrow:hover{
+    border: solid hsl(0, 0%, 50%);  
+    border-width: 0 3px 3px 0; 
+}
