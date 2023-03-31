@@ -1,4 +1,6 @@
-
+:root{
+    --dailHeight: 200px;
+}
 body{
     margin: 0;
     padding: 0;
@@ -9,5 +11,19 @@ body{
     height: 100vh;
     background-color: darkgray;
     position: relative;
-    text-align: center;
+    justify-content: center;
+}
+.dialContainer{
+    width: 100%;
+    position: relative;
+    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(var(--dailHeight), 1fr));
+    grid-gap: 10px;
+}
+.round{
+    height: var(--dailHeight);
+    width: var(--dailHeight);
+    border-radius: 50%;
+    background-color: lightgray;
 }
