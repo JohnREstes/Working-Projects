@@ -1,17 +1,16 @@
 
+const round = document.querySelectorAll('.round');
 
-const weather = document.getElementById('weather');
-
-weather.addEventListener('click', ()=>{
-    weather.classList.remove('full'); // reset animation
-    void weather.offsetWidth; // trigger reflow
-    weather.classList.add('full'); // start animation
-})
-
-const quiz = document.getElementById('quiz');
-
-quiz.addEventListener('click', ()=>{
-    quiz.classList.remove('full'); // reset animation
-    void quiz.offsetWidth; // trigger reflow
-    quiz.classList.add('full'); // start animation
+round.forEach(dial =>{
+    dial.addEventListener('click', ()=>{
+        if(dial.classList.contains('full')){
+            dial.classList.remove('small', 'full'); // reset animation 
+            void dial.offsetWidth; // trigger reflow            
+            dial.classList.add('small') ;
+        } else {
+            dial.classList.remove('full', 'small'); // reset animation 
+            void dial.offsetWidth; // trigger reflow
+            dial.classList.add('full'); // start animation
+        }
+    })    
 })
