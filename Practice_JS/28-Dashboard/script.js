@@ -1,4 +1,15 @@
-
+const LINKS = {
+    weather: '',
+    calendar: '',
+    attractions: '',
+    event: '',
+    quiz: '',
+    charity: '',
+    restaurant: '',
+    stays: '',
+    bookTravel: '',
+    aboutUs: ''
+}
 const round = document.querySelectorAll('.round');
 
 round.forEach(dial =>{
@@ -14,3 +25,4 @@ round.forEach(dial =>{
         }
     })    
 })
+
