@@ -17,8 +17,18 @@ class Book {
         this.numCopies += numCopies;
     }
 }
+class TechnicalBook extends Book {
+    constructor(title, author, ISBN, numCopies, edition){
+        super(title, author, ISBN, numCopies);
+        this.edition = edition;
+    }
+    getEdition(){
+        return `The current version of this book is ${this.edition}.`
+    }
+}
 
 let clue = new Book('Clue', 'The Butler', 12345678, 20);
+let coding = new TechnicalBook('JavaScript', 'Yo Yo Mama', 12346789, 18, 1.2)
 
 const output = document.querySelector('[data-output]');
 const run = document.querySelector('[data-run]');
@@ -38,6 +48,7 @@ run.onclick = ()=>{
     display.push(clue.getAvailabilities());
     clue.restock()
     display.push(clue.getAvailabilities());
+    display.push(coding.getEdition());
 
     addOutput();
 }
