@@ -22,7 +22,6 @@ function addOutput(){
 }
 
 function total(){
-    let sum = numOfCoffees.reduce((prevVal, curVal)=>(prevVal += curVal)
-    );
+    let sum = numOfCoffees.reduce((prevVal, curVal)=>(prevVal += curVal));
     return `The total of coffee is $${(sum * priceOfCoffee)}.`
 }
