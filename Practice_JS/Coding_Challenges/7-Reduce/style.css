@@ -1,0 +1,33 @@
+body{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.container{
+    width: 100vw;
+    height: 100vh;
+    background-color: darkgray;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.messageWindow{
+    width: 50%;
+    height: 50%;
+    background-color: lightgray;
+    overflow: scroll;
+    border: solid black 1px;
+}
+ul{
+    list-style-type: none;
+}
+li{
+    font-size: 1.5rem;
+}
+button{
+    font-size: 1.5rem;
+    padding: 10px;
+    margin: 5px;
+}
