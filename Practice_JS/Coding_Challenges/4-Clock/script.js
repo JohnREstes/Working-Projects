@@ -5,8 +5,12 @@ let display = [];
 
 run.onclick = ()=>{
 
-    
-    addOutput()
+    setInterval(()=>{
+        output.innerHTML = ""
+        display = [];
+        display.push(time());
+        addOutput()
+    }, 1000)
 }
 clear.onclick = ()=>{
     output.innerHTML = ""
@@ -18,4 +22,12 @@ function addOutput(){
         temp.innerText = item;
         output.appendChild(temp);
     }
+}
+function time(){
+    let now = new Date()
+    let tick = now.toLocaleTimeString()
+    return tick
+}
+function calcTime(){
+
 }
