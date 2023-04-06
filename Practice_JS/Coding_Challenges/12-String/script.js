@@ -28,7 +28,7 @@ function addOutput(){
 
 function URLify(value){
     let clean = value.replace(regPunc, '');
-    let lower = clean.toLowerCase()
+    let lower = clean.toLowerCase().trim();
     let dash = lower.replace(regSpace, '-');
     return dash
 }
