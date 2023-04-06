@@ -2,16 +2,16 @@ const output = document.querySelector('[data-output]');
 const run = document.querySelector('[data-run]');
 const clear = document.querySelector('[data-clear]');
 let display = [];
-let blog1 = "My blog name!"
-let blog2 = "Emma's blog"
-let regPunc = /[\.,-\/#!$%\^&\*;:{}=\-_`~()'@\+\?><\[\]\+]/g;
-let regSpace = /\s/g
+let password1 = "133Utica"
+let password2 = "Ou812wwww!"
+let regSpecial = /[\.,-\/#!$%\^&\*;:{}=\-_`~()'@\+\?><\[\]\+]/g;
+let regCapital = /[A-Z]/g;
+let regLower = /[a-z]/g
 
 run.onclick = ()=>{
 
-    display.push(URLify(blog1));
-    display.push(URLify(blog2));
-    
+    display.push(checkPassword(password1))
+    display.push(checkPassword(password2))
     addOutput()
 }
 clear.onclick = ()=>{
@@ -26,9 +26,9 @@ function addOutput(){
     }
 }
 
-function URLify(value){
-    let clean = value.replace(regPunc, '');
-    let lower = clean.toLowerCase().trim();
-    let dash = lower.replace(regSpace, '-');
-    return dash
+function checkPassword(value){
+    let valid = true;
+    console.log(value.length);
+    if(value.search(regSpecial) === -1 || value.search(regCapital) === -1 || value.search(regLower) === -1 || value.length < 8) valid = false;
+    return outcome = valid ? "Your Password is Valid" : "Your Password is invalid";
 }
