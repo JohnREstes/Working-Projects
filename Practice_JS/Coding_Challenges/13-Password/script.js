@@ -29,6 +29,10 @@ function addOutput(){
 function checkPassword(value){
     let valid = true;
     console.log(value.length);
-    if(value.search(regSpecial) === -1 || value.search(regCapital) === -1 || value.search(regLower) === -1 || value.length < 8) valid = false;
-    return outcome = valid ? "Your Password is Valid" : "Your Password is invalid";
+    if( value.search(regSpecial) === -1 || 
+        value.search(regCapital) === -1 || 
+        value.search(regLower) === -1 || 
+        value.length < 8
+        ) valid = false;
+    return valid ? "Your Password is Valid" : "Your Password is invalid";
 }
