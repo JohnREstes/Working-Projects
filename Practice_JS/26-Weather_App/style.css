@@ -40,12 +40,12 @@ header {
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
-  width: 30%;
+  width: clamp(15%, 25%, 30%);
   height: 100%;
 }
 .currentWeatherTemp {
   height: 100%;
-  font-size: 2.5rem;
+  font-size: clamp(1.5rem, 2.5vw, 2.5rem);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -60,10 +60,10 @@ header {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-size: 1rem;
+  font-size:  clamp(.5rem, 1.0vw, 1rem);
 }
 .currentNumber {
-  font-size: 1.5rem;
+  font-size:  clamp(.75rem, 2vw, 1.5rem);
 }
 .main {
   width: 100%;
@@ -89,10 +89,10 @@ header {
   background-position: center;
 }
 .forecastDay {
-  font-size: 1.5rem;
+  font-size: clamp(.75rem, 2vw, 1.5rem);
 }
 .forecastTemp {
-  font-size: 2rem;
+  font-size: clamp(1rem, 2.5vw, 2rem);
 }
 .hourly {
   width: 100%;
@@ -197,7 +197,7 @@ nav{
 
 #menu li {
   padding: 10px 0;
-  font-size: 22px;
+  font-size: clamp(.75rem, 2vw, 1.5rem);
 }
 #menuToggle input:checked ~ ul {
   transform: none;
