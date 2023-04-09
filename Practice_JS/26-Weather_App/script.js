@@ -168,8 +168,8 @@ function buildForecast(){
           dailyForecast[i].innerHTML = `${json.daily.temperature_2m_max[index]} &#8451`;
           break;
         case 'day':
-          let tempDay = new Date(`${json.daily.time[index]}, 12:00`).toLocaleString('en-US', { weekday: 'long',});
-          dailyForecast[i].innerHTML = `${tempDay}`;
+          let tempDay = new Date(`${json.daily.time[index]} 12:00`).toLocaleString('en-US', { weekday: 'long',});
+          dailyForecast[i].innerHTML = tempDay;
           break;
         default:
           break;
