@@ -28,8 +28,12 @@ header {
   width: 50%;
   height: 100%;
   display: flex;
-  flex-direction: row;
   justify-content: center;
+  position: relative;
+}
+#cityStateCountry{
+  position: absolute;
+  bottom: 5px;
 }
 .current {
   border-right: 1px lightgray solid;
@@ -40,8 +44,8 @@ header {
   background-image: url("./img/thunder.svg");
   background-repeat: no-repeat;
   background-position: center;
-  background-size: cover;
-  width: clamp(15%, 25%, 30%);
+  background-size: contain;
+  width: 50%;
   height: 100%;
 }
 .currentWeatherTemp {
@@ -75,7 +79,7 @@ header {
 }
 .forecastCard {
   width: 80%;
-  height: 200px;
+  height: clamp(100px, 150px, 200px);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -86,8 +90,9 @@ header {
   margin-bottom: 10px;
 }
 .forecastIcon {
-  width: 60%;
+  width: 100%;
   background-position: center;
+  background-size: contain;
 }
 .forecastDay {
   font-size: clamp(.75rem, 2vw, 1.5rem);
@@ -209,7 +214,11 @@ nav{
   width: 250px;
   margin-left: 50px;
   margin-top: -50px;
+  margin-bottom: 5px;
 }
 #menu #submit{
+  margin-top: 0px;
+}
+#menu #currentLoc{
   margin-top: 0px;
 }

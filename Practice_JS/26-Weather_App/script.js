@@ -1,4 +1,4 @@
-import { pullWeather, pullLatLon } from "./API_CALL.js";
+import { pullWeather, pullLatLon, pullCityStateCountry } from "./API_CALL.js";
 
 const ICON_CODES = {
   0: "./img/day.svg", 
@@ -67,9 +67,10 @@ const current = document.querySelectorAll(`[data-current]`);
 const forecast = document.querySelectorAll(`[data-forecast]`);
 const hourly = document.querySelector(`[data-hourly]`);
 const submit = document.getElementById('submit');
+const currentLoc = document.getElementById('currentLoc');
 const searchText = document.querySelector('[data-search-text]');
 const cityStateCountry = document.getElementById('cityStateCountry');
-let json, jsonLatLon, newLocation, lat, lon, city, state, country_code;
+let json, jsonLatLon, jsonCityStateCountry, newLocation, newLatLon, lat, lon, city, state, country_code;
 let latitude = 20.36; 
 let longitude = -87.59;
 
@@ -94,7 +95,7 @@ submit.addEventListener('click', ()=>{
 
 async function searchLocation(location){
   newLocation = await locationCords(location);
-  if(location){
+  if(newLocation){
     lat = (newLocation.features[0].bbox[1]);
     lon = (newLocation.features[0].bbox[0]);
     city = (newLocation.features[0].properties.city);
@@ -105,12 +106,43 @@ async function searchLocation(location){
     searchText.value = '';
   }
 }
+async function searchLatLon(lat, lon){
+  newLatLon = await coordinates(lat, lon);
+  if(newLatLon){
+    console.log(newLatLon.features[0].properties);
+    city = (newLatLon.features[0].properties.city);
+    state = (newLatLon.features[0].properties.state);
+    country_code = (newLatLon.features[0].properties.country_code.toUpperCase());
+    cityStateCountry.innerText = `${city}, ${state}, ${country_code}`;
+    searchText.value = '';
+  }
+}
 
+currentLoc.addEventListener('click', ()=>{
+    if (!navigator.geolocation) {
+      alert('Geolocation API not allowed!');
+    } else {
+      console.log('Checking location...');
+      navigator.geolocation.getCurrentPosition(locationSuccess, console.log);
+    }
+})
+function locationSuccess(position) {
+    container.classList.add('blurry');
+    document.getElementById("checkbox").checked = false;
+    searchLatLon(position.coords.latitude, position.coords.longitude);
+    initApp(position.coords.latitude, position.coords.longitude)
+  }
 
 async function locationCords(location){
   jsonLatLon = await pullLatLon(location);
   if (jsonLatLon){
     return jsonLatLon
+  }
+}
+async function coordinates(lat, lon){
+  jsonCityStateCountry = await pullCityStateCountry(lat, lon);
+  if (jsonCityStateCountry){
+    return jsonCityStateCountry
   }
 }
 
