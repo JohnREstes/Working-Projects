@@ -34,6 +34,7 @@ header {
 #cityStateCountry{
   position: absolute;
   bottom: 5px;
+  text-align: center;
 }
 .current {
   border-right: 1px lightgray solid;
@@ -107,7 +108,7 @@ header {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
   grid-template-rows: 1fr;
-  height: 100px;
+  height: clamp(50px, 65px, 75px);
 }
 #hourlyImg {
   width: 100%;
