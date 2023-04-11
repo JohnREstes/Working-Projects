@@ -21,6 +21,7 @@ function randomShape(){
   (Math.random() >= .5) ? tempDiv.classList.add('circle') : tempDiv.classList.add('square');
   let id = self.crypto.randomUUID();
   tempDiv.id = id;
+  tempDiv.style.backgroundColor = 
   tempDiv.style.top = `${randomNum(100)+1}%`;
   tempDiv.style.left = `${randomNum(100)+1}%`;
   container[0].appendChild(tempDiv);
