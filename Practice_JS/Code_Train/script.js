@@ -3,8 +3,9 @@ const root = document.documentElement;
 const container = document.getElementsByClassName('container');
 const backgroundColor = ['--rgb1', '--rgb2', '--rgb3'];
 
-changeButton.addEventListener("click", ()=>{
+container[0].addEventListener("click", ()=>{
   backgroundColor.forEach(randomColorRBG);
+  randomShape();
  });
 
 function randomColorRBG(rgb){
@@ -16,5 +17,14 @@ let randomColor = function(){
 }
 
 function randomShape(){
-
+  let tempDiv = document.createElement('div');
+  (Math.random() >= .5) ? tempDiv.classList.add('circle') : tempDiv.classList.add('square');
+  let id = self.crypto.randomUUID();
+  tempDiv.id = id;
+  tempDiv.style.top = `${randomNum(100)+1}%`;
+  tempDiv.style.left = `${randomNum(100)+1}%`;
+  container[0].appendChild(tempDiv);
+}
+function randomNum(num){
+  return Math.floor(Math.random() * num)
 }

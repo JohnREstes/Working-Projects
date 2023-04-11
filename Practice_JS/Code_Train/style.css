@@ -14,10 +14,19 @@ body{
     height: 100vh;
     background-color: rgb(var(--rgb1), var(--rgb2), var(--rgb3));
     position: relative;
-    text-align: center;
 }
 .changeButton{
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
+}
+.square, .circle{
+    height: 100px;
+    width: 100px;
+    background-color: white;
+    border: 1px black solid;
+    position: absolute;
+}
+.circle{
+    border-radius: 50%;
 }
