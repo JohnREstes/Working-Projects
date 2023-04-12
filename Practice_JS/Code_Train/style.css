@@ -2,8 +2,6 @@
     --rgb1: 0;
     --rgb2: 0;
     --rgb3: 255;
-    --top: 0;
-    --left: 0;
 }
 
 body{
@@ -23,8 +21,8 @@ body{
     transform: translateY(-50%);
 }
 .square, .circle{
-    height: 100px;
     width: 100px;
+    aspect-ratio: 1;
     background-color: white;
     border: 1px black solid;
     position: absolute;
