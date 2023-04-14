@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Get User Location</title>
+</head>
+<body>
+  <h1>Get User Location</h1>
+  <p>Click the button below to get your current location:</p>
+  <button onclick="getLocation()">Get Location</button>
+  <p id="output"></p>
+
+  <script>
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError);
+      } else {
+        document.getElementById("output").innerHTML = "Geolocation is not supported by this browser.";
+      }
+    }
+
+    function showPosition(position) {
+      var latitude = position.coords.latitude;
+      var longitude = position.coords.longitude;
+
+      // Call Geoapify Geocoding API to get address information
+      fetch(`https://api.geoapify.com/v1/geocode/reverse?lat=${latitude}&lon=${longitude}&apiKey=478698bbf5ba41ffb5be61d8f08c56d3`)
+        .then(response => response.json())
+        .then(data => {
+          var city = data.features[0].properties.city;
+          var state = data.features[0].properties.state;
+          var country = data.features[0].properties.country;
+          if(!state){
+            state = city;
+          }
+          document.getElementById("output").innerHTML = "City: " + city + "<br>State: " + state + "<br>Country: " + country;
+        })
+        .catch(error => console.error(error));
+    }
+
+    function showError(error) {
+      switch(error.code) {
+        case error.PERMISSION_DENIED:
+          document.getElementById("output").innerHTML = "User denied the request for Geolocation.";
+          break;
+        case error.POSITION_UNAVAILABLE:
+          document.getElementById("output").innerHTML = "Location information is unavailable.";
+          break;
+        case error.TIMEOUT:
+          document.getElementById("output").innerHTML = "The request to get user location timed out.";
+          break;
+        case error.UNKNOWN_ERROR:
+          document.getElementById("output").innerHTML = "An unknown error occurred.";
+          break;
+      }
+    }
+  </script>
+</body>
+</html>
