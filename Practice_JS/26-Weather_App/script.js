@@ -102,7 +102,7 @@ async function searchLocation(location){
     state = (newLocation.features[0].properties.state);
     country_code = (newLocation.features[0].properties.country_code.toUpperCase());
     initApp(lat, lon);
-    cityStateCountry.innerText = `${city}, ${state}, ${country_code}`;
+    updateCityStateCC(city, state, country_code);
     searchText.value = '';
   }
 }
@@ -113,9 +113,14 @@ async function searchLatLon(lat, lon){
     city = (newLatLon.features[0].properties.city);
     state = (newLatLon.features[0].properties.state);
     country_code = (newLatLon.features[0].properties.country_code.toUpperCase());
-    cityStateCountry.innerText = `${city}, ${state}, ${country_code}`;
+    updateCityStateCC(city, state, country_code);
     searchText.value = '';
   }
+}
+function updateCityStateCC(city, state, country_code){
+  if(!city) cityStateCountry.innerText = `${state}, ${country_code}`
+  else if(!state) cityStateCountry.innerText = `${city}, ${country_code}`
+  else cityStateCountry.innerText = `${city}, ${state}, ${country_code}`;
 }
 
 currentLoc.addEventListener('click', ()=>{
