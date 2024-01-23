@@ -79,4 +79,12 @@ async def main():
 
 
 if __name__ == "__main__":
-    asyncio.run(asyncio.gather(main(), gpio_status_loop()))
+    loop = asyncio.get_event_loop()
+    tasks = [main(), gpio_status_loop()]
+
+    try:
+        loop.run_until_complete(asyncio.gather(*tasks))
+    except KeyboardInterrupt:
+        print("\nExiting the script.")
+    finally:
+        loop.close()
