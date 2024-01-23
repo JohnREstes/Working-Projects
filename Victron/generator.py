@@ -30,9 +30,9 @@ async def send_status(status):
             data = response.json()
             print("GET request successful.")
             print("Server response:", data)
+        await activate_pin(17, 90)  # Await the asynchronous function
     except requests.exceptions.RequestException as error:
         print("Error sending test GET request:", error)
-    activate_pin(17, 90)
 
 
 input_pin = InputDevice(READ_PIN_NUMBER)
@@ -76,7 +76,7 @@ async def main():
         print("Error:", error)
 
 
-def activate_pin(pin_number, duration_seconds):
+async def activate_pin(pin_number, duration_seconds):
     # Create an OutputDevice object for the specified pin
     active_pin = OutputDevice(pin_number)
 
@@ -85,7 +85,7 @@ def activate_pin(pin_number, duration_seconds):
         active_pin.on()
 
         # Optional: Add a delay to keep the pin active for the specified duration
-        sleep(duration_seconds)
+        await asyncio.sleep(duration_seconds)
 
     finally:
         # Turn off the pin to deactivate it
