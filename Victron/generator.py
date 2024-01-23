@@ -3,7 +3,6 @@ import json
 import asyncio
 from gpiozero import InputDevice
 from gpiozero import OutputDevice
-from time import sleep
 
 READ_PIN_NUMBER = 17
 DATA_URL = "https://node.dondeestasyolanda.com/api/victron/data"
@@ -30,26 +29,46 @@ async def send_status(status):
             data = response.json()
             print("GET request successful.")
             print("Server response:", data)
-        await activate_pin(17, 90)  # Await the asynchronous function
     except requests.exceptions.RequestException as error:
         print("Error sending test GET request:", error)
 
 
-input_pin = InputDevice(READ_PIN_NUMBER)
-
-
-async def gpio_status_loop():
-    print("Started GPIO loop")
+async def toggle_pin_and_send_status():
     try:
         while True:
-            current_status = input_pin.is_active
-            await send_status(current_status)
-            await asyncio.sleep(60)
-    except KeyboardInterrupt:
-        print("\nExiting the script.")
-        # Add cleanup code if needed
-    except Exception as error:
-        print("Error:", error)
+            # Set pin 17 to on
+            await activate_pin(17, 0.1)  # Set a short duration for on state
+            await send_status("ON")
+
+            # Wait for 90 seconds
+            await asyncio.sleep(90)
+
+            # Set pin 17 to off
+            await activate_pin(17, 0.1)  # Set a short duration for off state
+            await send_status("OFF")
+
+            # Wait for 90 seconds before the next iteration
+            await asyncio.sleep(90)
+
+    except asyncio.CancelledError:
+        # This exception will be raised when the program is stopped
+        pass
+
+
+async def activate_pin(pin_number, duration_seconds):
+    # Create an OutputDevice object for the specified pin
+    active_pin = OutputDevice(pin_number)
+
+    try:
+        # Set the pin to an active state
+        active_pin.on()
+
+        # Add a delay to keep the pin active for the specified duration
+        await asyncio.sleep(duration_seconds)
+
+    finally:
+        # Turn off the pin to deactivate it
+        active_pin.off()
 
 
 async def main():
@@ -71,30 +90,19 @@ async def main():
             else:
                 print("Voltage information not found in the data.")
 
+            # Wait for 60 seconds before the next iteration
             await asyncio.sleep(60)
+
+    except asyncio.CancelledError:
+        # This exception will be raised when the program is stopped
+        pass
     except Exception as error:
         print("Error:", error)
 
 
-async def activate_pin(pin_number, duration_seconds):
-    # Create an OutputDevice object for the specified pin
-    active_pin = OutputDevice(pin_number)
-
-    try:
-        # Set the pin to an active state
-        active_pin.on()
-
-        # Optional: Add a delay to keep the pin active for the specified duration
-        await asyncio.sleep(duration_seconds)
-
-    finally:
-        # Turn off the pin to deactivate it
-        active_pin.off()
-
-
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
-    tasks = [main(), gpio_status_loop()]
+    tasks = [main(), toggle_pin_and_send_status()]
 
     try:
         loop.run_until_complete(asyncio.gather(*tasks))
