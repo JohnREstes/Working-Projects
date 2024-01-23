@@ -22,6 +22,41 @@ async def get_data():
         raise error
 
 
+def get_Send_status(data):
+    api_endpoint = "https://node.dondeestasyolanda.com/api/generator/status"
+    test_message = data
+
+    try:
+        response = requests.get(api_endpoint, params={"message": test_message})
+        response.raise_for_status()
+        data = response.json()
+        print("GET request successful.")
+        print("Server response:", data)
+    except requests.exceptions.RequestException as error:
+        print("Error sending test GET request:", error)
+
+
+# Create an InputDevice object for the specified pin
+input_pin = InputDevice(READ_PIN_NUMBER)
+
+
+async def gpio_status_loop():
+    try:
+        while True:
+            # Read the status of the GPIO pin
+            current_status = input_pin.is_active
+
+            # Post the status to the API endpoint asynchronously
+            await get_Send_status(current_status)
+
+            await asyncio.sleep(60)
+
+    except KeyboardInterrupt:
+        print("\nExiting the script.")
+    except Exception as error:
+        print("Error:", error)
+
+
 async def main():
     while True:
         try:
@@ -45,41 +80,6 @@ async def main():
         await asyncio.sleep(60)
 
 
-# Create an InputDevice object for the specified pin
-# input_pin = InputDevice(READ_PIN_NUMBER)
-
-
-async def post_gpio_status(status):
-    api_endpoint = "https://node.dondeestasyolanda.com/api/generator/data"
-    payload = {"status": status}
-
-    try:
-        response = await asyncio.to_thread(
-            lambda: requests.post(api_endpoint, json=payload)
-        )
-        response.raise_for_status()
-        print("Status posted successfully.")
-    except requests.exceptions.RequestException as error:
-        print("Error posting status:", error)
-
-
-async def gpio_status_loop():
-    try:
-        while True:
-            # Read the status of the GPIO pin
-            current_status = input_pin.is_active
-
-            # Post the status to the API endpoint asynchronously
-            await post_gpio_status(current_status)
-
-            await asyncio.sleep(60)
-
-    except KeyboardInterrupt:
-        print("\nExiting the script.")
-    except Exception as error:
-        print("Error:", error)
-
-
 # Run the event loop using asyncio.run()
-# asyncio.run(gpio_status_loop())
 asyncio.run(main())
+asyncio.run(gpio_status_loop())
