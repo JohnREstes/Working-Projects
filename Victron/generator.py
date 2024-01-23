@@ -4,33 +4,26 @@ import asyncio
 from gpiozero import InputDevice
 
 READ_PIN_NUMBER = 17
+DATA_URL = "https://node.dondeestasyolanda.com/api/victron/data"
+STATUS_URL = "https://node.dondeestasyolanda.com/api/generator/status"
 
 
-async def get_data():
-    headers = {}
-    url = "https://node.dondeestasyolanda.com/api/victron/data"
-
+async def fetch_data(url):
     try:
         with requests.Session() as session:
-            response = session.get(url, headers=headers)
+            response = session.get(url)
             response.raise_for_status()
-
-            result = response.text
-            data = json.loads(result)
-            return data
+            return response.json()
     except (requests.exceptions.RequestException, json.JSONDecodeError) as error:
         print("Error:", error)
         raise error
 
 
-def get_send_status(data):
+async def send_status(status):
     print("Get to receive and send data")
-    api_endpoint = "https://node.dondeestasyolanda.com/api/generator/status"
-    test_message = data
-
     try:
         with requests.Session() as session:
-            response = session.get(api_endpoint, params={"message": test_message})
+            response = session.get(STATUS_URL, params={"message": status})
             response.raise_for_status()
             data = response.json()
             print("GET request successful.")
@@ -47,7 +40,7 @@ async def gpio_status_loop():
     try:
         while True:
             current_status = input_pin.is_active
-            asyncio.create_task(get_send_status(current_status))
+            await send_status(current_status)
             await asyncio.sleep(60)
     except KeyboardInterrupt:
         print("\nExiting the script.")
@@ -57,25 +50,27 @@ async def gpio_status_loop():
 
 
 async def main():
-    while True:
-        try:
-            data = await get_data()
+    try:
+        while True:
+            data = await fetch_data(DATA_URL)
 
-            voltage_value = None
-            for item in data:
-                if item["description"] == "Voltage":
-                    voltage_value = item["formattedValue"]
-                    break
+            voltage_value = next(
+                (
+                    item["formattedValue"]
+                    for item in data
+                    if item["description"] == "Voltage"
+                ),
+                None,
+            )
 
             if voltage_value is not None:
                 print("Voltage:", voltage_value)
             else:
                 print("Voltage information not found in the data.")
 
-        except Exception as error:
-            print("Error:", error)
-
-        await asyncio.sleep(60)
+            await asyncio.sleep(60)
+    except Exception as error:
+        print("Error:", error)
 
 
 if __name__ == "__main__":
