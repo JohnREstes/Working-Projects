@@ -6,5 +6,7 @@ key.js
 
 # dependencies
 /node_modules
-...
 node_modules
+/nodejs-ssl-server/node_modules
+/Users/johnestes/Documents/WebSites/GitHub/Working-Projects/node_modules
+/Victron/nodejs-ssl-server
