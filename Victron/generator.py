@@ -7,6 +7,7 @@ from gpiozero import OutputDevice
 READ_PIN_NUMBER = 17
 DATA_URL = "https://node.dondeestasyolanda.com/api/victron/data"
 STATUS_URL = "https://node.dondeestasyolanda.com/api/generator/status"
+SLEEP_DURATION = 90
 
 
 async def fetch_data(url):
@@ -21,13 +22,11 @@ async def fetch_data(url):
 
 
 async def send_status(status):
-    print("Get to receive and send data")
     try:
         with requests.Session() as session:
             response = session.get(STATUS_URL, params={"message": status})
             response.raise_for_status()
             data = response.json()
-            print("GET request successful.")
             print("Server response:", data)
     except requests.exceptions.RequestException as error:
         print("Error sending test GET request:", error)
@@ -37,38 +36,32 @@ async def toggle_pin_and_send_status():
     try:
         while True:
             # Set pin 17 to on
-            await activate_pin(17, 0.1)  # Set a short duration for on state
-            await send_status("ON")
+            await activate_pin(17, "on")
 
             # Wait for 90 seconds
-            await asyncio.sleep(90)
+            await asyncio.sleep(SLEEP_DURATION)
 
             # Set pin 17 to off
-            await activate_pin(17, 0.1)  # Set a short duration for off state
-            await send_status("OFF")
+            await activate_pin(17, "off")
 
-            # Wait for 90 seconds before the next iteration
-            await asyncio.sleep(90)
+            # Wait for 90 seconds
+            await asyncio.sleep(SLEEP_DURATION)
 
     except asyncio.CancelledError:
         # This exception will be raised when the program is stopped
         pass
 
 
-async def activate_pin(pin_number, duration_seconds):
+async def activate_pin(pin_number, power):
     # Create an OutputDevice object for the specified pin
     active_pin = OutputDevice(pin_number)
 
-    try:
-        # Set the pin to an active state
+    if power == "on":
         active_pin.on()
-
-        # Add a delay to keep the pin active for the specified duration
-        await asyncio.sleep(duration_seconds)
-
-    finally:
-        # Turn off the pin to deactivate it
+        await send_status("ON")
+    else:
         active_pin.off()
+        await send_status("OFF")
 
 
 async def main():
