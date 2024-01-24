@@ -1,19 +1,29 @@
-from gpiozero import OutputDevice
+import RPi.GPIO as GPIO
 from time import sleep
 
-
-def toggle_pin(pin_number, power):
-    active_pin = OutputDevice(pin_number)
-
-    if power == "on":
-        active_pin.on()
-        print(f"Pin {pin_number} is ON")
-    else:
-        active_pin.off()
-        print(f"Pin {pin_number} is OFF")
+# Set up GPIO
+GPIO.setmode(GPIO.BCM)
+LED_PIN = 17
+GPIO.setup(LED_PIN, GPIO.OUT)
 
 
-# Test the GPIO pin without asyncio
-toggle_pin(17, "on")  # Check if the LED lights up
-sleep(5)  # Wait for 5 seconds
-toggle_pin(17, "off")  # Check if the LED turns off
+def toggle_led():
+    try:
+        while True:
+            # Turn on the LED
+            GPIO.output(LED_PIN, GPIO.HIGH)
+            print("LED ON")
+            sleep(5)
+
+            # Turn off the LED
+            GPIO.output(LED_PIN, GPIO.LOW)
+            print("LED OFF")
+            sleep(5)
+
+    except KeyboardInterrupt:
+        # Clean up GPIO on script exit
+        GPIO.cleanup()
+
+
+if __name__ == "__main__":
+    toggle_led()
