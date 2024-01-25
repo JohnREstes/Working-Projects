@@ -19,6 +19,8 @@ GPIO.setup(START_PIN, GPIO.OUT)
 GPIO.setup(RUNNING_PIN, GPIO.IN)
 GPIO.setup(PROPANE_PIN, GPIO.OUT)
 
+generatorRunning = False  # Define the variable here
+
 
 async def start_generator():
     try:
@@ -48,9 +50,10 @@ async def start_generator():
 
 async def check_generator_running():
     try:
+        global generatorRunning  # Use the global variable
+
         while True:
             voltage_state = GPIO.input(RUNNING_PIN)
-            global generatorRunning
             generatorRunning = voltage_state == GPIO.HIGH
 
             print(generatorRunning)
