@@ -51,8 +51,6 @@ async def start_generator():
         pass
     except Exception as error:
         print("Error:", error)
-    finally:
-        GPIO.cleanup()
 
 
 async def check_generator_running():
@@ -138,8 +136,6 @@ async def main():
         pass
     except Exception as error:
         print("Error:", error)
-    finally:
-        GPIO.cleanup()
 
 
 if __name__ == "__main__":
