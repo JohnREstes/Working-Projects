@@ -19,7 +19,7 @@ GPIO.setup(START_PIN, GPIO.OUT)
 GPIO.setup(RUNNING_PIN, GPIO.IN)
 GPIO.setup(PROPANE_PIN, GPIO.OUT)
 
-generatorRunning = False
+generatorRunning = True
 
 
 async def start_generator():
