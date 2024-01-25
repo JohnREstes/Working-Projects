@@ -117,8 +117,14 @@ async def send_status(status):
 
 
 async def main():
-    await start_generator()
     try:
+        # Set up GPIO for START_PIN
+        GPIO.setup(START_PIN, GPIO.OUT)
+        # Set up GPIO for RUNNING_PIN
+        GPIO.setup(RUNNING_PIN, GPIO.IN)
+
+        await start_generator()
+
         while True:
             data = await fetch_data(DATA_URL)
 
@@ -144,6 +150,9 @@ async def main():
         pass
     except Exception as error:
         print("Error:", error)
+    finally:
+        # Clean up GPIO on script exit
+        GPIO.cleanup()
 
 
 if __name__ == "__main__":
