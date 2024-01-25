@@ -13,7 +13,10 @@ STATUS_URL = "https://node.dondeestasyolanda.com/api/generator/status"
 SLEEP_DURATION = 90
 generatorRunning = False
 
+# Set GPIO numbering mode
 GPIO.setmode(GPIO.BCM)
+# Disable warnings
+GPIO.setwarnings(False)
 
 
 async def start_generator():
