@@ -2,11 +2,11 @@ import RPi.GPIO as GPIO
 import time
 
 CHECK_PIN = 27
+GPIO.setmode(GPIO.BCM)
 
 
 def check_voltage():
-    # Set up GPIO
-    GPIO.setmode(GPIO.BCM)
+    # Set up GPIO in
     GPIO.setup(CHECK_PIN, GPIO.IN)
 
     try:

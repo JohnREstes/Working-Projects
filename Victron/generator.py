@@ -2,7 +2,7 @@ import requests
 import json
 import asyncio
 import RPi.GPIO as GPIO
-import time
+from time import sleep
 
 PROPANE_PIN = 17
 START_PIN = 27
@@ -39,6 +39,7 @@ async def send_status(status):
 
 
 async def main():
+    start_generator()
     try:
         while True:
             data = await fetch_data(DATA_URL)
@@ -56,7 +57,7 @@ async def main():
                 print("Voltage:", voltage_value)
             else:
                 print("Voltage information not found in the data.")
-
+            send_status(generatorRunning)
             # Wait for 60 seconds before the next iteration
             await asyncio.sleep(60)
 
@@ -67,12 +68,37 @@ async def main():
         print("Error:", error)
 
 
-def start_generator():
+async def start_generator():
     if not generatorRunning:
-        return None
+        open_gas_valve("open")
+        try:
+            for i in range(5):
+                # Supply power
+                GPIO.output(START_PIN, GPIO.HIGH)
+                print("Attempting to start")
+                await asyncio.sleep(5)
+
+                # Remove Power
+                GPIO.output(START_PIN, GPIO.LOW)
+                print("Pausing Start")
+                await asyncio.sleep(5)
+
+                if generatorRunning:
+                    break
+                else:
+                    pass
+                if i == 5:
+                    print("error")
+                    break
+
+        except asyncio.CancelledError:
+            # This exception will be raised when the program is stopped
+            pass
+        except Exception as error:
+            print("Error:", error)
 
 
-def check_generator_running():
+async def check_generator_running():
     # Set up GPIO in
     GPIO.setup(RUNNING_PIN, GPIO.IN)
 
@@ -83,14 +109,29 @@ def check_generator_running():
             global generatorRunning
 
             if voltage_state == GPIO.HIGH:
-                print(f"5V is present on GPIO pin {RUNNING_PIN}")
                 generatorRunning = True
             else:
-                print(f"No 5V signal on GPIO pin {RUNNING_PIN}")
                 generatorRunning = False
 
             # Add a 1-second pause
-            time.sleep(1)
+            print(generatorRunning)
+            await asyncio.sleep(1)
+
+    except KeyboardInterrupt:
+        # Clean up GPIO on script exit
+        GPIO.cleanup()
+
+
+def open_gas_valve(state):
+    try:
+        if state == "open":
+            # Turn on the propane
+            GPIO.output(PROPANE_PIN, GPIO.HIGH)
+            print("Propane ON")
+        else:
+            # Turn off the propane
+            GPIO.output(PROPANE_PIN, GPIO.LOW)
+            print("Propane OFF")
 
     except KeyboardInterrupt:
         # Clean up GPIO on script exit
@@ -99,7 +140,7 @@ def check_generator_running():
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
-    tasks = [main(), toggle_pin_and_send_status()]
+    tasks = [main(), check_generator_running()]
 
     try:
         loop.run_until_complete(asyncio.gather(*tasks))
