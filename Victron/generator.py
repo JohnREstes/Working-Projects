@@ -1,13 +1,16 @@
 import requests
 import json
 import asyncio
-from gpiozero import InputDevice
-from gpiozero import OutputDevice
+import RPi.GPIO as GPIO
 
-READ_PIN_NUMBER = 17
+PROPANE_PIN = 17
+START_PIN = 27
+AC_PIN = 22
+RUNNING_PIN = 23
 DATA_URL = "https://node.dondeestasyolanda.com/api/victron/data"
 STATUS_URL = "https://node.dondeestasyolanda.com/api/generator/status"
 SLEEP_DURATION = 90
+generatorRunning = False
 
 
 async def fetch_data(url):
@@ -92,6 +95,10 @@ async def main():
     except Exception as error:
         print("Error:", error)
 
+
+def start_generator():
+    if not generatorRunning:
+        
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
