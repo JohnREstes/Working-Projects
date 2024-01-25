@@ -11,7 +11,6 @@ STATUS_URL = "https://node.dondeestasyolanda.com/api/generator/status"
 SLEEP_DURATION = 90
 
 # Set GPIO numbering mode and disable warnings
-GPIO.cleanup()  # Ensure cleanup at the beginning
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
