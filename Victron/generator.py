@@ -36,8 +36,8 @@ async def start_generator():
                     break
                 else:
                     pass
-                if i == 5:
-                    print("error")
+                if i == 4:
+                    print("DID NOT START, ERROR")
                     break
 
         except asyncio.CancelledError:
@@ -72,9 +72,12 @@ async def check_generator_running():
 
 
 def open_gas_valve(state):
-    # Set up GPIO for PROPANE_PIN
-    GPIO.setup(PROPANE_PIN, GPIO.OUT)
     try:
+        # Check if PROPANE_PIN is already set up
+        if not GPIO.getmode() or GPIO.gpio_function(PROPANE_PIN) != GPIO.OUT:
+            # Set up GPIO for PROPANE_PIN as an output
+            GPIO.setup(PROPANE_PIN, GPIO.OUT)
+
         if state == "open":
             # Turn on the propane
             GPIO.output(PROPANE_PIN, GPIO.HIGH)
@@ -103,7 +106,7 @@ async def fetch_data(url):
 async def send_status(status):
     try:
         with requests.Session() as session:
-            response = session.get(STATUS_URL, params={"message": status})
+            response = session.get(STATUS_URL, params={"status": status})
             response.raise_for_status()
             data = response.json()
             print("Server response:", data)
