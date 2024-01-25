@@ -39,7 +39,7 @@ async def send_status(status):
 
 
 async def main():
-    start_generator()
+    await start_generator()
     try:
         while True:
             data = await fetch_data(DATA_URL)
@@ -57,7 +57,7 @@ async def main():
                 print("Voltage:", voltage_value)
             else:
                 print("Voltage information not found in the data.")
-            send_status(generatorRunning)
+            await send_status(generatorRunning)
             # Wait for 60 seconds before the next iteration
             await asyncio.sleep(60)
 
