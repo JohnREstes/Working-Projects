@@ -69,6 +69,7 @@ async def main():
 
 
 async def start_generator():
+    GPIO.setup(START_PIN, GPIO.OUT)
     if not generatorRunning:
         open_gas_valve("open")
         try:
