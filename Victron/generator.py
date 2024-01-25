@@ -29,7 +29,7 @@ generatorRunning = True
 
 async def start_generator():
     try:
-        open_gas_valve("open")
+        await toggle_gas_valve("open")
         for i in range(5):
             GPIO.output(START_PIN, GPIO.HIGH)
             print("Attempting to start")
@@ -42,6 +42,7 @@ async def start_generator():
                 break
             if i == 4:
                 print("DID NOT START, ERROR")
+                await toggle_gas_valve("close")
                 break
 
     except asyncio.CancelledError:
@@ -62,20 +63,20 @@ async def check_generator_running():
             generatorRunning = voltage_state == GPIO.HIGH
 
             print(generatorRunning)
-            await asyncio.sleep(1)
+            await asyncio.sleep(2)
 
     except KeyboardInterrupt:
         GPIO.cleanup()
 
 
-def open_gas_valve(state):
+async def toggle_gas_valve(state):
     try:
-        current_state = GPIO.input(PROPANE_PIN)
+        # current_state = GPIO.input(PROPANE_PIN)
 
-        if state == "open" and current_state == GPIO.LOW:
+        if state == "open":
             GPIO.output(PROPANE_PIN, GPIO.HIGH)
             print("Propane ON")
-        elif state == "close" and current_state == GPIO.HIGH:
+        elif state == "close":
             GPIO.output(PROPANE_PIN, GPIO.LOW)
             print("Propane OFF")
 
@@ -127,7 +128,7 @@ async def main():
             await send_status(generatorRunning)
             if generatorRunning == False:
                 await start_generator()
-            await asyncio.sleep(60)
+            await asyncio.sleep(30)
 
     except asyncio.CancelledError:
         pass
