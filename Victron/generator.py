@@ -6,6 +6,7 @@ import RPi.GPIO as GPIO
 PROPANE_PIN = 17
 START_PIN = 27
 RUNNING_PIN = 23
+SS_RELAY = 22
 DATA_URL = "https://node.dondeestasyolanda.com/api/victron/data"
 STATUS_URL = "https://node.dondeestasyolanda.com/api/generator/status"
 SLEEP_DURATION = 90
@@ -15,16 +16,18 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
 # Setup GPIO pins
-GPIO.setup(START_PIN, GPIO.OUT)
 GPIO.setup(RUNNING_PIN, GPIO.IN)
+GPIO.setup(START_PIN, GPIO.OUT)
 GPIO.setup(PROPANE_PIN, GPIO.OUT)
+GPIO.setup(SS_RELAY, GPIO.OUT)
 
 # Set default pin state
 
 GPIO.output(PROPANE_PIN, GPIO.LOW)
 GPIO.output(START_PIN, GPIO.LOW)
+GPIO.output(SS_RELAY, GPIO.LOW)
 
-generatorRunning = True
+generatorRunning = False
 
 
 async def start_generator():
@@ -39,10 +42,12 @@ async def start_generator():
             await asyncio.sleep(5)
 
             if generatorRunning:
+                await toggle_SS_relays("on")
                 break
             if i == 4:
                 print("DID NOT START, ERROR")
                 await toggle_gas_valve("close")
+                await toggle_SS_relays("off")
                 break
 
     except asyncio.CancelledError:
@@ -71,14 +76,25 @@ async def check_generator_running():
 
 async def toggle_gas_valve(state):
     try:
-        # current_state = GPIO.input(PROPANE_PIN)
-
         if state == "open":
             GPIO.output(PROPANE_PIN, GPIO.HIGH)
             print("Propane ON")
         elif state == "close":
             GPIO.output(PROPANE_PIN, GPIO.LOW)
             print("Propane OFF")
+
+    except KeyboardInterrupt:
+        GPIO.cleanup()
+
+
+async def toggle_SS_relays(state):
+    try:
+        if state == "on":
+            GPIO.output(SS_RELAY, GPIO.HIGH)
+            print("Power ON")
+        elif state == "off":
+            GPIO.output(SS_RELAY, GPIO.LOW)
+            print("Power OFF")
 
     except KeyboardInterrupt:
         GPIO.cleanup()
@@ -147,3 +163,5 @@ if __name__ == "__main__":
     finally:
         GPIO.cleanup()
         loop.close()
+        toggle_gas_valve("close")
+        toggle_SS_relays("off")
