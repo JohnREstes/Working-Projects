@@ -17,41 +17,30 @@ GPIO.setmode(GPIO.BCM)
 
 
 async def start_generator():
-    # Disable warnings to suppress RuntimeWarning
-    GPIO.setwarnings(False)
-
-    # Check if START_PIN is already set up
-    if not GPIO.getmode() or GPIO.gpio_function(START_PIN) != GPIO.OUT:
-        # Set up GPIO for START_PIN as an output
+    try:
         GPIO.setup(START_PIN, GPIO.OUT)
-
-    if not generatorRunning:
-        open_gas_valve("open")
-        try:
+        if not generatorRunning:
+            open_gas_valve("open")
             for i in range(5):
-                # Supply power
                 GPIO.output(START_PIN, GPIO.HIGH)
                 print("Attempting to start")
                 await asyncio.sleep(5)
-
-                # Remove Power
                 GPIO.output(START_PIN, GPIO.LOW)
                 print("Pausing Start")
                 await asyncio.sleep(5)
 
                 if generatorRunning:
                     break
-                else:
-                    pass
                 if i == 4:
                     print("DID NOT START, ERROR")
                     break
 
-        except asyncio.CancelledError:
-            # This exception will be raised when the program is stopped
-            pass
-        except Exception as error:
-            print("Error:", error)
+    except asyncio.CancelledError:
+        pass
+    except Exception as error:
+        print("Error:", error)
+    finally:
+        GPIO.cleanup()
 
 
 async def check_generator_running():
@@ -85,11 +74,14 @@ def open_gas_valve(state):
             # Set up GPIO for PROPANE_PIN as an output
             GPIO.setup(PROPANE_PIN, GPIO.OUT)
 
-        if state == "open":
+        # Check if the pin is already set to HIGH or LOW before changing
+        current_state = GPIO.input(PROPANE_PIN)
+
+        if state == "open" and current_state == GPIO.LOW:
             # Turn on the propane
             GPIO.output(PROPANE_PIN, GPIO.HIGH)
             print("Propane ON")
-        else:
+        elif state == "close" and current_state == GPIO.HIGH:
             # Turn off the propane
             GPIO.output(PROPANE_PIN, GPIO.LOW)
             print("Propane OFF")
@@ -160,4 +152,5 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         print("\nExiting the script.")
     finally:
+        GPIO.cleanup()
         loop.close()
