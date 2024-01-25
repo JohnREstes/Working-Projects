@@ -11,6 +11,7 @@ STATUS_URL = "https://node.dondeestasyolanda.com/api/generator/status"
 SLEEP_DURATION = 90
 
 # Set GPIO numbering mode and disable warnings
+GPIO.cleanup()  # Ensure cleanup at the beginning
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
@@ -19,14 +20,14 @@ GPIO.setup(START_PIN, GPIO.OUT)
 GPIO.setup(RUNNING_PIN, GPIO.IN)
 GPIO.setup(PROPANE_PIN, GPIO.OUT)
 
-generatorRunning = False  # Define the variable here
+generatorRunning = False
 
 
 async def start_generator():
     try:
         if not generatorRunning:
             open_gas_valve("open")
-            for _ in range(5):
+            for i in range(5):
                 GPIO.output(START_PIN, GPIO.HIGH)
                 print("Attempting to start")
                 await asyncio.sleep(5)
@@ -141,4 +142,5 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         print("\nExiting the script.")
     finally:
+        GPIO.cleanup()
         loop.close()
