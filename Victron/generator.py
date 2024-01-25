@@ -2,6 +2,7 @@ import requests
 import json
 import asyncio
 import RPi.GPIO as GPIO
+import time
 
 PROPANE_PIN = 17
 START_PIN = 27
@@ -11,6 +12,8 @@ DATA_URL = "https://node.dondeestasyolanda.com/api/victron/data"
 STATUS_URL = "https://node.dondeestasyolanda.com/api/generator/status"
 SLEEP_DURATION = 90
 generatorRunning = False
+
+GPIO.setmode(GPIO.BCM)
 
 
 async def fetch_data(url):
@@ -33,38 +36,6 @@ async def send_status(status):
             print("Server response:", data)
     except requests.exceptions.RequestException as error:
         print("Error sending test GET request:", error)
-
-
-async def toggle_pin_and_send_status():
-    try:
-        while True:
-            # Set pin 17 to on
-            await activate_pin(17, "on")
-
-            # Wait for 90 seconds
-            await asyncio.sleep(SLEEP_DURATION)
-
-            # Set pin 17 to off
-            await activate_pin(17, "off")
-
-            # Wait for 90 seconds
-            await asyncio.sleep(SLEEP_DURATION)
-
-    except asyncio.CancelledError:
-        # This exception will be raised when the program is stopped
-        pass
-
-
-async def activate_pin(pin_number, power):
-    # Create an OutputDevice object for the specified pin
-    active_pin = OutputDevice(pin_number)
-
-    if power == "on":
-        active_pin.on()
-        await send_status("ON")
-    else:
-        active_pin.off()
-        await send_status("OFF")
 
 
 async def main():
@@ -98,7 +69,33 @@ async def main():
 
 def start_generator():
     if not generatorRunning:
-        
+        return None
+
+
+def check_generator_running():
+    # Set up GPIO in
+    GPIO.setup(RUNNING_PIN, GPIO.IN)
+
+    try:
+        while True:
+            # Read the state of GPIO pin 27
+            voltage_state = GPIO.input(RUNNING_PIN)
+            global generatorRunning
+
+            if voltage_state == GPIO.HIGH:
+                print(f"5V is present on GPIO pin {RUNNING_PIN}")
+                generatorRunning = True
+            else:
+                print(f"No 5V signal on GPIO pin {RUNNING_PIN}")
+                generatorRunning = False
+
+            # Add a 1-second pause
+            time.sleep(1)
+
+    except KeyboardInterrupt:
+        # Clean up GPIO on script exit
+        GPIO.cleanup()
+
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
