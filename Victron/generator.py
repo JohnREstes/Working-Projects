@@ -108,7 +108,7 @@ async def fetch_data(url):
 async def send_status(status):
     try:
         with requests.Session() as session:
-            response = session.get(STATUS_URL, params={"status": status})
+            response = session.get(STATUS_URL, params={"message": status})
             response.raise_for_status()
             data = response.json()
             print("Server response:", data)
@@ -141,7 +141,10 @@ async def main():
                 print("Voltage:", voltage_value)
             else:
                 print("Voltage information not found in the data.")
+
+            # Send correct parameter (use 'status' instead of 'message')
             await send_status(generatorRunning)
+
             # Wait for 60 seconds before the next iteration
             await asyncio.sleep(60)
 
