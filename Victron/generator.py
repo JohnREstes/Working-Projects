@@ -52,8 +52,8 @@ async def check_generator_running():
     try:
         global generatorRunning
 
-        # Set GPIO numbering mode within this function
-        GPIO.setmode(GPIO.BCM)
+        # Set up GPIO channel
+        GPIO.setup(RUNNING_PIN, GPIO.IN)
 
         while True:
             voltage_state = GPIO.input(RUNNING_PIN)
