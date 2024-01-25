@@ -123,6 +123,8 @@ async def check_generator_running():
 
 
 def open_gas_valve(state):
+    # Set up GPIO for PROPANE_PIN
+    GPIO.setup(PROPANE_PIN, GPIO.OUT)
     try:
         if state == "open":
             # Turn on the propane
