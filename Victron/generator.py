@@ -18,6 +18,8 @@ GPIO.setwarnings(False)
 GPIO.setup(START_PIN, GPIO.OUT)
 GPIO.setup(RUNNING_PIN, GPIO.IN)
 GPIO.setup(PROPANE_PIN, GPIO.OUT)
+GPIO.output(PROPANE_PIN, GPIO.LOW)
+GPIO.output(START_PIN, GPIO.LOW)
 
 generatorRunning = True
 
@@ -39,6 +41,8 @@ async def start_generator():
                 if i == 4:
                     print("DID NOT START, ERROR")
                     break
+        else:
+            await asyncio.sleep(30)
 
     except asyncio.CancelledError:
         pass
