@@ -18,6 +18,9 @@ GPIO.setwarnings(False)
 GPIO.setup(START_PIN, GPIO.OUT)
 GPIO.setup(RUNNING_PIN, GPIO.IN)
 GPIO.setup(PROPANE_PIN, GPIO.OUT)
+
+# Set default pin state
+
 GPIO.output(PROPANE_PIN, GPIO.LOW)
 GPIO.output(START_PIN, GPIO.LOW)
 
@@ -127,6 +130,8 @@ async def main():
                 print("Voltage information not found in the data.")
 
             await send_status(generatorRunning)
+            if generatorRunning == False:
+                await start_generator()
             await asyncio.sleep(60)
 
     except asyncio.CancelledError:
