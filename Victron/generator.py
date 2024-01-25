@@ -29,23 +29,20 @@ generatorRunning = True
 
 async def start_generator():
     try:
-        if generatorRunning == False:
-            open_gas_valve("open")
-            for i in range(5):
-                GPIO.output(START_PIN, GPIO.HIGH)
-                print("Attempting to start")
-                await asyncio.sleep(5)
-                GPIO.output(START_PIN, GPIO.LOW)
-                print("Pausing Start")
-                await asyncio.sleep(5)
+        open_gas_valve("open")
+        for i in range(5):
+            GPIO.output(START_PIN, GPIO.HIGH)
+            print("Attempting to start")
+            await asyncio.sleep(5)
+            GPIO.output(START_PIN, GPIO.LOW)
+            print("Pausing Start")
+            await asyncio.sleep(5)
 
-                if generatorRunning:
-                    break
-                if i == 4:
-                    print("DID NOT START, ERROR")
-                    break
-        else:
-            await asyncio.sleep(30)
+            if generatorRunning:
+                break
+            if i == 4:
+                print("DID NOT START, ERROR")
+                break
 
     except asyncio.CancelledError:
         pass
