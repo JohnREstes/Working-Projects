@@ -2,29 +2,29 @@ import requests
 import json
 import asyncio
 import RPi.GPIO as GPIO
-from time import sleep
 
 PROPANE_PIN = 17
 START_PIN = 27
-AC_PIN = 22
 RUNNING_PIN = 23
 DATA_URL = "https://node.dondeestasyolanda.com/api/victron/data"
 STATUS_URL = "https://node.dondeestasyolanda.com/api/generator/status"
 SLEEP_DURATION = 90
-generatorRunning = False
 
-# Set GPIO numbering mode
+# Set GPIO numbering mode and disable warnings
 GPIO.setmode(GPIO.BCM)
-# Disable warnings
 GPIO.setwarnings(False)
+
+# Setup GPIO pins
+GPIO.setup(START_PIN, GPIO.OUT)
+GPIO.setup(RUNNING_PIN, GPIO.IN)
+GPIO.setup(PROPANE_PIN, GPIO.OUT)
 
 
 async def start_generator():
     try:
-        GPIO.setup(START_PIN, GPIO.OUT)
         if not generatorRunning:
             open_gas_valve("open")
-            for i in range(5):
+            for _ in range(5):
                 GPIO.output(START_PIN, GPIO.HIGH)
                 print("Attempting to start")
                 await asyncio.sleep(5)
@@ -47,50 +47,31 @@ async def start_generator():
 
 
 async def check_generator_running():
-    # Set up GPIO in
-    GPIO.setup(RUNNING_PIN, GPIO.IN)
-
     try:
         while True:
-            # Read the state of GPIO pin 27
             voltage_state = GPIO.input(RUNNING_PIN)
             global generatorRunning
+            generatorRunning = voltage_state == GPIO.HIGH
 
-            if voltage_state == GPIO.HIGH:
-                generatorRunning = True
-            else:
-                generatorRunning = False
-
-            # Add a 1-second pause
             print(generatorRunning)
             await asyncio.sleep(1)
 
     except KeyboardInterrupt:
-        # Clean up GPIO on script exit
         GPIO.cleanup()
 
 
 def open_gas_valve(state):
     try:
-        # Check if PROPANE_PIN is already set up
-        if not GPIO.getmode() or GPIO.gpio_function(PROPANE_PIN) != GPIO.OUT:
-            # Set up GPIO for PROPANE_PIN as an output
-            GPIO.setup(PROPANE_PIN, GPIO.OUT)
-
-        # Check if the pin is already set to HIGH or LOW before changing
         current_state = GPIO.input(PROPANE_PIN)
 
         if state == "open" and current_state == GPIO.LOW:
-            # Turn on the propane
             GPIO.output(PROPANE_PIN, GPIO.HIGH)
             print("Propane ON")
         elif state == "close" and current_state == GPIO.HIGH:
-            # Turn off the propane
             GPIO.output(PROPANE_PIN, GPIO.LOW)
             print("Propane OFF")
 
     except KeyboardInterrupt:
-        # Clean up GPIO on script exit
         GPIO.cleanup()
 
 
@@ -118,11 +99,6 @@ async def send_status(status):
 
 async def main():
     try:
-        # Set up GPIO for START_PIN
-        GPIO.setup(START_PIN, GPIO.OUT)
-        # Set up GPIO for RUNNING_PIN
-        GPIO.setup(RUNNING_PIN, GPIO.IN)
-
         await start_generator()
 
         while True:
@@ -142,19 +118,14 @@ async def main():
             else:
                 print("Voltage information not found in the data.")
 
-            # Send correct parameter (use 'status' instead of 'message')
             await send_status(generatorRunning)
-
-            # Wait for 60 seconds before the next iteration
             await asyncio.sleep(60)
 
     except asyncio.CancelledError:
-        # This exception will be raised when the program is stopped
         pass
     except Exception as error:
         print("Error:", error)
     finally:
-        # Clean up GPIO on script exit
         GPIO.cleanup()
 
 
@@ -167,5 +138,4 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         print("\nExiting the script.")
     finally:
-        GPIO.cleanup()
         loop.close()
