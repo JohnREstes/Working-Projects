@@ -1,7 +1,9 @@
 import requests
 import json
 import asyncio
+import atexit
 import RPi.GPIO as GPIO
+
 
 PROPANE_PIN = 17
 START_PIN = 27
@@ -58,17 +60,23 @@ async def start_generator():
 
 async def check_generator_running():
     try:
-        global generatorRunning
-
-        # Set up GPIO channel
-        GPIO.setup(RUNNING_PIN, GPIO.IN)
+        global generatorRunning  # Use the global variable
+        previous_state = generatorRunning
 
         while True:
             voltage_state = GPIO.input(RUNNING_PIN)
             generatorRunning = voltage_state == GPIO.HIGH
 
             print(generatorRunning)
-            await asyncio.sleep(2)
+
+            if previous_state and not generatorRunning:
+                # Change from True to False detected
+                print("Generator stopped. Performing safety check functions.")
+                await toggle_gas_valve("close")
+                await toggle_SS_relays("off")
+
+            await asyncio.sleep(1)
+            previous_state = generatorRunning
 
     except KeyboardInterrupt:
         GPIO.cleanup()
@@ -122,6 +130,14 @@ async def send_status(status):
         print("Error sending test GET request:", error)
 
 
+# Function to clean up GPIO and perform safety checks
+def cleanup_and_safety_checks():
+    GPIO.cleanup()
+    toggle_gas_valve("close")
+    toggle_SS_relays("off")
+    print("Cleanup and safety checks completed.")
+
+
 async def main():
     try:
         while True:
@@ -153,6 +169,9 @@ async def main():
 
 
 if __name__ == "__main__":
+    # Register the cleanup_and_safety_checks function to be called at exit
+    atexit.register(cleanup_and_safety_checks)
+
     loop = asyncio.get_event_loop()
     tasks = [main(), check_generator_running()]
 
@@ -161,7 +180,5 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         print("\nExiting the script.")
     finally:
-        GPIO.cleanup()
+        # Atexit registered functions will be called here
         loop.close()
-        toggle_gas_valve("close")
-        toggle_SS_relays("off")
