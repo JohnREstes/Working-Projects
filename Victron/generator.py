@@ -105,8 +105,6 @@ async def send_status(status):
 
 async def main():
     try:
-        await start_generator()
-
         while True:
             data = await fetch_data(DATA_URL)
 
