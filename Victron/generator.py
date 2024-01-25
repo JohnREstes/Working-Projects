@@ -17,7 +17,14 @@ GPIO.setmode(GPIO.BCM)
 
 
 async def start_generator():
-    GPIO.setup(START_PIN, GPIO.OUT)
+    # Disable warnings to suppress RuntimeWarning
+    GPIO.setwarnings(False)
+
+    # Check if START_PIN is already set up
+    if not GPIO.getmode() or GPIO.gpio_function(START_PIN) != GPIO.OUT:
+        # Set up GPIO for START_PIN as an output
+        GPIO.setup(START_PIN, GPIO.OUT)
+
     if not generatorRunning:
         open_gas_valve("open")
         try:
