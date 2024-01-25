@@ -25,7 +25,7 @@ generatorRunning = False
 
 async def start_generator():
     try:
-        if not generatorRunning:
+        if generatorRunning == False:
             open_gas_valve("open")
             for i in range(5):
                 GPIO.output(START_PIN, GPIO.HIGH)
