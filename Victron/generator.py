@@ -163,7 +163,7 @@ async def main():
 
             await send_status(generatorRunning)
 
-            if generatorRunning == False and float(voltage_value) <= 49.0:
+            if generatorRunning == False and float(voltage_value.split()[0]) <= 49.0:
                 await start_generator()
                 await asyncio.sleep(GENERATOR_RUNTIME)
                 await stop_generator()
