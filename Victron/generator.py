@@ -124,19 +124,26 @@ async def fetch_data(url):
         raise error
 
 
-async def send_status():
+async def send_status(url):
     global generatorRunning, requestToRun
 
     try:
         status_data = {"generatorRunning": generatorRunning}
 
         with requests.Session() as session:
-            response = session.get(
-                STATUS_URL, params={"message": json.dumps(status_data)}
-            )
+            response = session.get(url, params={"message": json.dumps(status_data)})
             response.raise_for_status()
             data = response.json()
-            print("Server response:", data)
+
+            # Extract the 'requestToRun' from the server response
+            server_request_to_run = data.get("requestToRun")
+
+            # Update global variable 'requestToRun' if the server response has a value
+            if server_request_to_run is not None:
+                requestToRun = server_request_to_run
+
+            print("Server response:")
+            print("requestToRun:", requestToRun)
 
     except requests.exceptions.RequestException as error:
         print("Error sending GET request:", error)
@@ -169,7 +176,7 @@ async def main():
             else:
                 print("Voltage information not found in the data.")
 
-            await send_status(generatorRunning)
+            await send_status(STATUS_URL)
 
             if generatorRunning == False and float(voltage_value.split()[0]) <= 49.0:
                 await start_generator()
