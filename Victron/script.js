@@ -6,8 +6,6 @@ async function fetchData(){
   let victron_data = await get_Data(VICTRON_API)
   format_data(victron_data);
   time_Stamp();
-  let post_data = await sendPostRequest(GENERATOR_API)
-  console.log(post_data)
   let generator_data = await get_Data(GENERATOR_API)
   console.log(generator_data)
 }
@@ -81,35 +79,4 @@ function time_Stamp() {
 
   let el = document.getElementById('timeStamp');
   el.innerText = formattedTime;
-}
-
-async function sendPostRequest(url) {
-
-  // Sample data to be sent in the request body
-  const postData = {
-      voltage: 55.0,           // Replace with the actual voltage value
-      start_status: true        // Replace with the actual start status
-  };
-
-  try {
-      const response = await fetch(url, {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json'
-              // Add any other headers if needed
-          },
-          body: JSON.stringify(postData)
-      });
-
-      if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log('Success:', data);
-      // Handle the success response as needed
-  } catch (error) {
-      console.error('Error:', error);
-      // Handle errors here
-  }
 }

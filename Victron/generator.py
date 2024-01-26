@@ -31,6 +31,7 @@ GPIO.output(START_PIN, GPIO.LOW)
 GPIO.output(SS_RELAY, GPIO.LOW)
 
 generatorRunning = False
+requestToRun = False
 
 
 async def start_generator():
@@ -123,15 +124,22 @@ async def fetch_data(url):
         raise error
 
 
-async def send_status(status):
+async def send_status():
+    global generatorRunning, requestToRun
+
     try:
+        status_data = {"generatorRunning": generatorRunning}
+
         with requests.Session() as session:
-            response = session.get(STATUS_URL, params={"message": status})
+            response = session.get(
+                STATUS_URL, params={"message": json.dumps(status_data)}
+            )
             response.raise_for_status()
             data = response.json()
             print("Server response:", data)
+
     except requests.exceptions.RequestException as error:
-        print("Error sending test GET request:", error)
+        print("Error sending GET request:", error)
 
 
 # Function to clean up GPIO and perform safety checks
