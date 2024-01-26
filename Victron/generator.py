@@ -12,6 +12,7 @@ SS_RELAY = 22
 DATA_URL = "https://node.dondeestasyolanda.com/api/victron/data"
 STATUS_URL = "https://node.dondeestasyolanda.com/api/generator/status"
 SLEEP_DURATION = 90
+GENERATOR_RUNTIME = 1800  # 60 sec x 30 min
 
 # Set GPIO numbering mode and disable warnings
 GPIO.setmode(GPIO.BCM)
@@ -48,8 +49,7 @@ async def start_generator():
                 break
             if i == 4:
                 print("DID NOT START, ERROR")
-                await toggle_gas_valve("close")
-                await toggle_SS_relays("off")
+                await stop_generator()
                 break
 
     except asyncio.CancelledError:
@@ -71,15 +71,19 @@ async def check_generator_running():
 
             if previous_state and not generatorRunning:
                 # Change from True to False detected
-                print("Generator stopped. Performing safety check functions.")
-                await toggle_gas_valve("close")
-                await toggle_SS_relays("off")
+                await stop_generator()
 
-            await asyncio.sleep(1)
+            await asyncio.sleep(2.5)
             previous_state = generatorRunning
 
     except KeyboardInterrupt:
         GPIO.cleanup()
+
+
+async def stop_generator():
+    print("Generator stopped. Performing safety check functions.")
+    await toggle_gas_valve("close")
+    await toggle_SS_relays("off")
 
 
 async def toggle_gas_valve(state):
@@ -158,8 +162,12 @@ async def main():
                 print("Voltage information not found in the data.")
 
             await send_status(generatorRunning)
-            if generatorRunning == False:
+
+            if generatorRunning == False and float(voltage_value) <= 49.0:
                 await start_generator()
+                await asyncio.sleep(GENERATOR_RUNTIME)
+                await stop_generator()
+
             await asyncio.sleep(30)
 
     except asyncio.CancelledError:
