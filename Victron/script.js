@@ -2,6 +2,7 @@ const REFRESH_RATE = 15;
 const VICTRON_API = 'https://node.dondeestasyolanda.com/api/victron/data'
 const GENERATOR_API = 'https://node.dondeestasyolanda.com/api/generator/status'
 const toggleSwitch = document.getElementById('toggleSwitch');
+const generatorStatusField = document.getElementById('GeneratorStatus')
 let generatorRunning;
 let requestToRun = false;
 
@@ -115,21 +116,21 @@ async function get_Generator(url) {
     console.log(data)
     generatorRunning = data.generatorRunning;
     requestToRun = data.requestToRun;
-    
-    if(iniLoad == true && requestToRun == true){
+
+    if(iniLoad == true && requestToRun == true && generatorRunning == true){
       requestToRun = data.requestToRun
       toggleSwitch.checked = true
+      generatorStatusField.innerText = 'ON'
     }
     iniLoad = false
 
     console.log("Server response:");
     console.log("Generator Running:", generatorRunning);
-    let elm = document.getElementById('GeneratorStatus')
     if(generatorRunning == true){
-      elm.innerText = 'ON'
+      generatorStatusField.innerText = 'ON'
       // toggleSwitch.checked = true
     } else {
-      elm.innerText = 'OFF'
+      generatorStatusField.innerText = 'OFF'
       // toggleSwitch.checked = false
     }
 
