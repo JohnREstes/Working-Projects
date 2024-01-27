@@ -11,7 +11,7 @@ RUNNING_PIN = 23
 SS_RELAY = 22
 DATA_URL = "https://node.dondeestasyolanda.com/api/victron/data"
 STATUS_URL = "https://node.dondeestasyolanda.com/api/generator/status"
-SLEEP_DURATION = 90
+SLEEP_DURATION = 15
 GENERATOR_RUNTIME = 1800  # 60 sec x 30 min
 
 # Set GPIO numbering mode and disable warnings
@@ -185,7 +185,7 @@ async def main():
                 await asyncio.sleep(GENERATOR_RUNTIME)
                 await stop_generator()
 
-            await asyncio.sleep(30)
+            await asyncio.sleep(SLEEP_DURATION)
 
     except asyncio.CancelledError:
         pass
