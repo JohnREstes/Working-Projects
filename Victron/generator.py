@@ -53,8 +53,6 @@ async def start_generator():
             if i == 4:
                 print("DID NOT START, ERROR")
                 await stop_generator()
-                await send_status(STATUS_URL)
-
                 break
 
     except asyncio.CancelledError:
@@ -69,7 +67,6 @@ async def stop_generator():
     await toggle_gas_valve("close")
     await toggle_SS_relays("off")
     generatorRunning = False
-    await send_status(STATUS_URL)
 
 
 async def check_generator_running():

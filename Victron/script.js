@@ -151,5 +151,4 @@ toggleSwitch.addEventListener('change', ()=>{
       console.log('Toggle switch is OFF');
       requestToRun = false
   }
-  get_Generator(GENERATOR_API);
 })
