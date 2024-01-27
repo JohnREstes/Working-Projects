@@ -8,8 +8,7 @@ async function fetchData(){
   let victron_data = await get_Data(VICTRON_API)
   format_data(victron_data);
   time_Stamp();
-  let generator_data = await sendStatus(GENERATOR_API);
-  console.log(generator_data)
+  await get_Generator(GENERATOR_API);
 }
 
 async function get_Data(url) {
