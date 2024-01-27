@@ -202,17 +202,14 @@ async def main():
 
 
 if __name__ == "__main__":
-    # Register the cleanup_and_safety_checks function to be called at exit
-    atexit.register(cleanup_and_safety_checks)
-
-    loop = asyncio.get_event_loop()
-    tasks = [main(), check_generator_running()]
-
     try:
+        loop = asyncio.get_event_loop()
+        tasks = [main(), check_generator_running()]
+
         loop.run_until_complete(asyncio.gather(*tasks))
     except KeyboardInterrupt:
         print("\nExiting the script.")
     finally:
-        # Atexit registered functions will be called here
+        # Run asynchronous cleanup before exiting
         loop.run_until_complete(cleanup_and_safety_checks())
         loop.close()
