@@ -154,9 +154,16 @@ async def send_status(url):
 
 # Function to clean up GPIO and perform safety checks
 def cleanup_and_safety_checks():
+    global generatorRunning
+
     GPIO.cleanup()
     toggle_gas_valve("close")
     toggle_SS_relays("off")
+
+    # tell server generator has stopped
+    generatorRunning = False
+    send_status(STATUS_URL)
+
     print("Cleanup and safety checks completed.")
 
 

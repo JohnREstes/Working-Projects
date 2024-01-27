@@ -103,6 +103,12 @@ async function get_Generator(url) {
 
     console.log("Server response:");
     console.log("Generator Running:", generatorRunning);
+    let elm = document.getElementById('GeneratorStatus')
+    if(generatorRunning == true){
+      elm.innerText = 'ON'
+    } else {
+      elm.innerText = 'OFF'
+    }
 
 } catch (error) {
     console.error("Error sending GET request:", error);
