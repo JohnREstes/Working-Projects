@@ -1,4 +1,4 @@
-const REFRESH_RATE = 30;
+const REFRESH_RATE = 15;
 const VICTRON_API = 'https://node.dondeestasyolanda.com/api/victron/data'
 const GENERATOR_API = 'https://node.dondeestasyolanda.com/api/generator/status'
 const toggleSwitch = document.getElementById('toggleSwitch');
@@ -84,13 +84,24 @@ function time_Stamp() {
   el.innerText = formattedTime;
 }
 
+let iniLoad = true
+
 async function get_Generator(url) {
   try {
     console.log(requestToRun + " FROM API CALL")
-    const statusData = {
+    var statusData = {};
+    if(iniLoad == true){
+        statusData = {
+          "generatorRunning": "",
+          "requestToRun": ""
+        };
+    } else {
+      statusData = {
         "generatorRunning": "",
         "requestToRun": requestToRun
     };
+    }
+
 
     const params = new URLSearchParams({
         "message": JSON.stringify(statusData)
@@ -103,6 +114,13 @@ async function get_Generator(url) {
 
     console.log(data)
     generatorRunning = data.generatorRunning;
+    requestToRun = data.requestToRun;
+    
+    if(iniLoad == true && requestToRun == true){
+      requestToRun = data.requestToRun
+      toggleSwitch.checked = true
+    }
+    iniLoad = false
 
     console.log("Server response:");
     console.log("Generator Running:", generatorRunning);
