@@ -130,7 +130,7 @@ async def send_status(url):
     try:
         status_data = {
             "generatorRunning": generatorRunning,
-            "requestToRun": requestToRun,
+            "requestToRun": "",
         }
 
         with requests.Session() as session:
