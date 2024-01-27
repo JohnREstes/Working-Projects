@@ -212,11 +212,12 @@ if __name__ == "__main__":
     finally:
         # Run asynchronous cleanup before exiting
         # loop.run_until_complete(cleanup_and_safety_checks())
-        GPIO.cleanup()
 
         loop.run_until_complete(toggle_gas_valve("close"))
         loop.run_until_complete(toggle_SS_relays("off"))
         generatorRunning = False
         loop.run_until_complete(send_status(STATUS_URL))
         print("Cleanup and safety checks completed.")
+
+        GPIO.cleanup()
         loop.close()
