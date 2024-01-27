@@ -59,6 +59,15 @@ async def start_generator():
         print("Error:", error)
 
 
+async def stop_generator():
+    global generatorRunning
+    print("Generator stopped. Performing safety check functions.")
+    await toggle_gas_valve("close")
+    await toggle_SS_relays("off")
+    generatorRunning = False
+    await send_status(STATUS_URL)
+
+
 async def check_generator_running():
     try:
         global generatorRunning  # Use the global variable
@@ -79,12 +88,6 @@ async def check_generator_running():
 
     except KeyboardInterrupt:
         GPIO.cleanup()
-
-
-async def stop_generator():
-    print("Generator stopped. Performing safety check functions.")
-    await toggle_gas_valve("close")
-    await toggle_SS_relays("off")
 
 
 async def toggle_gas_valve(state):
@@ -147,24 +150,13 @@ async def send_status(url):
 
             print("Server response:")
             print("requestToRun:", requestToRun)
+            if requestToRun == True and generatorRunning == False:
+                start_generator()
+            elif requestToRun == False and generatorRunning == True:
+                stop_generator()
 
     except requests.exceptions.RequestException as error:
         print("Error sending GET request:", error)
-
-
-# Function to clean up GPIO and perform safety checks
-async def cleanup_and_safety_checks():
-    global generatorRunning
-
-    GPIO.cleanup()
-    toggle_gas_valve("close")
-    toggle_SS_relays("off")
-
-    # tell server generator has stopped
-    generatorRunning = False
-    send_status(STATUS_URL)
-
-    print("Cleanup and safety checks completed.")
 
 
 async def main():
@@ -211,7 +203,6 @@ if __name__ == "__main__":
         print("\nExiting the script.")
     finally:
         # Run asynchronous cleanup before exiting
-        # loop.run_until_complete(cleanup_and_safety_checks())
 
         loop.run_until_complete(toggle_gas_valve("close"))
         loop.run_until_complete(toggle_SS_relays("off"))
