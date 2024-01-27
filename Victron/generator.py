@@ -13,6 +13,7 @@ DATA_URL = "https://node.dondeestasyolanda.com/api/victron/data"
 STATUS_URL = "https://node.dondeestasyolanda.com/api/generator/status"
 SLEEP_DURATION = 15
 GENERATOR_RUNTIME = 1800  # 60 sec x 30 min
+CHECK_GENERATOR_STATUS = 2
 
 # Set GPIO numbering mode and disable warnings
 GPIO.setmode(GPIO.BCM)
@@ -83,7 +84,7 @@ async def check_generator_running():
                 # Change from True to False detected
                 await stop_generator()
 
-            await asyncio.sleep(2.5)
+            await asyncio.sleep(CHECK_GENERATOR_STATUS)
             previous_state = generatorRunning
 
     except KeyboardInterrupt:
