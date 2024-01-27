@@ -151,9 +151,9 @@ async def send_status(url):
             print("Server response:")
             print("requestToRun:", requestToRun)
             if requestToRun == True and generatorRunning == False:
-                start_generator()
+                await start_generator()
             elif requestToRun == False and generatorRunning == True:
-                stop_generator()
+                await stop_generator()
 
     except requests.exceptions.RequestException as error:
         print("Error sending GET request:", error)
