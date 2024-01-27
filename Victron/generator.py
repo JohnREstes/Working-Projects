@@ -36,6 +36,7 @@ requestToRun = False
 
 
 async def start_generator():
+    global generatorRunning
     try:
         await toggle_gas_valve("open")
         for i in range(5):
@@ -51,7 +52,6 @@ async def start_generator():
                 break
             if i == 4:
                 print("DID NOT START, ERROR")
-                generatorRunning = "error"
                 await stop_generator()
                 await send_status(STATUS_URL)
 
