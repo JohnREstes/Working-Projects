@@ -129,9 +129,12 @@ async function get_Generator(url) {
     if(generatorRunning == true){
       generatorStatusField.innerText = 'ON'
       // toggleSwitch.checked = true
-    } else {
+    } else if (generatorRunning == false) {
       generatorStatusField.innerText = 'OFF'
       // toggleSwitch.checked = false
+    } else {
+      generatorStatusField.innerText = 'ERROR'
+      toggleSwitch.checked = false
     }
 
 } catch (error) {
