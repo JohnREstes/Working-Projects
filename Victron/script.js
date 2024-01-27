@@ -133,6 +133,7 @@ async function get_Generator(url) {
       generatorStatusField.innerText = 'OFF'
       // toggleSwitch.checked = false
     } else {
+      requestToRun = false
       generatorStatusField.innerText = 'ERROR'
       toggleSwitch.checked = false
     }
