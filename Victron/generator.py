@@ -51,7 +51,6 @@ async def start_generator():
                 break
             if i == 4:
                 print("DID NOT START, ERROR")
-                global generatorRunning
                 generatorRunning = "error"
                 await stop_generator()
                 await send_status(STATUS_URL)
