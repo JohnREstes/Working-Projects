@@ -128,7 +128,7 @@ async def send_status(url):
     global generatorRunning, requestToRun
 
     try:
-        status_data = {"generatorRunning": generatorRunning}
+        status_data = {"generatorRunning": generatorRunning, "requestToRun": ""}
 
         with requests.Session() as session:
             response = session.get(url, params={"message": json.dumps(status_data)})

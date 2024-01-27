@@ -1,12 +1,14 @@
 const REFRESH_RATE = 60;
 const VICTRON_API = 'https://node.dondeestasyolanda.com/api/victron/data'
 const GENERATOR_API = 'https://node.dondeestasyolanda.com/api/generator/status'
+let generatorRunning
+let requestToRun = true
 
 async function fetchData(){
   let victron_data = await get_Data(VICTRON_API)
   format_data(victron_data);
   time_Stamp();
-  let generator_data = await get_Data(GENERATOR_API)
+  let generator_data = await sendStatus(GENERATOR_API);
   console.log(generator_data)
 }
 
@@ -80,3 +82,39 @@ function time_Stamp() {
   let el = document.getElementById('timeStamp');
   el.innerText = formattedTime;
 }
+
+async function sendStatus(url) {
+  try {
+      const message = {
+          "generatorRunning": '',
+          "requestToRun": requestToRun
+      };
+
+      const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          // Convert the message object to a query parameter
+          // For example: ?generatorRunning=&requestToRun=true
+          params: new URLSearchParams(message).toString()
+      });
+
+      const data = await response.json();
+
+      // Extract the 'generatorRunning' from the server response
+      const serverGeneratorRunning = data.generatorRunning;
+
+      // Update the global variable 'generatorRunning' if the server response has a value
+      if (serverGeneratorRunning !== undefined) {
+          generatorRunning = serverGeneratorRunning;
+      }
+
+      console.log("Server response:");
+      console.log("generatorRunning:", generatorRunning);
+
+  } catch (error) {
+      console.error("Error sending GET request:", error);
+  }
+}
+
