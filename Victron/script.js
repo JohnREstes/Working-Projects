@@ -83,38 +83,29 @@ function time_Stamp() {
   el.innerText = formattedTime;
 }
 
-async function sendStatus(url) {
+async function get_Generator(url) {
   try {
-      const message = {
-          "generatorRunning": '',
-          "requestToRun": requestToRun
-      };
+    const statusData = {
+        "generatorRunning": "",
+        "requestToRun": requestToRun
+    };
 
-      const response = await fetch(url, {
-          method: 'GET',
-          headers: {
-              'Content-Type': 'application/json'
-          },
-          // Convert the message object to a query parameter
-          // For example: ?generatorRunning=&requestToRun=true
-          params: new URLSearchParams(message).toString()
-      });
+    const params = new URLSearchParams({
+        "message": JSON.stringify(statusData)
+    });
 
-      const data = await response.json();
+    const response = await fetch(`${url}?${params}`);
+    const data = await response.json();
 
-      // Extract the 'generatorRunning' from the server response
-      const serverGeneratorRunning = data.generatorRunning;
+    // Extract the 'requestToRun' from the server response
 
-      // Update the global variable 'generatorRunning' if the server response has a value
-      if (serverGeneratorRunning !== undefined) {
-          generatorRunning = serverGeneratorRunning;
-      }
+    console.log(data)
+    generatorRunning = data.generatorRunning;
 
-      console.log("Server response:");
-      console.log("generatorRunning:", generatorRunning);
+    console.log("Server response:");
+    console.log("Generator Running:", generatorRunning);
 
-  } catch (error) {
-      console.error("Error sending GET request:", error);
-  }
+} catch (error) {
+    console.error("Error sending GET request:", error);
 }
-
+}
