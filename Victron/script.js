@@ -1,4 +1,4 @@
-const REFRESH_RATE = 60;
+const REFRESH_RATE = 30;
 const VICTRON_API = 'https://node.dondeestasyolanda.com/api/victron/data'
 const GENERATOR_API = 'https://node.dondeestasyolanda.com/api/generator/status'
 let generatorRunning

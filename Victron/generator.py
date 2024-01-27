@@ -153,7 +153,7 @@ async def send_status(url):
 
 
 # Function to clean up GPIO and perform safety checks
-def cleanup_and_safety_checks():
+async def cleanup_and_safety_checks():
     global generatorRunning
 
     GPIO.cleanup()
@@ -214,4 +214,5 @@ if __name__ == "__main__":
         print("\nExiting the script.")
     finally:
         # Atexit registered functions will be called here
+        loop.run_until_complete(cleanup_and_safety_checks())
         loop.close()
