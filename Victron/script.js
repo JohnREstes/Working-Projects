@@ -1,8 +1,10 @@
 const REFRESH_RATE = 30;
 const VICTRON_API = 'https://node.dondeestasyolanda.com/api/victron/data'
 const GENERATOR_API = 'https://node.dondeestasyolanda.com/api/generator/status'
-let generatorRunning
-let requestToRun = true
+const toggleSwitch = document.getElementById('toggleSwitch');
+let generatorRunning;
+let requestToRun = false;
+
 
 async function fetchData(){
   let victron_data = await get_Data(VICTRON_API)
@@ -84,6 +86,7 @@ function time_Stamp() {
 
 async function get_Generator(url) {
   try {
+    console.log(requestToRun + " FROM API CALL")
     const statusData = {
         "generatorRunning": "",
         "requestToRun": requestToRun
@@ -106,11 +109,24 @@ async function get_Generator(url) {
     let elm = document.getElementById('GeneratorStatus')
     if(generatorRunning == true){
       elm.innerText = 'ON'
+      // toggleSwitch.checked = true
     } else {
       elm.innerText = 'OFF'
+      // toggleSwitch.checked = false
     }
 
 } catch (error) {
     console.error("Error sending GET request:", error);
 }
 }
+
+toggleSwitch.addEventListener('change', ()=>{
+  if (toggleSwitch.checked) {
+      console.log('Toggle switch is ON');
+      requestToRun = true
+  } else {
+      console.log('Toggle switch is OFF');
+      requestToRun = false
+  }
+  get_Generator(GENERATOR_API);
+})
