@@ -1,9 +1,10 @@
 const REFRESH_RATE = 10; //seconds
-const VICTRON_API = 'https://node.dondeestasyolanda.com/api/victron/data'
-const GENERATOR_API = 'https://node.dondeestasyolanda.com/api/generator/status'
+const VICTRON_API = 'https://node.dondeestasyolanda.com/api/victron/data';
+const GENERATOR_API = 'https://node.dondeestasyolanda.com/api/status';
 const toggleSwitch = document.getElementById('toggleSwitch');
-const generatorStatusField = document.getElementById('GeneratorStatus')
-let generatorRunning, errorState;
+const generatorStatusField = document.getElementById('GeneratorStatus');
+const settingsObject = {};
+let generatorRunning, errorState, settings;
 let requestToRun = false;
 
 
@@ -94,13 +95,15 @@ async function get_Generator(url) {
         statusData = {
           "generatorRunning": "",
           "requestToRun": "",
-          "errorState": ""
+          "errorState": "",
+          "settings": null
         };
     } else {
       statusData = {
         "generatorRunning": "",
         "requestToRun": requestToRun,
-        "errorState": ""
+        "errorState": "",
+        "settings": settingsObject
     };
     }
 
@@ -117,6 +120,10 @@ async function get_Generator(url) {
     generatorRunning = data.generatorRunning;
     requestToRun = data.requestToRun;
     errorState = data.errorState;
+    settings = data.settings;
+
+    console.log(settings);
+    
 
     if(iniLoad == true && requestToRun == true && generatorRunning == true){
       requestToRun = data.requestToRun
@@ -153,3 +160,30 @@ toggleSwitch.addEventListener('change', ()=>{
       requestToRun = false
   }
 })
+
+
+//  HTML Modification
+
+const settingsMenu = document.getElementsByClassName('settingsMenu')[0]; // Get the first element in the collection
+const settingsGear = document.getElementById('settingsGear');
+const settingsClose = document.getElementById('settingsClose');
+const inputElements = document.querySelectorAll('.settingsGrid input');
+
+settingsGear.addEventListener('click', () => {
+  settingsMenu.style.display = 'inline-block';
+});
+
+settingsClose.addEventListener('click', () => {
+  settingsMenu.style.display = 'none';
+});
+
+// Add event listener to each input element
+inputElements.forEach(input => {
+  input.addEventListener('change', () => {
+    // Update the settingsObject with the input value
+    settingsObject[input.id] = input.value;
+    
+    // Log the updated settingsObject (you can remove this line if not needed)
+    console.log('Updated Settings:', settingsObject);
+  });
+});

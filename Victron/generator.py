@@ -9,7 +9,7 @@ START_PIN = 27  # GPIO PIN, board pin 7 ?
 RUNNING_PIN = 23  # GPIO PIN, board pin 8 ?
 SS_RELAY = 22  # GPIO PIN, board pin 28 ?
 DATA_URL = "https://node.dondeestasyolanda.com/api/victron/data"
-STATUS_URL = "https://node.dondeestasyolanda.com/api/generator/status"
+STATUS_URL = "https://node.dondeestasyolanda.com/api/status"
 SLEEP_DURATION = 10  # seconds
 GENERATOR_RUNTIME = 1800  # 60 sec x 30 min
 CHECK_GENERATOR_STATUS = 2  # seconds
@@ -19,6 +19,7 @@ CLEAR_ERROR_STATE = 60  # seconds
 generatorRunning = False
 requestToRun = False
 errorState = False
+variableSettings = None
 
 # Set GPIO numbering mode and disable warnings
 GPIO.setmode(GPIO.BCM)
@@ -136,14 +137,15 @@ async def fetch_data(url):
         raise error
 
 
-async def send_status(url):
-    global generatorRunning, requestToRun, errorState
+async def send_get_status(url):
+    global generatorRunning, requestToRun, errorState, variableSettings
 
     try:
         status_data = {
             "generatorRunning": generatorRunning,
             "requestToRun": "",
             "errorState": errorState,
+            "settings": None,
         }
 
         with requests.Session() as session:
@@ -153,6 +155,9 @@ async def send_status(url):
 
             # Extract the 'requestToRun' from the server response
             server_request_to_run = data.get("requestToRun")
+            variableSettings = data.get("settings")
+
+            print("\n\n", variableSettings, "\n\n")
 
             # Update global variable 'requestToRun' if the server response has a value
             if server_request_to_run is not None:
@@ -205,7 +210,7 @@ async def main():
             else:
                 print("Voltage information not found in the data.")
 
-            await send_status(STATUS_URL)
+            await send_get_status(STATUS_URL)
 
             if generatorRunning == False and float(voltage_value.split()[0]) <= 49.0:
                 await start_generator()
@@ -232,7 +237,7 @@ if __name__ == "__main__":
         loop.run_until_complete(toggle_gas_valve("close"))
         loop.run_until_complete(toggle_SS_relays("off"))
         generatorRunning = False
-        loop.run_until_complete(send_status(STATUS_URL))
+        loop.run_until_complete(send_get_status(STATUS_URL))
         print("Cleanup and safety checks completed.")
 
         GPIO.cleanup()

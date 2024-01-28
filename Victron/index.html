@@ -10,6 +10,24 @@
 </head>
 <body>
     <div class="container">
+        <div class="settings">
+            <img src="./gear_icon.png" alt="settings gear" id="settingsGear">
+        </div>
+        <div class="settingsMenu">
+            <div id="settingsClose">X</div>
+            <div class="settingsGrid">
+                <div class="settingGridItem">Default Voltage</div>
+                <div class="settingGridItem"><input type="number" pattern="[0-9]*" id="defaultVoltage"></div>
+                <div class="settingGridItem">Default Runtime</div>
+                <div class="settingGridItem"><input type="number" pattern="[0-9]*" id="defaultRuntime"></div>
+                <div class="settingGridItem">Check Hour</div>
+                <div class="settingGridItem"><input type="number" pattern="[0-9]*" id="checkHour"></div>
+                <div class="settingGridItem">Check Voltage</div>
+                <div class="settingGridItem"><input type="number" pattern="[0-9]*" id="checkVoltage"></div>
+                <div class="settingGridItem">Check Runtime</div>
+                <div class="settingGridItem"><input type="number" pattern="[0-9]*" id="checkRuntime"></div>
+            </div>
+        </div>
         <div id="timeStamp"></div>
         <div class="grid">
             <div class="gridItem grid_header">Victron</div>
