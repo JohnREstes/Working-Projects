@@ -1,19 +1,23 @@
 import requests
 import json
 import asyncio
-import atexit
 import RPi.GPIO as GPIO
 
 
-PROPANE_PIN = 17
-START_PIN = 27
-RUNNING_PIN = 23
-SS_RELAY = 22
+PROPANE_PIN = 17  # GPIO PIN, board pin 6
+START_PIN = 27  # GPIO PIN, board pin 7 ?
+RUNNING_PIN = 23  # GPIO PIN, board pin 8 ?
+SS_RELAY = 22  # GPIO PIN, board pin 28 ?
 DATA_URL = "https://node.dondeestasyolanda.com/api/victron/data"
 STATUS_URL = "https://node.dondeestasyolanda.com/api/generator/status"
-SLEEP_DURATION = 15
+SLEEP_DURATION = 10  # seconds
 GENERATOR_RUNTIME = 1800  # 60 sec x 30 min
-CHECK_GENERATOR_STATUS = 2
+CHECK_GENERATOR_STATUS = 2  # seconds
+
+# Global Variables
+generatorRunning = False
+requestToRun = False
+errorState = False
 
 # Set GPIO numbering mode and disable warnings
 GPIO.setmode(GPIO.BCM)
@@ -31,12 +35,9 @@ GPIO.output(PROPANE_PIN, GPIO.LOW)
 GPIO.output(START_PIN, GPIO.LOW)
 GPIO.output(SS_RELAY, GPIO.LOW)
 
-generatorRunning = False
-requestToRun = False
-
 
 async def start_generator():
-    global generatorRunning
+    global generatorRunning, errorState
     try:
         await toggle_gas_valve("open")
         for i in range(5):
@@ -49,9 +50,11 @@ async def start_generator():
 
             if generatorRunning:
                 await toggle_SS_relays("on")
+                errorState = False
                 break
             if i == 4:
                 print("DID NOT START, ERROR")
+                errorState = True
                 await stop_generator()
                 break
 
@@ -129,12 +132,13 @@ async def fetch_data(url):
 
 
 async def send_status(url):
-    global generatorRunning, requestToRun
+    global generatorRunning, requestToRun, errorState
 
     try:
         status_data = {
             "generatorRunning": generatorRunning,
             "requestToRun": "",
+            "errorState": errorState,
         }
 
         with requests.Session() as session:

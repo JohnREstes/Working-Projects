@@ -1,9 +1,9 @@
-const REFRESH_RATE = 15;
+const REFRESH_RATE = 10; //seconds
 const VICTRON_API = 'https://node.dondeestasyolanda.com/api/victron/data'
 const GENERATOR_API = 'https://node.dondeestasyolanda.com/api/generator/status'
 const toggleSwitch = document.getElementById('toggleSwitch');
 const generatorStatusField = document.getElementById('GeneratorStatus')
-let generatorRunning;
+let generatorRunning, errorState;
 let requestToRun = false;
 
 
@@ -94,12 +94,14 @@ async function get_Generator(url) {
     if(iniLoad == true){
         statusData = {
           "generatorRunning": "",
-          "requestToRun": ""
+          "requestToRun": "",
+          "errorState": ""
         };
     } else {
       statusData = {
         "generatorRunning": "",
-        "requestToRun": requestToRun
+        "requestToRun": requestToRun,
+        "errorState": ""
     };
     }
 
@@ -116,6 +118,7 @@ async function get_Generator(url) {
     console.log(data)
     generatorRunning = data.generatorRunning;
     requestToRun = data.requestToRun;
+    errorState = data.errorState;
 
     if(iniLoad == true && requestToRun == true && generatorRunning == true){
       requestToRun = data.requestToRun
@@ -128,14 +131,13 @@ async function get_Generator(url) {
     console.log("Generator Running:", generatorRunning);
     if(generatorRunning == true){
       generatorStatusField.innerText = 'ON'
-      // toggleSwitch.checked = true
-    } else if (generatorRunning == false) {
-      generatorStatusField.innerText = 'OFF'
-      // toggleSwitch.checked = false
     } else {
+      generatorStatusField.innerText = 'OFF'
+    } 
+    if(errorState == true){
       requestToRun = false
-      generatorStatusField.innerText = 'ERROR'
       toggleSwitch.checked = false
+      generatorStatusField.innerText = 'ERROR'
     }
 
 } catch (error) {
