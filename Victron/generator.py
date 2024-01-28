@@ -93,6 +93,7 @@ async def check_generator_running():
             previous_state = generatorRunning
 
     except KeyboardInterrupt:
+        await asyncio.sleep(1)
         GPIO.cleanup()
 
 
@@ -106,6 +107,7 @@ async def toggle_gas_valve(state):
             print("Propane OFF")
 
     except KeyboardInterrupt:
+        await asyncio.sleep(1)
         GPIO.cleanup()
 
 
@@ -119,6 +121,7 @@ async def toggle_SS_relays(state):
             print("Power OFF")
 
     except KeyboardInterrupt:
+        await asyncio.sleep(1)
         GPIO.cleanup()
 
 
