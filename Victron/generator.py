@@ -170,6 +170,7 @@ async def send_status(url):
 
 
 async def clearErrorState():
+    global errorState
     if errorState:
         await asyncio.sleep(CLEAR_ERROR_STATE)
         errorState = False
