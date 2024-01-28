@@ -75,7 +75,7 @@ async def stop_generator():
 
 async def check_generator_running():
     try:
-        global generatorRunning  # Use the global variable
+        global generatorRunning, errorState  # Use the global variable
         previous_state = generatorRunning
 
         while True:
@@ -86,6 +86,7 @@ async def check_generator_running():
 
             if previous_state and not generatorRunning:
                 # Change from True to False detected
+                errorState = True
                 await stop_generator()
 
             await asyncio.sleep(CHECK_GENERATOR_STATUS)
