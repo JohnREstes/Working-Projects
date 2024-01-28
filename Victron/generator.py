@@ -171,9 +171,15 @@ async def send_status(url):
 
 async def clearErrorState():
     global errorState
-    if errorState:
-        await asyncio.sleep(CLEAR_ERROR_STATE)
-        errorState = False
+    try:
+        while True:
+            if errorState:
+                await asyncio.sleep(CLEAR_ERROR_STATE)
+                errorState = False
+            await asyncio.sleep(CHECK_GENERATOR_STATUS)
+
+    except Exception as error:
+        print("Error:", error)
 
 
 async def main():
@@ -206,8 +212,6 @@ async def main():
 
     except asyncio.CancelledError:
         pass
-    except Exception as error:
-        print("Error:", error)
 
 
 if __name__ == "__main__":
