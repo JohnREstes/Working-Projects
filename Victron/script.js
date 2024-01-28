@@ -89,7 +89,6 @@ let iniLoad = true
 
 async function get_Generator(url) {
   try {
-    console.log(requestToRun + " FROM API CALL")
     var statusData = {};
     if(iniLoad == true){
         statusData = {
@@ -115,7 +114,6 @@ async function get_Generator(url) {
 
     // Extract the 'requestToRun' from the server response
 
-    console.log(data)
     generatorRunning = data.generatorRunning;
     requestToRun = data.requestToRun;
     errorState = data.errorState;
@@ -129,6 +127,7 @@ async function get_Generator(url) {
 
     console.log("Server response:");
     console.log("Generator Running:", generatorRunning);
+    console.log("Error State:", errorState);
     if(generatorRunning == true){
       generatorStatusField.innerText = 'ON'
     } else {

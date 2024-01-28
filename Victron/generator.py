@@ -13,6 +13,7 @@ STATUS_URL = "https://node.dondeestasyolanda.com/api/generator/status"
 SLEEP_DURATION = 10  # seconds
 GENERATOR_RUNTIME = 1800  # 60 sec x 30 min
 CHECK_GENERATOR_STATUS = 2  # seconds
+CLEAR_ERROR_STATE = 60  # seconds
 
 # Global Variables
 generatorRunning = False
@@ -155,13 +156,23 @@ async def send_status(url):
 
             print("Server response:")
             print("requestToRun:", requestToRun)
-            if requestToRun == True and generatorRunning == False:
+            if (
+                requestToRun == True
+                and generatorRunning == False
+                and errorState == False
+            ):
                 await start_generator()
             elif requestToRun == False and generatorRunning == True:
                 await stop_generator()
 
     except requests.exceptions.RequestException as error:
         print("Error sending GET request:", error)
+
+
+async def clearErrorState():
+    if errorState:
+        await asyncio.sleep(CLEAR_ERROR_STATE)
+        errorState = False
 
 
 async def main():
@@ -201,7 +212,7 @@ async def main():
 if __name__ == "__main__":
     try:
         loop = asyncio.get_event_loop()
-        tasks = [main(), check_generator_running()]
+        tasks = [main(), check_generator_running(), clearErrorState()]
 
         loop.run_until_complete(asyncio.gather(*tasks))
     except KeyboardInterrupt:
