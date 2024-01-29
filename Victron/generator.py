@@ -176,7 +176,7 @@ async def send_get_status(url):
             server_request_to_run = data.get("requestToRun")
             variableSettings = data.get("settings")
 
-            logging.info("\n\n", variableSettings, "\n\n")
+            logging.info(variableSettings)
 
             # Update global variable 'requestToRun' if the server response has a value
             if server_request_to_run is not None:
@@ -249,7 +249,7 @@ if __name__ == "__main__":
 
         loop.run_until_complete(asyncio.gather(*tasks))
     except KeyboardInterrupt:
-        logging.info("\nExiting the script.")
+        logging.info("Exiting the script.")
     finally:
         # Run asynchronous cleanup before exiting
 
