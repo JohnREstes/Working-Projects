@@ -102,7 +102,7 @@ async def check_generator_running():
             voltage_state = GPIO.input(RUNNING_PIN)
             generatorRunning = voltage_state == GPIO.HIGH
 
-            logging.info(generatorRunning)
+            logging.info("Generator Running: ", generatorRunning)
 
             if previous_state and not generatorRunning:
                 # Change from True to False detected
@@ -176,7 +176,7 @@ async def send_get_status(url):
             server_request_to_run = data.get("requestToRun")
             variableSettings = data.get("settings")
 
-            logging.info(variableSettings)
+            logging.info("Settings : ", variableSettings)
 
             # Update global variable 'requestToRun' if the server response has a value
             if server_request_to_run is not None:
