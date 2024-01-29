@@ -82,7 +82,7 @@ async def start_generator():
     except asyncio.CancelledError:
         pass
     except Exception as error:
-        logging.info("Error:", error)
+        logging.info("Error: %s", error)
 
 
 async def stop_generator():
@@ -102,7 +102,7 @@ async def check_generator_running():
             voltage_state = GPIO.input(RUNNING_PIN)
             generatorRunning = voltage_state == GPIO.HIGH
 
-            logging.info("Generator Running: ", generatorRunning)
+            logging.info("Generator Running: %s", generatorRunning)
 
             if previous_state and not generatorRunning:
                 # Change from True to False detected
@@ -152,7 +152,7 @@ async def fetch_data(url):
             response.raise_for_status()
             return response.json()
     except (requests.exceptions.RequestException, json.JSONDecodeError) as error:
-        logging.info("Error:", error)
+        logging.info("Error: %s", error)
         raise error
 
 
@@ -176,14 +176,14 @@ async def send_get_status(url):
             server_request_to_run = data.get("requestToRun")
             variableSettings = data.get("settings")
 
-            logging.info("Settings : ", variableSettings)
+            logging.info("Settings: %s", variableSettings)
 
             # Update global variable 'requestToRun' if the server response has a value
             if server_request_to_run is not None:
                 requestToRun = server_request_to_run
 
             logging.info("Server response:")
-            logging.info("requestToRun:", requestToRun)
+            logging.info("requestToRun: %s", requestToRun)
             if (
                 requestToRun == True
                 and generatorRunning == False
@@ -194,7 +194,7 @@ async def send_get_status(url):
                 await stop_generator()
 
     except requests.exceptions.RequestException as error:
-        logging.info("Error sending GET request:", error)
+        logging.info("Error sending GET request: %s", error)
 
 
 async def clearErrorState():
@@ -207,7 +207,7 @@ async def clearErrorState():
             await asyncio.sleep(CHECK_GENERATOR_STATUS)
 
     except Exception as error:
-        logging.info("Error:", error)
+        logging.info("Error: %s", error)
 
 
 async def main():
@@ -225,7 +225,7 @@ async def main():
             )
 
             if voltage_value is not None:
-                logging.info("Voltage:", voltage_value)
+                logging.info("Voltage: %s", voltage_value)
             else:
                 logging.info("Voltage information not found in the data.")
 
