@@ -12,7 +12,7 @@ async function fetchData(){
   let victron_data = await get_Data(VICTRON_API)
   format_data(victron_data);
   time_Stamp();
-  await get_Generator(GENERATOR_API);
+  await get_status(GENERATOR_API);
 }
 
 async function get_Data(url) {
@@ -88,7 +88,7 @@ function time_Stamp() {
 
 let iniLoad = true
 
-async function get_Generator(url) {
+async function get_status(url) {
   try {
     var statusData = {};
     if(iniLoad == true){
