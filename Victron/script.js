@@ -122,9 +122,8 @@ async function get_status(url) {
     errorState = data.errorState;
     settings = data.settings;
 
-    console.log(settings);
+    await configureSettings(settings)
     
-
     if(iniLoad == true && requestToRun == true && generatorRunning == true){
       requestToRun = data.requestToRun
       toggleSwitch.checked = true
@@ -168,6 +167,9 @@ const settingsMenu = document.getElementsByClassName('settingsMenu')[0]; // Get 
 const settingsGear = document.getElementById('settingsGear');
 const settingsClose = document.getElementById('settingsClose');
 const inputElements = document.querySelectorAll('.settingsGrid input');
+const saveButton = document.getElementById('saveButton');
+
+saveButton.addEventListener('click', onSaveButtonClick);
 
 settingsGear.addEventListener('click', () => {
   settingsMenu.style.display = 'inline-block';
@@ -177,13 +179,31 @@ settingsClose.addEventListener('click', () => {
   settingsMenu.style.display = 'none';
 });
 
-// Add event listener to each input element
-inputElements.forEach(input => {
-  input.addEventListener('change', () => {
-    // Update the settingsObject with the input value
-    settingsObject[input.id] = input.value;
-    
-    // Log the updated settingsObject (you can remove this line if not needed)
-    console.log('Updated Settings:', settingsObject);
-  });
-});
+async function configureSettings(serverSettings){
+  // ensures module is not displayed, so that items can be changed
+  if (window.getComputedStyle(settingsMenu).display == 'none') {
+    for (const inputId in serverSettings) {
+      if (serverSettings.hasOwnProperty(inputId)) {
+          const inputElement = document.getElementById(inputId);
+          const settings = serverSettings[inputId];
+          inputElement.value = settings
+      }
+  }}
+}
+// Function to handle button click
+function onSaveButtonClick() {
+  // Create a JSON object to store input settings
+  var inputSettings = {
+    defaultVoltage: document.getElementById('defaultVoltage').value,
+    defaultRuntime: document.getElementById('defaultRuntime').value,
+    checkHour: document.getElementById('checkHour').value,
+    checkVoltage: document.getElementById('checkVoltage').value,
+    checkRuntime: document.getElementById('checkRuntime').value,
+  };
+
+  // Log the JSON object to the console (you can do whatever you want with it)
+  console.log('Input Settings:', inputSettings);
+
+  // You can also return the JSON object or use it as needed
+  return inputSettings;
+}

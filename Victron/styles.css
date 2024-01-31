@@ -77,10 +77,16 @@ span{
     font-weight: 700;
     cursor: pointer;
 }
-.settingGridItem{
-
+.buttonDiv{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    grid-column: span 2;
+    padding: 5px;
 }
-
+button{
+    cursor: pointer;
+}
 
 .toggle-switch {
     position: relative;
