@@ -1,3 +1,6 @@
+const loginContainer = document.getElementById('loginContainer')
+
+
 async function login() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
@@ -39,13 +42,18 @@ async function login() {
         if (response.ok) {
           const data = await response.json();
           console.log(data);
+          loginContainer.style.display = 'none'
         } else {
           console.error('Error:', response.statusText);
+          loginContainer.style.display = 'flex'
         }
       } catch (error) {
         console.error('Error:', error.message);
+        loginContainer.style.display = 'flex'
       }
     } else {
       console.log('Token not found in localStorage');
+      loginContainer.style.display = 'flex'
     }
   }
+handleToken()

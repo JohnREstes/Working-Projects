@@ -1,0 +1,45 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+body{
+    background-color: rgb(174, 251, 251);
+    height: 100vh;
+    width: 100vw;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: clamp(.5rem, 1.1rem, 2rem);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.loginContainer{
+    position: absolute;
+    left: 0;
+    top:0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: whitesmoke;
+    display: none;
+}
+.loginForm{
+    background-color: rgb(116, 179, 233);
+    padding: 10px;
+    width: max-content;
+    height: max-content;
+}
+input{
+    margin: 5px;
+}
+.buttonCenter{
+    display: flex;
+    justify-content: center;
+}
+#loginButton{
+    padding: 5px;
+    font-size: clamp(.5rem, 1.1rem, 2rem);
+    margin-top: 15px;
+}
