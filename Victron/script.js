@@ -115,7 +115,6 @@ async function get_status(url) {
     const response = await fetch(`${url}?${params}`);
     const data = await response.json();
 
-    // Extract the 'requestToRun' from the server response
 
     generatorRunning = data.generatorRunning;
     requestToRun = data.requestToRun;
@@ -205,5 +204,5 @@ function onSaveButtonClick() {
   console.log('Input Settings:', inputSettings);
 
   // You can also return the JSON object or use it as needed
-  return inputSettings;
+  settingsObject = inputSettings;
 }
