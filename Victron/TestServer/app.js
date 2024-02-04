@@ -120,6 +120,7 @@ async function readFromFile(file) {
     throw error;
   }
 }
+
 function handleServerError(res, error, errorMessage) {
   console.error(errorMessage, error);
   res.status(500).json({ error: 'Internal Server Error' });
