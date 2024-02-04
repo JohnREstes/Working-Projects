@@ -111,8 +111,8 @@ async function writeToFile(file, data) {
 
 async function readFromFile(file) {
   try {
-    let rawdata = await fs.promises.readFile(file);
-    let savedSettings = JSON.parse(rawdata);
+    let rawdata = await fs.promises.readFile(file, 'utf-8');
+    let savedSettings = JSON.parse(rawdata);    
     console.log('Settings successfully read from file');
     return savedSettings;
   } catch (error) {
