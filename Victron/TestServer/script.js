@@ -3,6 +3,11 @@ const settingsLocalP = document.getElementById('settingLocal');
 var storedToken = null
 var savedSettings = JSON.parse(localStorage.getItem('settings'));
 
+window.addEventListener('unhandledrejection', function (event) {
+  console.error('Unhandled Promise Rejection:', event.reason);
+});
+
+
 async function login() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
@@ -63,7 +68,7 @@ async function login() {
   var jsonString = {};
 
   async function saveSettings() {
-    console.log(jsonString2)
+    console.log(jsonString2);
     try {
       const response = await fetch('http://localhost:3000/settings', {
         method: 'POST',
@@ -75,10 +80,15 @@ async function login() {
       });
   
       if (response.ok) {
-        const data = await response.json();
-        console.log('Settings successfully uploaded:', data.settings);
-        await saveSettingsLocal(data.settings)
-        updateSettingsP()
+        try {
+          const data = await response.json();
+          debugger;
+          console.log('Settings successfully uploaded:', data.settings);
+          await saveSettingsLocal(data.settings);
+          await updateSettingsP();
+        } catch (jsonError) {
+          console.error('Error parsing JSON:', jsonError);
+        }
       } else {
         const errorData = await response.json();
         console.error('Error in uploading settings:', errorData.error || 'Unknown error');
@@ -104,7 +114,7 @@ async function login() {
         const data = await response.json();
         console.log(data);
         await saveSettingsLocal(data)
-        updateSettingsP()
+        await updateSettingsP()
       } else {
         console.error('Error retrieving settings:', response.statusText);
         alert('Error retrieving settings');
@@ -121,20 +131,22 @@ async function login() {
 
 handleToken()
 
-document.getElementById('saveSettingsButton').addEventListener('click', async function(event) {
+document.getElementById('saveSettingsButton').addEventListener('click', function(event) {
   event.preventDefault();
-  await saveSettings();
+  saveSettings();
+  event.preventDefault();
 });
 
-document.getElementById('getSettingsButton').addEventListener('click', async function(event) {
+document.getElementById('getSettingsButton').addEventListener('click', function(event) {
   event.preventDefault();
-  await getSettings();
+  getSettings();
 });
+
 async function saveSettingsLocal(data){
   localStorage.setItem('settings', JSON.stringify(data));
   savedSettings = JSON.parse(localStorage.getItem('settings'))
 }
-function updateSettingsP() {
+async function updateSettingsP() {
   console.log(savedSettings);
 
   if (savedSettings && savedSettings.username) {
