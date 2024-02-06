@@ -2,6 +2,25 @@ import requests
 import json
 import asyncio
 import RPi.GPIO as GPIO
+import logging
+from logging.handlers import RotatingFileHandler
+
+# Set up the rotating file handler configuration
+log_filename = "generator.log"
+max_log_size = 1024  # Specify the maximum log file size in bytes
+backup_count = 3  # Specify the number of backup log files to keep
+
+# Create a rotating file handler
+handler = RotatingFileHandler(
+    log_filename, maxBytes=max_log_size, backupCount=backup_count
+)
+
+# Set up the logging configuration with the handler
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    handlers=[handler],
+)
 
 
 PROPANE_PIN = 17  # GPIO PIN, board pin 6
@@ -44,10 +63,10 @@ async def start_generator():
         await toggle_gas_valve("open")
         for i in range(5):
             GPIO.output(START_PIN, GPIO.HIGH)
-            print("Attempting to start")
+            logging.info("Attempting to start")
             await asyncio.sleep(5)
             GPIO.output(START_PIN, GPIO.LOW)
-            print("Pausing Start")
+            logging.info("Pausing Start")
             await asyncio.sleep(5)
 
             if generatorRunning:
@@ -55,7 +74,7 @@ async def start_generator():
                 errorState = False
                 break
             if i == 4:
-                print("DID NOT START, ERROR")
+                logging.info("DID NOT START, ERROR")
                 errorState = True
                 await stop_generator()
                 break
@@ -63,12 +82,12 @@ async def start_generator():
     except asyncio.CancelledError:
         pass
     except Exception as error:
-        print("Error: ", error)
+        logging.info("Error: %s", error)
 
 
 async def stop_generator():
     global generatorRunning
-    print("Generator stopped. Performing safety check functions.")
+    logging.info("Generator stopped. Performing safety check functions.")
     await toggle_gas_valve("close")
     await toggle_SS_relays("off")
     generatorRunning = False
@@ -83,7 +102,7 @@ async def check_generator_running():
             voltage_state = GPIO.input(RUNNING_PIN)
             generatorRunning = voltage_state == GPIO.HIGH
 
-            print("Generator Running: ", generatorRunning)
+            logging.info("Generator Running: %s", generatorRunning)
 
             if previous_state and not generatorRunning:
                 # Change from True to False detected
@@ -102,10 +121,10 @@ async def toggle_gas_valve(state):
     try:
         if state == "open":
             GPIO.output(PROPANE_PIN, GPIO.HIGH)
-            print("Propane ON")
+            logging.info("Propane ON")
         elif state == "close":
             GPIO.output(PROPANE_PIN, GPIO.LOW)
-            print("Propane OFF")
+            logging.info("Propane OFF")
 
     except KeyboardInterrupt:
         await asyncio.sleep(1)
@@ -116,10 +135,10 @@ async def toggle_SS_relays(state):
     try:
         if state == "on":
             GPIO.output(SS_RELAY, GPIO.HIGH)
-            print("Power ON")
+            logging.info("Power ON")
         elif state == "off":
             GPIO.output(SS_RELAY, GPIO.LOW)
-            print("Power OFF")
+            logging.info("Power OFF")
 
     except KeyboardInterrupt:
         await asyncio.sleep(1)
@@ -133,7 +152,7 @@ async def fetch_data(url):
             response.raise_for_status()
             return response.json()
     except (requests.exceptions.RequestException, json.JSONDecodeError) as error:
-        print("Error: ", error)
+        logging.info("Error: %s", error)
         raise error
 
 
@@ -157,14 +176,14 @@ async def send_get_status(url):
             server_request_to_run = data.get("requestToRun")
             variableSettings = data.get("settings")
 
-            print("Settings: ", variableSettings)
+            logging.info("Settings: %s", variableSettings)
 
             # Update global variable 'requestToRun' if the server response has a value
             if server_request_to_run is not None:
                 requestToRun = server_request_to_run
 
-            print("Server response:")
-            print("requestToRun: ", requestToRun)
+            logging.info("Server response:")
+            logging.info("requestToRun: %s", requestToRun)
             if (
                 requestToRun == True
                 and generatorRunning == False
@@ -175,7 +194,7 @@ async def send_get_status(url):
                 await stop_generator()
 
     except requests.exceptions.RequestException as error:
-        print("Error sending GET request: ", error)
+        logging.info("Error sending GET request: %s", error)
 
 
 async def clearErrorState():
@@ -188,7 +207,7 @@ async def clearErrorState():
             await asyncio.sleep(CHECK_GENERATOR_STATUS)
 
     except Exception as error:
-        print("Error: ", error)
+        logging.info("Error: %s", error)
 
 
 async def main():
@@ -206,9 +225,9 @@ async def main():
             )
 
             if voltage_value is not None:
-                print("Voltage: ", voltage_value)
+                logging.info("Voltage: %s", voltage_value)
             else:
-                print("Voltage information not found in the data.")
+                logging.info("Voltage information not found in the data.")
 
             await send_get_status(STATUS_URL)
 
@@ -230,7 +249,7 @@ if __name__ == "__main__":
 
         loop.run_until_complete(asyncio.gather(*tasks))
     except KeyboardInterrupt:
-        print("Exiting the script.")
+        logging.info("Exiting the script.")
     finally:
         # Run asynchronous cleanup before exiting
 
@@ -238,7 +257,7 @@ if __name__ == "__main__":
         loop.run_until_complete(toggle_SS_relays("off"))
         generatorRunning = False
         loop.run_until_complete(send_get_status(STATUS_URL))
-        print("Cleanup and safety checks completed.")
+        logging.info("Cleanup and safety checks completed.")
 
         GPIO.cleanup()
         loop.close()
