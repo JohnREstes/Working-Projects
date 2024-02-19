@@ -3,6 +3,11 @@ const VICTRON_API = 'https://node.dondeestasyolanda.com/api/victron/data';
 const GENERATOR_API = 'https://node.dondeestasyolanda.com/api/status';
 const toggleSwitch = document.getElementById('toggleSwitch');
 const generatorStatusField = document.getElementById('GeneratorStatus');
+const defaultVoltage = document.getElementById('defaultVoltage');
+const defaultRuntime = document.getElementById('defaultRuntime');
+const checkHour = document.getElementById('checkHour');
+const checkVoltage = document.getElementById('checkVoltage');
+const checkRuntime = document.getElementById('checkRuntime');
 let settingsObject = {};
 let generatorRunning, errorState, settings;
 let requestToRun = false;
@@ -193,11 +198,11 @@ async function configureSettings(serverSettings){
 function onSaveButtonClick() {
   // Create a JSON object to store input settings
   var inputSettings = {
-    defaultVoltage: document.getElementById('defaultVoltage').value,
-    defaultRuntime: document.getElementById('defaultRuntime').value,
-    checkHour: document.getElementById('checkHour').value,
-    checkVoltage: document.getElementById('checkVoltage').value,
-    checkRuntime: document.getElementById('checkRuntime').value,
+    defaultVoltage: defaultVoltage.value,
+    defaultRuntime: defaultRuntime.value,
+    checkHour: checkHour.value,
+    checkVoltage: checkVoltage.value,
+    checkRuntime: checkRuntime.value,
   };
 
   console.log('Input Settings:', inputSettings);
@@ -291,8 +296,18 @@ async function login() {
         try {
           const data = await response.json();
           console.log('Settings successfully uploaded:', data.settings);
-          //await saveSettingsLocal(data.settings);
-          //await updateSettingsP();
+          defaultVoltage.style.color = "green";
+          defaultRuntime.style.color = "green";
+          checkHour.style.color = "green";
+          checkVoltage.style.color = "green";
+          checkRuntime.style.color = "green";
+          setTimeout(() => {
+            defaultVoltage.style.color = "black";
+            defaultRuntime.style.color = "black";
+            checkHour.style.color = "black";
+            checkVoltage.style.color = "black";
+            checkRuntime.style.color = "black";
+          }, "5000");
         } catch (jsonError) {
           console.error('Error parsing JSON:', jsonError);
         }
@@ -320,11 +335,11 @@ async function login() {
       if (response.ok) {
         const data = await response.json();
         console.log(data);
-          document.getElementById('defaultVoltage').value = data.defaultVoltage;
-          document.getElementById('defaultRuntime').value = data.defaultRuntime;
-          document.getElementById('checkHour').value = data.checkHour
-          document.getElementById('checkVoltage').value = data.checkVoltage
-          document.getElementById('checkRuntime').value = data.checkRuntime;
+          defaultVoltage.value = data.defaultVoltage;
+          defaultRuntime.value = data.defaultRuntime;
+          checkHour.value = data.checkHour
+          checkVoltage.value = data.checkVoltage
+          checkRuntime.value = data.checkRuntime;
       } else {
         console.error('Error retrieving settings:', response.statusText);
         alert('Error retrieving settings');
@@ -336,7 +351,7 @@ async function login() {
   }
 
 
-  const jsonString2 = {defaultVoltage: '49', defaultRuntime: '30', checkHour: '2100', checkVoltage: '52', checkRuntime: '35'};
+  //const jsonString2 = {defaultVoltage: '49', defaultRuntime: '30', checkHour: '2100', checkVoltage: '52', checkRuntime: '35'};
 
 
 handleToken()
