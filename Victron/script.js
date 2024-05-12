@@ -11,6 +11,7 @@ const checkRuntime = document.getElementById('checkRuntime');
 let settingsObject = {};
 let generatorRunning, errorState, settings;
 let requestToRun = false;
+let victronAPItimestamp = 0;
 
 
 async function fetchData(){
@@ -44,8 +45,9 @@ async function format_data(data) {
     for (const record of data) {
       switch (record.idDataAttribute) {
         case 81:
-          elm = document.getElementById("VRMvoltage")
-          elm.innerText = record.formattedValue
+          elm = document.getElementById("VRMvoltage");
+          elm.innerText = record.formattedValue;
+          victronAPItimestamp = record.timestamp;
           break;
         // case 49:
         //   elm = document.getElementById("VRMcurrent")
@@ -81,6 +83,8 @@ setInterval(fetchData, REFRESH_RATE * 1000)
 function time_Stamp() {
   // Get the current date and time
   const currentDate = new Date();
+  const victronAPItimestampConverted = new Date((victronAPItimestamp * 1000));
+  console.log(victronAPItimestampConverted)
 
   // Convert the date and time to a string without seconds in the user's local time zone
   const formattedTime = currentDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
