@@ -1,4 +1,8 @@
 const { chromium } = require('playwright');
+require('dotenv').config();
+
+const usernameGrowatt = process.env.USERNAME_GROWATT;
+const passwordGrowatt = process.env.PASSWORD_GROWATT;
 
 async function getGrowattData() {
     const browser = await chromium.launch({
@@ -8,44 +12,30 @@ async function getGrowattData() {
     let growattData = [];
 
     try {
-        // Navigate to the login page
+        // Navigate to the Growatt login page
         await page.goto('https://server-us.growatt.com/');
+
+        // Wait for login form elements
         await page.waitForSelector('#val_loginAccount', { timeout: 30000 });
-        await page.fill('#val_loginAccount', 'johnnie321');
         await page.waitForSelector('#val_loginPwd');
-        await page.fill('#val_loginPwd', '133Utica');
         await page.waitForSelector('.loginB');
+
+        // Fill in username and password
+        await page.fill('#val_loginAccount', usernameGrowatt);
+        await page.fill('#val_loginPwd', passwordGrowatt);
+
+        // Click on the login button
         await page.click('.loginB');
 
-        // Wait for login and navigate to the dashboard
-        await page.waitForTimeout(2000); // Adjust timeout as needed
+        // Navigate to the dashboard page
+        await page.waitForTimeout(1000); // Adjust timeout as needed
         await page.goto('https://server-us.growatt.com/index');
-        await page.waitForTimeout(2000); // Adjust timeout as needed
+        await page.waitForTimeout(1000); // Adjust timeout as needed
 
-        // Click on the device XSK0CKS058
-        await page.locator('.selDiv_blank').locator('i').click();
-        await page.locator('dd:has-text("XSK0CKS058")').click();
-        await page.waitForTimeout(2000); // Adjust timeout as needed
-
-        // Extract data from animPan element for XSK0CKS058
-        const animPan = await page.locator('.animPan');
-        const texts = await animPan.innerHTML();
-        const values = await extractValuesFromHTML(texts);
-        growattData.push({ device: 'XSK0CKS058', data: values });
-
-        // Wait before switching to another device
-        await page.waitForTimeout(2000); // Adjust timeout as needed
-
-        // Click on the device XSK0CKS03A
-        await page.locator('.selDiv_blank').locator('i').click();
-        await page.locator('dd:has-text("XSK0CKS03A")').click();
-        await page.waitForTimeout(2000); // Adjust timeout as needed
-
-        // Extract data from animPan element for XSK0CKS03A
-        const animPan2 = await page.locator('.animPan');
-        const texts2 = await animPan2.innerHTML();
-        const values2 = await extractValuesFromHTML(texts2);
-        growattData.push({ device: 'XSK0CKS03A', data: values2 });
+        // Process each device
+        await processDevice(page, 'XSK0CKS058', growattData);
+        await page.waitForTimeout(1000); // Adjust timeout as needed
+        await processDevice(page, 'XSK0CKS03A', growattData);
 
         return growattData;
 
@@ -56,10 +46,22 @@ async function getGrowattData() {
     }
 }
 
-(async () => {
-    const data = await getGrowattData();
-    console.log(data);
-})();
+async function processDevice(page, deviceCode, growattData) {
+    // Click on the device selector
+    await page.locator('.selDiv_blank').locator('i').click();
+
+    // Click on the specific device option
+    await page.locator(`dd:has-text("${deviceCode}")`).click();
+    await page.waitForTimeout(2000); // Adjust timeout as needed
+
+    // Extract data from animPan element
+    const animPan = await page.locator('.animPan');
+    const texts = await animPan.innerHTML();
+    const values = await extractValuesFromHTML(texts);
+
+    // Push device data to growattData array
+    growattData.push({ device: deviceCode, data: values });
+}
 
 async function extractValuesFromHTML(html) {
     // Regular expressions to match and extract values
@@ -108,3 +110,8 @@ async function extractValue(html, regex, groupIndex = 1) {
     const match = html.match(regex);
     return match ? parseFloat(match[groupIndex]) : null;
 }
+
+(async () => {
+    const data = await getGrowattData();
+    console.log(data);
+})();
