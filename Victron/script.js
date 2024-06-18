@@ -22,10 +22,12 @@ async function fetchData(){
 }
 
 async function get_Data(url) {
-  const headers = { };
   var requestOptions = {
     method: 'GET',
-    headers: headers,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${storedToken}`,
+    },
     redirect: 'follow'
   };
 
@@ -282,6 +284,8 @@ async function login() {
     }
   }
 
+  handleToken()
+
   var jsonString = {};
 
   async function saveSettings(data) {
@@ -357,8 +361,6 @@ async function login() {
 
   //const jsonString2 = {defaultVoltage: '49', defaultRuntime: '30', checkHour: '2100', checkVoltage: '52', checkRuntime: '35'};
 
-
-handleToken()
 
 
 async function saveSettingsLocal(data){
