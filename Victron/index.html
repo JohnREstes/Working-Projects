@@ -25,51 +25,25 @@
         </div>
     </div>
     <div class="container">
-        <div class="settings">
-            <img src="./gear_icon.png" alt="settings gear" id="settingsGear">
-        </div>
-        <div class="settingsMenu">
-            <div id="settingsClose">X</div>
-            <div class="settingsGrid">
-                <div class="settingGridItem">Default Voltage</div>
-                <div class="settingGridItem"><input type="number" pattern="[0-9]*" id="defaultVoltage"></div>
-                <div class="settingGridItem">Default Runtime</div>
-                <div class="settingGridItem"><input type="number" pattern="[0-9]*" id="defaultRuntime"></div>
-                <div class="settingGridItem">Check Hour</div>
-                <div class="settingGridItem"><input type="number" pattern="[0-9]*" id="checkHour"></div>
-                <div class="settingGridItem">Check Voltage</div>
-                <div class="settingGridItem"><input type="number" pattern="[0-9]*" id="checkVoltage"></div>
-                <div class="settingGridItem">Check Runtime</div>
-                <div class="settingGridItem"><input type="number" pattern="[0-9]*" id="checkRuntime"></div>
-                <div class="buttonDiv">
-                    <button type="submit" id="saveButton">Save Settings</button>
-                </div>
-            </div>
-        </div>
         <div id="timeStamp"></div>
         <div class="grid">
             <div class="gridItem grid_header">Victron</div>
             <div class="gridItem"><p class="title">Voltage : </p></div>
             <div class="gridItem"><span id="VRMvoltage"></span></div>
-            <div class="gridItem" style="display: none;"><p class="title">State of charge : </p></div>
-            <div class="gridItem" style="display: none;"><span id="VRMstate"></span></div>
+            <div class="gridItem"><p class="title">Current: </p></div>
+            <div class="gridItem"><span id="VRMcurrent"></span></div>
+            <div class="gridItem"><p class="title">Battery % : </p></div>
+            <div class="gridItem"><span id="VRMstate"></span></div>
             <div class="gridItem"><p class="title">PV power : </p></div>
             <div class="gridItem"><span id="VRMpower"></span></div>
             <div class="gridItem"><p class="title">Yield today : </p></div>
             <div class="gridItem"><span id="VRMtoday"></span></div>
             <div class="gridItem"><p class="title">Yield yesterday : </p></div>
-            <div class="gridItem"><span id="VRMyesterday"></span></div>
-            <div class="gridItem"><p class="title">Generator Status : </p></div>
-            <div class="gridItem"><span id="GeneratorStatus"></span></div>
-            <div class="gridItem"><p class="title">Generator Status : </p></div>
-            <div class="gridItem"><span id="GeneratorStatusSwitch">
-                <label class="toggle-switch">
-                    <input type="checkbox" id="toggleSwitch">
-                    <span class="slider"></span>
-                </label>            
+            <div class="gridItem"><span id="VRMyesterday"></span></div>          
             </span></div>
         </div>
     </div>
+    <iframe width="100%" height="800" src="https://vrm.victronenergy.com/installation/462082/embed/37daf632"></iframe>
 
     
 </body>
