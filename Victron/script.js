@@ -1,14 +1,47 @@
 const REFRESH_RATE = 10; //seconds
-const VICTRON_API = 'https://node.johnetravels.com/api/victron/data';
+const HOST = 'http://127.0.0.1:3000';
+//const HOST = 'https://node.johnetravels.com/app1';
+const VICTRON_API = `${HOST}/api/victron/data`;
+const GROWATT_API = `${HOST}/api/growattData`;
+const loadingGraphic = document.getElementById('loadingGraphic')
 let victronAPItimestamp = 0;
+var storedToken = null
+
 
 async function fetchData(){
-  let victron_data = await get_Data(VICTRON_API)
-  format_data(victron_data);
-  time_Stamp();
+  if(storedToken){
+    let victron_data = await get_Data(VICTRON_API)
+    format_data(victron_data);
+        loadingGraphic.classList.add('none');
+    time_Stamp();
+    let growattData = await get_Growatt_Data(GROWATT_API)
+    await formatGrowattData(growattData)
+    console.log(growattData)
+  }
 }
 
 async function get_Data(url) {
+  var requestOptions = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${storedToken}`,
+    },
+    redirect: 'follow'
+  };
+
+  try {
+    const response = await fetch(url, requestOptions);
+    const result = await response.text();
+    let data = JSON.parse(result); // result is a JSON string
+    return data
+  } catch (error) {
+    console.log('error', error);
+    throw error; // Rethrow the error to handle it outside this function if needed
+  }
+}
+
+async function get_Growatt_Data(url) {
   var requestOptions = {
     method: 'GET',
     headers: {
@@ -58,12 +91,38 @@ async function format_data(data) {
           elm = document.getElementById("VRMpower")
           elm.innerText = record.formattedValue        
           break;
-    
+        case 243:
+          elm = document.getElementById("VRMBatteryPower")
+          elm.innerText = record.formattedValue        
+          break;    
+        case 146:
+          elm = document.getElementById("TimeToGo")
+          elm.innerText = record.formattedValue        
+          break;  
         default:
           break;
       }
     }
+    const chargingDischarge = document.getElementById('charging/discharging');
+    const vrmCurrentText = document.getElementById("VRMcurrent").innerText;
+    
+    if (vrmCurrentText.includes('-')) {
+      chargingDischarge.innerText = "Discharging";
+    } else {
+      chargingDischarge.innerText = "Charging";
+    }
   }
+
+async function formatGrowattData(data){
+   
+    const yolandaPower = document.getElementById('Yolandapower');
+    const casa1Power = document.getElementById('Casa1power');
+    const casa2Power = document.getElementById('Casa2power');
+
+    yolandaPower.innerText = data.yolandaData.panelPower;
+    casa1Power.innerText = data.casaMJData1.panelPower;
+    casa2Power.innerText = data.casaMJData2.panelPower;
+}
 
 fetchData();
 
@@ -84,20 +143,19 @@ function time_Stamp() {
 
 const loginContainer = document.getElementById('loginContainer');
 const settingsLocalP = document.getElementById('settingLocal');
-var storedToken = null
 var savedSettings = JSON.parse(localStorage.getItem('settings'));
-var hostName = "https://node.johnetravels.com"
+var hostName = `${HOST}/`
 
-window.addEventListener('unhandledrejection', function (event) {
-  console.error('Unhandled Promise Rejection:', event.reason);
-});
+// window.addEventListener('unhandledrejection', function (event) {
+//   console.error('Unhandled Promise Rejection:', event.reason);
+// });
 
 
 async function login() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
-    const response = await fetch('https://node.johnetravels.com/login', {
+    const response = await fetch(`${HOST}/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -123,7 +181,7 @@ async function login() {
     if (storedToken) {
       try {
         // Make a request with the token in the headers
-        const response = await fetch('https://node.johnetravels.com/protected-route', {
+        const response = await fetch(`${HOST}/protected-route`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

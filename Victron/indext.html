@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Dashboard</title>
+    <link rel="stylesheet" href="stylest.css">
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <div class="large-container">
+        <div class="container-lines">
+            <div class="line statusLine image-container">
+                <img src="./images/Stripes LT RB.jpg" alt="Stripes" id="animatedImage">
+            </div>
+            <div class="line chargingLine">
+                <img src="./images/Stripes LT RB.jpg" alt="Stripes" id="animatedImage">
+            </div>
+            <div class="line pv-chargerLine">
+                <img src="./images/Stripes LT RB.jpg" alt="Stripes" id="animatedImage">
+            </div>
+        </div>
+        <div class="container">
+            <div class="box ac-input">
+                <p>AC Input</p>
+                <p>--</p>
+            </div>
+            <div class="box status">
+                <p>On</p>
+            </div>
+            <div class="box ac-loads">
+                <p>AC Loads</p>
+                <p>--</p>
+            </div>
+            <div class="box charging">
+                <p>Charging/Discharging</p>
+                <p class="percentage">Battery % <span id="VRMstate"></span></p>
+                <p>Wattage: <span id="VRMBatteryPower"></span></p>
+                <p>Voltage: <span id="VRMvoltage"></span></p>
+                <p>Current: <span id="VRMcurrent"></span></p>
+            </div>
+            <div class="box pv-charger">
+                <p>PV Charger</p>
+                <p class="power">Wattage: <span id="VRMpower"></span></p>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

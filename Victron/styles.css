@@ -1,14 +1,33 @@
 body {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-}
-body{
-    font-family: 'Courier New', Courier, monospace;
+    font-family: Arial, sans-serif;
     font-size: clamp(.5rem, 1.1rem, 2rem);
     height: 100dvh;
     width: 100dvw;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    position: relative;
+    display: block;
+    flex-direction: column;
 }
+
+header{
+    position: relative;
+    width: 100%;
+    height: 25px;
+    left: 0;
+    top: 0;
+}
+main{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    height: max-content;
+}
+
 .container{
     display: flex;
     justify-content: center;
@@ -18,7 +37,7 @@ body{
 #timeStamp{
     position: absolute;
     right: 15px;
-    bottom: 25px;
+    top: 5px;
     font-size: clamp(.5rem, 1rem, 1.5rem);
 }
 .title{
@@ -204,4 +223,109 @@ input{
     margin: 5px;
     border: 1px black solid;
     background-color: lightgray;
+}
+.loadingGraphic{
+    position: absolute;
+    width: 100dvw;
+    height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 5;
+}
+#loading{
+    height: 100px;
+    width: 100px;
+}
+.none{
+    display: none;
+}
+
+.container-output {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width: 600px;
+    z-index: 2;
+    /* position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); */
+}
+
+.box {
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.status {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+}
+
+.charging {
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
+}
+
+.pv-charger {
+    grid-column: 3 / 4;
+    grid-row: 2 / 3;
+}
+
+.line{
+    width: 150px;
+    height: 5px;
+    border: 1px black solid;
+    overflow: hidden;
+}
+.line img{
+    width: 200px;
+}
+.container-lines{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.statusLine{
+    rotate: 90deg;
+    transform: translateX(-50%);
+    background-color: red;
+}
+.chargingLine{
+    transform: translate(50%, -50%);
+    background-color: green;
+}
+.pv-chargerLine{
+    transform: translate(-50%, -150%);
+    background-color: blue;
+}
+#animatedImage {
+    position: relative;
+    animation: move 3s linear infinite running;
+}
+
+@keyframes move {
+    0% { top: 0; }
+    25% { top: -5px; }
+    50% { top: -10px; } /* Move up by default */
+    75% { top: -15px; } /* Move up by default */    
+    100% { top: 0; }
+}
+/* Default styles (light mode) */
+body {
+    background-color: lightgrey;
+    color: black;
+}
+
+/* Dark mode styles */
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: black;
+        color: white;
+    }
 }
