@@ -1,6 +1,6 @@
 const REFRESH_RATE = 10; //seconds
-const HOST = 'http://127.0.0.1:3000';
-//const HOST = 'https://node.johnetravels.com/app1';
+//const HOST = 'http://127.0.0.1:3000';
+const HOST = 'https://node.johnetravels.com/app1';
 const VICTRON_API = `${HOST}/api/victron/data`;
 const GROWATT_API = `${HOST}/api/growattData`;
 const loadingGraphic = document.getElementById('loadingGraphic')
@@ -81,7 +81,9 @@ async function format_data(data) {
           break;
         case 94:
           elm = document.getElementById("VRMtoday")
-          elm.innerText = record.formattedValue        
+          //elm.innerText = record.formattedValue
+          //removed to allow for sum below
+          todayTotalPower[0] = record.formattedValue;     
           break;
         case 96:
           elm = document.getElementById("VRMyesterday")
@@ -113,6 +115,8 @@ async function format_data(data) {
     }
   }
 
+var todayTotalPower = [];  
+
 async function formatGrowattData(data){
    
     const yolandaPower = document.getElementById('Yolandapower');
@@ -122,6 +126,40 @@ async function formatGrowattData(data){
     yolandaPower.innerText = data.yolandaData.panelPower;
     casa1Power.innerText = data.casaMJData1.panelPower;
     casa2Power.innerText = data.casaMJData2.panelPower;
+
+    const yolandaLoad = document.getElementById('Yolandaload'); 
+    const casa1Load = document.getElementById('Casa1load');
+    const casa2Load = document.getElementById('Casa2load');  
+
+    yolandaLoad.innerText = data.yolandaData.loadPower;
+    casa1Load.innerText = data.casaMJData1.loadPower;
+    casa2Load.innerText = data.casaMJData2.loadPower;
+
+    const yolandaInput = document.getElementById('Yolandainput'); 
+    const casa1Input = document.getElementById('Casa1input');
+    const casa2Input = document.getElementById('Casa2input');  
+
+    yolandaInput.innerText = data.yolandaData.gridPower;
+    casa1Input.innerText = data.casaMJData1.gridPower;
+    casa2Input.innerText = data.casaMJData2.gridPower;
+
+    const yolandaDayTotal = data.casaMJData1Total.epvToday
+    const casa1DayTotal = data.casaMJData1Total.epvToday
+    const casa2DayTotal = data.casaMJData1Total.epvToday
+
+    todayTotalPower[1] = yolandaDayTotal;
+    todayTotalPower[2] = casa1DayTotal;
+    todayTotalPower[3] = casa2DayTotal;
+
+    // Calculate the sum of the values
+    const numericValues = todayTotalPower.map(value => {
+      // Remove non-numeric characters (like 'kWh') and convert to a float
+      return parseFloat(value.replace(/[^\d.-]/g, ''));
+    });
+    const sum = (numericValues.reduce((accumulator, currentValue) => accumulator + currentValue, 0)).toFixed(2);
+
+    const VRMtodayTotal = document.getElementById('VRMtoday');
+    VRMtodayTotal.innerHTML = sum + " kWh"
 }
 
 fetchData();
@@ -140,16 +178,10 @@ function time_Stamp() {
   el.innerText = formattedTime;
 }
 
-
 const loginContainer = document.getElementById('loginContainer');
 const settingsLocalP = document.getElementById('settingLocal');
 var savedSettings = JSON.parse(localStorage.getItem('settings'));
 var hostName = `${HOST}/`
-
-// window.addEventListener('unhandledrejection', function (event) {
-//   console.error('Unhandled Promise Rejection:', event.reason);
-// });
-
 
 async function login() {
     const username = document.getElementById('username').value;
@@ -207,3 +239,32 @@ async function login() {
   }
 
   handleToken()
+
+// Function to calculate and update PVTotal
+function updatePVTotal() {
+  const vrmPower = parseFloat(document.getElementById('VRMpower').textContent) || 0;
+  const yolandaPower = parseFloat(document.getElementById('Yolandapower').textContent) || 0;
+  const casa1Power = parseFloat(document.getElementById('Casa1power').textContent) || 0;
+  const casa2Power = parseFloat(document.getElementById('Casa2power').textContent) || 0;
+
+  const pvTotal = vrmPower + yolandaPower + casa1Power + casa2Power;
+  document.getElementById('PVTotal').textContent = pvTotal.toFixed(0) + " W";
+}
+
+// Function to observe changes in the target element
+function observeElement(id) {
+  const target = document.getElementById(id);
+  const observer = new MutationObserver(updatePVTotal);
+
+  // Configuration of the observer
+  const config = { childList: true, subtree: true, characterData: true };
+
+  // Start observing the target node
+  observer.observe(target, config);
+}
+
+// Add observers to all power elements
+observeElement('VRMpower');
+observeElement('Yolandapower');
+observeElement('Casa1power');
+observeElement('Casa2power');
