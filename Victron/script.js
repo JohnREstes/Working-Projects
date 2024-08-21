@@ -3,20 +3,34 @@ const REFRESH_RATE = 10; //seconds
 const HOST = 'https://node.johnetravels.com/app1';
 const VICTRON_API = `${HOST}/api/victron/data`;
 const GROWATT_API = `${HOST}/api/growattData`;
+const YESTERDAY_API = `${HOST}/api/lastEntry`;
 const loadingGraphic = document.getElementById('loadingGraphic')
 let victronAPItimestamp = 0;
 var storedToken = null
 
 
-async function fetchData(){
-  if(storedToken){
-    let victron_data = await get_Data(VICTRON_API)
-    format_data(victron_data);
-        loadingGraphic.classList.add('none');
+async function fetchData() {
+  if (storedToken) {
     time_Stamp();
-    let growattData = await get_Growatt_Data(GROWATT_API)
-    await formatGrowattData(growattData)
-    console.log(growattData)
+    try {
+      // Start all API calls concurrently
+      const victronPromise = get_Data(VICTRON_API);
+      const growattPromise = get_Growatt_Data(GROWATT_API);
+      const yesterdayPromise = get_Yesterday_Solar(YESTERDAY_API);
+
+      // Wait for all API calls to complete
+      await Promise.all([
+        victronPromise,
+        growattPromise,
+        yesterdayPromise
+      ]);
+
+      loadingGraphic.classList.add('none');
+
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      // Handle any errors that occurred during the API calls
+    }
   }
 }
 
@@ -34,7 +48,8 @@ async function get_Data(url) {
     const response = await fetch(url, requestOptions);
     const result = await response.text();
     let data = JSON.parse(result); // result is a JSON string
-    return data
+    format_data(data);
+    //return data
   } catch (error) {
     console.log('error', error);
     throw error; // Rethrow the error to handle it outside this function if needed
@@ -55,9 +70,46 @@ async function get_Growatt_Data(url) {
     const response = await fetch(url, requestOptions);
     const result = await response.text();
     let data = JSON.parse(result); // result is a JSON string
-    return data
+    formatGrowattData(data);
+    //return data
   } catch (error) {
     console.log('error', error);
+    throw error; // Rethrow the error to handle it outside this function if needed
+  }
+}
+
+async function get_Yesterday_Solar(url) {
+  const requestOptions = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${storedToken}`,
+    },
+    redirect: 'follow'
+  };
+
+  try {
+    const response = await fetch(url, requestOptions);
+    const result = await response.json(); // Parse JSON directly
+    const lastEntry = result.lastEntry;
+
+    // Extract values from the last entry
+    const valuesString = lastEntry.match(/\[([^\]]+)\]/)[1];
+    const valuesArray = valuesString.split(',').map(value => value.trim());
+
+    // Convert the values to numbers, stripping out any units
+    const values = valuesArray.map(value => parseFloat(value.replace(/[^0-9.-]/g, '')));
+
+    // Calculate the sum of the values
+    const sum = values.reduce((acc, value) => acc + value, 0);
+
+    const formattedSum = sum.toFixed(2);
+
+    let elm = document.getElementById("VRMyesterday")
+    elm.innerText = `${formattedSum} kWh`      
+
+  } catch (error) {
+    console.error('Error:', error);
     throw error; // Rethrow the error to handle it outside this function if needed
   }
 }
@@ -80,14 +132,14 @@ async function format_data(data) {
           elm.innerText = record.formattedValue        
           break;
         case 94:
-          elm = document.getElementById("VRMtoday")
+          //elm = document.getElementById("VRMtoday")
           //elm.innerText = record.formattedValue
           //removed to allow for sum below
           todayTotalPower[0] = record.formattedValue;     
           break;
         case 96:
-          elm = document.getElementById("VRMyesterday")
-          elm.innerText = record.formattedValue        
+          // elm = document.getElementById("VRMyesterday")
+          // elm.innerText = record.formattedValue        
           break;
         case 442:
           elm = document.getElementById("VRMpower")
@@ -99,7 +151,18 @@ async function format_data(data) {
           break;    
         case 146:
           elm = document.getElementById("TimeToGo")
-          elm.innerText = record.formattedValue        
+          const match = record.formattedValue.match(/(\d+(\.\d+)?)\s*(\w+)/);
+          if (match) {
+              // Extract the number and unit
+              const number = parseFloat(match[1]); // Convert the number part to a float
+              const unit = match[3]; // Extract the unit part (e.g., 'h')
+              
+              // Round the number to the nearest integer using toFixed(0)
+              const roundedNumber = number.toFixed(0);
+              
+              // Return the formatted string
+              elm.innerText = `${roundedNumber} ${unit}`;
+          }    
           break;  
         default:
           break;
@@ -143,9 +206,17 @@ async function formatGrowattData(data){
     casa1Input.innerText = data.casaMJData1.gridPower;
     casa2Input.innerText = data.casaMJData2.gridPower;
 
-    const yolandaDayTotal = data.casaMJData1Total.epvToday
+    const condText = document.getElementById('cond_txt'); 
+    const hum = document.getElementById('hum');
+    const tmp = document.getElementById('tmp');  
+
+    condText.innerText = `${data.weatherDataCasaMJ.now.cond_txt}`
+    hum.innerText = `${data.weatherDataCasaMJ.now.hum}% hum.`
+    tmp.innerText = `${data.weatherDataCasaMJ.now.tmp}°C`
+
+    const yolandaDayTotal = data.yolandaDataTotal.epvToday
     const casa1DayTotal = data.casaMJData1Total.epvToday
-    const casa2DayTotal = data.casaMJData1Total.epvToday
+    const casa2DayTotal = data.casaMJData2Total.epvToday
 
     todayTotalPower[1] = yolandaDayTotal;
     todayTotalPower[2] = casa1DayTotal;
@@ -238,7 +309,7 @@ async function login() {
     }
   }
 
-  handleToken()
+handleToken()
 
 // Function to calculate and update PVTotal
 function updatePVTotal() {

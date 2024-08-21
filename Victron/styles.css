@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    font-size: clamp(.5rem, 1rem, 1.5rem);
+    font-size: clamp(.45rem, .9rem, 1.5rem);
     height: 100dvh;
     width: 100dvw;
     background-color: #f8f9fa;
@@ -12,12 +12,29 @@ body {
     flex-direction: column;
 }
 
-header{
-    position: relative;
+.header-container {
+    display: flex;
+    justify-content: space-around; /* Distributes space evenly around items */
+    align-items: center; /* Vertically aligns items in the center */
+    max-width: 600px; /* Sets the maximum width of the container */
+    margin: 0 auto; /* Centers the container horizontally */
+    width: 100%; /* Allows the container to be responsive */
+    height: 25px;
+    box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
+}
+
+header {
     width: 100%;
     height: 25px;
+    position: relative;
     left: 0;
     top: 0;
+    box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
+}
+
+header span {
+    /* Optional: Add some styling to the spans if needed */
+    padding: 0 10px; /* Adjust spacing around each item */
 }
 main{
     display: flex;
@@ -34,11 +51,11 @@ main{
     align-items: center;
     height: 100%;
 }
-#timeStamp{
+/* #timeStamp{
     position: absolute;
     right: 15px;
     top: 5px;
-}
+} */
 .title{
     font-weight: 700;
     text-align: right;
@@ -170,16 +187,12 @@ input{
     75% { top: -15px; } /* Move up by default */    
     100% { top: 0; }
 }
-/* Default styles (light mode) */
-body {
-    background-color: lightgrey;
-    color: black;
-}
-
-/* Dark mode styles */
-@media (prefers-color-scheme: dark) {
-    body {
-        background-color: black;
-        color: white;
+@media (max-width: 600px) {
+    .container-output {
+        gap: 10px;
+    }
+    
+    .box {
+        padding: 5px;
     }
 }
