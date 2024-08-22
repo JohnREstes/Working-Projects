@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    font-size: clamp(.45rem, .9rem, 1.5rem);
+    font-size: clamp(.5rem, 1rem, 1.5rem);
     height: 100dvh;
     width: 100dvw;
     background-color: #f8f9fa;
@@ -25,11 +25,12 @@ body {
 
 header {
     width: 100%;
-    height: 25px;
+    height: 30px;
     position: relative;
     left: 0;
     top: 0;
     box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
+    font-weight: 700;
 }
 
 header span {
@@ -123,6 +124,9 @@ input{
     max-width: 600px;
     z-index: 2;
 }
+.container-output p {
+    margin: 16px 0; /* Adjust the margin as needed */
+}
 
 .box {
     background-color: white;
@@ -148,13 +152,13 @@ input{
 }
 
 .line{
-    width: 150px;
+    width: 120px;
     height: 5px;
     border: 1px black solid;
     overflow: hidden;
 }
 .line img{
-    width: 200px;
+    width: 150px;
 }
 .container-lines{
     position: absolute;
@@ -170,14 +174,19 @@ input{
 .chargingLine{
     transform: translate(50%, -50%);
     background-color: green;
+    border-left: none;
 }
 .pv-chargerLine{
     transform: translate(-50%, -150%);
     background-color: blue;
+    border-right: none;
 }
 #animatedImage {
     position: relative;
     animation: move 3s linear infinite running;
+}
+#charging_discharging{
+font-weight: 700;
 }
 
 @keyframes move {
@@ -194,5 +203,18 @@ input{
     
     .box {
         padding: 5px;
+    }
+    .container-output p {
+        margin: 4px 0; /* Decrease the margin around paragraphs */
+    }
+
+    .container-output p span {
+        display: block; /* Ensure span starts on a new line but keeps trailing text with it */
+        margin-top: 4px; /* Add some space above the span */
+        white-space: nowrap; /* Prevent text wrapping after the span */
+    }
+    body {
+        margin: 0;
+        padding: 2px;
     }
 }

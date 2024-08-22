@@ -168,7 +168,7 @@ async function format_data(data) {
           break;
       }
     }
-    const chargingDischarge = document.getElementById('charging/discharging');
+    const chargingDischarge = document.getElementById('charging_discharging');
     const vrmCurrentText = document.getElementById("VRMcurrent").innerText;
     
     if (vrmCurrentText.includes('-')) {
@@ -186,25 +186,25 @@ async function formatGrowattData(data){
     const casa1Power = document.getElementById('Casa1power');
     const casa2Power = document.getElementById('Casa2power');
 
-    yolandaPower.innerText = data.yolandaData.panelPower;
-    casa1Power.innerText = data.casaMJData1.panelPower;
-    casa2Power.innerText = data.casaMJData2.panelPower;
+    yolandaPower.innerText = `${data.yolandaData.panelPower} W`;
+    casa1Power.innerText = `${data.casaMJData1.panelPower} W`;
+    casa2Power.innerText = `${data.casaMJData2.panelPower} W`;
 
     const yolandaLoad = document.getElementById('Yolandaload'); 
     const casa1Load = document.getElementById('Casa1load');
     const casa2Load = document.getElementById('Casa2load');  
 
-    yolandaLoad.innerText = data.yolandaData.loadPower;
-    casa1Load.innerText = data.casaMJData1.loadPower;
-    casa2Load.innerText = data.casaMJData2.loadPower;
+    yolandaLoad.innerText = `${data.yolandaData.loadPower} W`;
+    casa1Load.innerText = `${data.casaMJData1.loadPower} W`;
+    casa2Load.innerText = `${data.casaMJData2.loadPower} W`;
 
     const yolandaInput = document.getElementById('Yolandainput'); 
     const casa1Input = document.getElementById('Casa1input');
     const casa2Input = document.getElementById('Casa2input');  
 
-    yolandaInput.innerText = data.yolandaData.gridPower;
-    casa1Input.innerText = data.casaMJData1.gridPower;
-    casa2Input.innerText = data.casaMJData2.gridPower;
+    yolandaInput.innerText = `${data.yolandaData.gridPower} W`;
+    casa1Input.innerText = `${data.casaMJData1.gridPower} W`;
+    casa2Input.innerText = `${data.casaMJData2.gridPower} W`;
 
     const condText = document.getElementById('cond_txt'); 
     const hum = document.getElementById('hum');
