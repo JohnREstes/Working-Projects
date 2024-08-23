@@ -172,9 +172,14 @@ async function format_data(data) {
     const vrmCurrentText = document.getElementById("VRMcurrent").innerText;
     
     if (vrmCurrentText.includes('-')) {
-      chargingDischarge.innerText = "Discharging";
+      chargingDischarge.innerHTML = '<i class="fa-solid fa-battery-full"></i>Discharging';
+      const element = document.querySelector('.left-div span');
+      element.style.animation = 'moveb 2s linear infinite';
+
     } else {
-      chargingDischarge.innerText = "Charging";
+      chargingDischarge.innerHTML = '<i class="fa-solid fa-battery-full"></i>Charging';
+      const element = document.querySelector('.left-div span');
+      element.style.animation = 'move 2s linear infinite';
     }
   }
 
@@ -182,18 +187,26 @@ var todayTotalPower = [];
 
 async function formatGrowattData(data){
    
+    const inputPowerTotal = document.getElementById('inputPowerTotal')
     const yolandaPower = document.getElementById('Yolandapower');
     const casa1Power = document.getElementById('Casa1power');
     const casa2Power = document.getElementById('Casa2power');
 
+    const powerTotal = parseInt(data.yolandaData.panelPower) + parseInt(data.casaMJData1.panelPower) + parseInt(data.casaMJData2.panelPower);
+
+    inputPowerTotal.innerText = `${powerTotal} W`;
     yolandaPower.innerText = `${data.yolandaData.panelPower} W`;
     casa1Power.innerText = `${data.casaMJData1.panelPower} W`;
     casa2Power.innerText = `${data.casaMJData2.panelPower} W`;
 
+    const loadsTotal = document.getElementById('loadsTotal')
     const yolandaLoad = document.getElementById('Yolandaload'); 
     const casa1Load = document.getElementById('Casa1load');
     const casa2Load = document.getElementById('Casa2load');  
 
+    const loadPower = parseInt(data.yolandaData.loadPower) + parseInt(data.casaMJData1.loadPower) + parseInt(data.casaMJData2.loadPower);
+
+    loadsTotal.innerText = `${loadPower} W`;
     yolandaLoad.innerText = `${data.yolandaData.loadPower} W`;
     casa1Load.innerText = `${data.casaMJData1.loadPower} W`;
     casa2Load.innerText = `${data.casaMJData2.loadPower} W`;
@@ -320,6 +333,10 @@ function updatePVTotal() {
 
   const pvTotal = vrmPower + yolandaPower + casa1Power + casa2Power;
   document.getElementById('PVTotal').textContent = pvTotal.toFixed(0) + " W";
+  if(pvTotal > 1) {
+    const element = document.querySelector('.right-div span');
+    element.style.animation = 'moveb 2s linear infinite';
+  }
 }
 
 // Function to observe changes in the target element
@@ -339,3 +356,17 @@ observeElement('VRMpower');
 observeElement('Yolandapower');
 observeElement('Casa1power');
 observeElement('Casa2power');
+
+const toggleButton = document.getElementById('toggle-all-details');
+const boxes = document.querySelectorAll('.box');
+
+toggleButton.addEventListener('click', function() {
+    const allExpanded = [...boxes].every(box => box.classList.contains('expanded'));
+
+    boxes.forEach(box => {
+        box.classList.toggle('expanded', !allExpanded);
+    });
+
+    this.textContent = allExpanded ? 'Show Details' : 'Hide Details';
+});
+

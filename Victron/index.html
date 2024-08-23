@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="./icons8-sun-48.png" type="image/png">
     <script src="./script.js" defer></script>
+    <script src="https://kit.fontawesome.com/f4c4519de4.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="bar.css">
     <title>Casa Yolanda Solar</title>
 </head>
 <body>
@@ -35,45 +37,52 @@
             <span id="timeStamp">Time</span>
         </div>
     </header>
+    <button id="toggle-all-details">Show Details</button>
     <main>
-        <div class="container-lines">
-            <div class="line statusLine image-container">
-                <img src="./images/Stripes LT RB.jpg" alt="Stripes" id="animatedImage">
-            </div>
-            <div class="line chargingLine">
-                <img src="./images/Stripes LT RB.jpg" alt="Stripes" id="animatedImage">
-            </div>
-            <div class="line pv-chargerLine">
-                <img src="./images/Stripes LT RB.jpg" alt="Stripes" id="animatedImage">
-            </div>
-        </div>
         <div class="container-output">
+
             <div class="box ac-input">
-                <p>AC Input</p>
+                <p><i class="fa-solid fa-plug"></i>AC Input</p>
+                <p class="inputPower">Total: <span id="inputPowerTotal"></span></p>
                 <p class="inputPower">Casa 1: <span id="Casa1input"></span></p>
                 <p class="inputPower">Casa 2: <span id="Casa2input"></span></p>
                 <p class="inputPower">Yolanda: <span id="Yolandainput"></span></p>
             </div>
             <div class="box status">
-                <p>Power Today:<br><span id="VRMtoday"></span></p>
+                <i class="fa-regular fa-sun"></i>
+                <p>Power Today:<br><span id="VRMtoday">- - - </span></p>
                 <p>Power Yesterday:<br><span id="VRMyesterday"></span></p>
             </div>
             <div class="box ac-loads">
-                <p>AC Loads</p>
+                <p><i class="fa-solid fa-upload"></i>AC Loads</p>
+                <p class="loads">Total: <span id="loadsTotal"></span></p>
                 <p class="loads">Casa 1: <span id="Casa1load"></span></p>
                 <p class="loads">Casa 2: <span id="Casa2load"></span></p>
                 <p class="loads">Yolanda: <span id="Yolandaload"></span></p>
             </div>
             <div class="box charging">
-                <p id="charging_discharging"></p>
+                <p id="charging_discharging">- - -</p>
                 <p class="percentage">Battery: <span id="VRMstate"></span></p>
                 <p>Wattage: <span id="VRMBatteryPower"></span></p>
                 <p>Voltage: <span id="VRMvoltage"></span></p>
                 <p>Current: <span id="VRMcurrent"></span></p>
                 <p>Time Left: <span id="TimeToGo"></span></p>
             </div>
+
+            <div class="container-for-lines">
+                <div class="left-div bar" style="rotate: 90deg;">
+                    <span></span>
+                </div>
+                <div class="up-div bar" style="rotate: 180deg;">
+                    <span></span>
+                </div>
+                <div class="right-div bar" style="rotate: 270deg;">
+                    <span></span>
+                </div>
+              </div>
+
             <div class="box pv-charger">
-                <p>PV Charger</p>
+                <p><i class="fa-solid fa-solar-panel"></i>PV Charger</p>
                 <p class="power">Total: <span id="PVTotal"></span></p>
                 <p class="power">Tower: <span id="VRMpower"></span></p>
                 <p class="power">Casa 1: <span id="Casa1power"></span></p>

@@ -27,9 +27,9 @@ header {
     width: 100%;
     height: 30px;
     position: relative;
+    background-color: whitesmoke;
     left: 0;
     top: 0;
-    box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
     font-weight: 700;
 }
 
@@ -45,6 +45,9 @@ main{
     width: 100%;
     height: max-content;
 }
+i {
+    padding: 0 5px 0 5px
+}
 
 .container{
     display: flex;
@@ -52,11 +55,7 @@ main{
     align-items: center;
     height: 100%;
 }
-/* #timeStamp{
-    position: absolute;
-    right: 15px;
-    top: 5px;
-} */
+
 .title{
     font-weight: 700;
     text-align: right;
@@ -130,10 +129,31 @@ input{
 
 .box {
     background-color: white;
+    position: relative;
     border: 1px solid #ccc;
-    padding: 20px;
+    padding: 10px;
     text-align: center;
     border-radius: 10px;
+    overflow: hidden;
+    max-height: 65px; /* Limit height to show only 3 lines */
+    transition: max-height 0.3s ease;
+}
+.box.expanded {
+    max-height: 1000px; /* Large enough to show all content */
+}
+
+#toggle-all-details {
+    display: block;
+    background-color: var(--main-color);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+#toggle-all-details:focus {
+    outline: none;
 }
 
 .status {
@@ -151,51 +171,12 @@ input{
     grid-row: 2 / 3;
 }
 
-.line{
-    width: 120px;
-    height: 5px;
-    border: 1px black solid;
-    overflow: hidden;
-}
-.line img{
-    width: 150px;
-}
-.container-lines{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-.statusLine{
-    rotate: 90deg;
-    transform: translateX(-50%);
-    background-color: red;
-}
-.chargingLine{
-    transform: translate(50%, -50%);
-    background-color: green;
-    border-left: none;
-}
-.pv-chargerLine{
-    transform: translate(-50%, -150%);
-    background-color: blue;
-    border-right: none;
-}
-#animatedImage {
-    position: relative;
-    animation: move 3s linear infinite running;
-}
 #charging_discharging{
-font-weight: 700;
+    font-weight: 700;
+    
 }
 
-@keyframes move {
-    0% { top: 0; }
-    25% { top: -5px; }
-    50% { top: -10px; } /* Move up by default */
-    75% { top: -15px; } /* Move up by default */    
-    100% { top: 0; }
-}
+
 @media (max-width: 600px) {
     .container-output {
         gap: 10px;
@@ -216,5 +197,14 @@ font-weight: 700;
     body {
         margin: 0;
         padding: 2px;
+    }
+}
+@media (max-width: 390px) {
+
+    .charging {
+        max-height: 80px;
+    }
+    .pv-charger {
+        max-height: 80px;
     }
 }
