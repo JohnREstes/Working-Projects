@@ -170,7 +170,7 @@ Animate the stripes
     transform-origin: center;
     position: absolute;
     top: -5px;
-    right: -84px;
+    right: -90px;
     transform: translate(-50%, -50%);
     width: 5px;
     height: 150px;
@@ -179,13 +179,13 @@ Animate the stripes
 
 @media (max-width: 600px) {
     .right-div {
-        right: -88px;;
+        right: -98px;;
       }
     
 }
 @media (max-width: 390px) {
     .right-div {
-        right: -96px;;
+        right: -98px;;
       }
     
 }

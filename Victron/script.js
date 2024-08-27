@@ -172,7 +172,11 @@ async function format_data(data) {
     const vrmCurrentText = document.getElementById("VRMcurrent").innerText;
     
     if (vrmCurrentText.includes('-')) {
-      chargingDischarge.innerHTML = '<i class="fa-solid fa-battery-full"></i>Discharging';
+      if (window.matchMedia('(max-width: 390px)').matches) {
+        chargingDischarge.innerHTML = '<i class="fa-solid fa-battery-full"></i>Discharging';
+      } else {
+        chargingDischarge.innerHTML = `<i class="fa-solid fa-battery-full"></i>Dischg`;
+      }
       const element = document.querySelector('.left-div span');
       element.style.animation = 'moveb 2s linear infinite';
 
@@ -187,14 +191,10 @@ var todayTotalPower = [];
 
 async function formatGrowattData(data){
    
-    const inputPowerTotal = document.getElementById('inputPowerTotal')
     const yolandaPower = document.getElementById('Yolandapower');
     const casa1Power = document.getElementById('Casa1power');
     const casa2Power = document.getElementById('Casa2power');
 
-    const powerTotal = parseInt(data.yolandaData.panelPower) + parseInt(data.casaMJData1.panelPower) + parseInt(data.casaMJData2.panelPower);
-
-    inputPowerTotal.innerText = `${powerTotal} W`;
     yolandaPower.innerText = `${data.yolandaData.panelPower} W`;
     casa1Power.innerText = `${data.casaMJData1.panelPower} W`;
     casa2Power.innerText = `${data.casaMJData2.panelPower} W`;
@@ -211,10 +211,14 @@ async function formatGrowattData(data){
     casa1Load.innerText = `${data.casaMJData1.loadPower} W`;
     casa2Load.innerText = `${data.casaMJData2.loadPower} W`;
 
+    const inputPowerTotal = document.getElementById('inputPowerTotal')
     const yolandaInput = document.getElementById('Yolandainput'); 
     const casa1Input = document.getElementById('Casa1input');
     const casa2Input = document.getElementById('Casa2input');  
 
+    const gridPower = parseInt(data.yolandaData.gridPower) + parseInt(data.casaMJData1.gridPower) + parseInt(data.casaMJData2.gridPower);
+
+    inputPowerTotal.innerText = `${gridPower} W`;
     yolandaInput.innerText = `${data.yolandaData.gridPower} W`;
     casa1Input.innerText = `${data.casaMJData1.gridPower} W`;
     casa2Input.innerText = `${data.casaMJData2.gridPower} W`;
@@ -370,3 +374,18 @@ toggleButton.addEventListener('click', function() {
     this.textContent = allExpanded ? 'Show Details' : 'Hide Details';
 });
 
+// Function to update innerHTML based on screen width
+function updateContent() {
+  const element = document.getElementById('pvCharger'); // Replace with your element ID
+  if (window.matchMedia('(max-width: 390px)').matches) {
+      element.innerHTML = `<i class="fa-solid fa-solar-panel"></i>PV Chgr.`;
+  } else {
+      element.innerHTML = `<i class="fa-solid fa-solar-panel"></i>PV Charger`;
+  }
+}
+
+// Check on initial load
+updateContent();
+
+// Add event listener to check on window resize
+window.addEventListener('resize', updateContent);
