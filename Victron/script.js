@@ -172,7 +172,7 @@ async function format_data(data) {
     const vrmCurrentText = document.getElementById("VRMcurrent").innerText;
     
     if (vrmCurrentText.includes('-')) {
-      if (window.matchMedia('(max-width: 390px)').matches) {
+      if (window.matchMedia('(max-width: 425px)').matches) {
         chargingDischarge.innerHTML = '<i class="fa-solid fa-battery-full"></i>Discharging';
       } else {
         chargingDischarge.innerHTML = `<i class="fa-solid fa-battery-full"></i>Dischg`;
@@ -377,7 +377,7 @@ toggleButton.addEventListener('click', function() {
 // Function to update innerHTML based on screen width
 function updateContent() {
   const element = document.getElementById('pvCharger'); // Replace with your element ID
-  if (window.matchMedia('(max-width: 390px)').matches) {
+  if (window.matchMedia('(max-width: 425px)').matches) {
       element.innerHTML = `<i class="fa-solid fa-solar-panel"></i>PV Chgr.`;
   } else {
       element.innerHTML = `<i class="fa-solid fa-solar-panel"></i>PV Charger`;

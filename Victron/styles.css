@@ -204,7 +204,14 @@ input{
         padding: 2px;
     }
 }
-@media (max-width: 390px) {
+@media (max-width: 425px) {
+    .container-output {
+        gap: 5px;
+    }
+    
+    .box {
+        padding: 5px 2px 5px 2px
+    }
     #pvCharger{
         font-size: .85rem;
     }
