@@ -11,7 +11,6 @@ var storedToken = null
 
 async function fetchData() {
   if (storedToken) {
-    time_Stamp();
     try {
       // Start all API calls concurrently
       const victronPromise = get_Data(VICTRON_API);
@@ -25,6 +24,7 @@ async function fetchData() {
         yesterdayPromise
       ]);
 
+      time_Stamp();
       loadingGraphic.classList.add('none');
 
     } catch (error) {
@@ -47,14 +47,27 @@ async function get_Data(url) {
   try {
     const response = await fetch(url, requestOptions);
     const result = await response.text();
-    let data = JSON.parse(result); // result is a JSON string
-    format_data(data);
-    //return data
+    
+    if (!result) {
+      return; // Exit early if the response is empty
+    }
+
+    try {
+      let data = JSON.parse(result); // Parse the JSON response
+      await format_data(data);
+      //return data
+    } catch (parseError) {
+      console.error('Error parsing JSON:', parseError);
+      console.error('Response that caused the error:', result);
+      throw parseError; // Rethrow the error if needed
+    }
+
   } catch (error) {
-    console.log('error', error);
+    console.log('Network or API error:', error);
     throw error; // Rethrow the error to handle it outside this function if needed
   }
 }
+
 
 async function get_Growatt_Data(url) {
   var requestOptions = {
@@ -173,9 +186,9 @@ async function format_data(data) {
     
     if (vrmCurrentText.includes('-')) {
       if (window.matchMedia('(max-width: 425px)').matches) {
-        chargingDischarge.innerHTML = '<i class="fa-solid fa-battery-full"></i>Discharging';
+        chargingDischarge.innerHTML = '<i class="fa-solid fa-battery-full"></i>Dischg';
       } else {
-        chargingDischarge.innerHTML = `<i class="fa-solid fa-battery-full"></i>Dischg`;
+        chargingDischarge.innerHTML = `<i class="fa-solid fa-battery-full"></i>Discharging`;
       }
       const element = document.querySelector('.left-div span');
       element.style.animation = 'moveb 2s linear infinite';

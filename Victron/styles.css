@@ -208,11 +208,16 @@ input{
     .container-output {
         gap: 5px;
     }
-    
     .box {
-        padding: 5px 2px 5px 2px
+        padding: 8px 2px 5px 2px;
+        max-height: 63px; /* Limit height to show only 3 lines */
+
     }
+    
     #pvCharger{
+        font-size: .85rem;
+    }
+    #charging{
         font-size: .85rem;
     }
 }
