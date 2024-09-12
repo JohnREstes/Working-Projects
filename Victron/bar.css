@@ -189,6 +189,15 @@ Animate the stripes
     background-color: #ff0;
   }
 
+  .highLeft{
+	top: -200px;
+  }
+  .highRight{
+	top: -205px;
+  }
+
+
+
 @media (max-width: 600px) {
     .right-div {
         right: -98px;;

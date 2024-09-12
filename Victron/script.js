@@ -271,10 +271,15 @@ async function formatGrowattData(data){
     
     // Select the span inside the .up-div element
     const upDiv = document.querySelector('.up-div span');
+    const highLeft = document.querySelector('.highLeft span');
+    const highRight = document.querySelector('.highRight span');
+
+    highRight.style.animation = 'move 2s linear infinite';
     
     // Apply the animation based on the integer values
     if (acCasa1Int > 0 || acCasa2Int > 0) {
       upDiv.style.animation = 'moveb 2s linear infinite';
+      highLeft.style.animation = 'moveb 2s linear infinite';
     } else {
       upDiv.style.animation = 'move 2s linear infinite';
     }
@@ -396,12 +401,24 @@ observeElement('Casa2power');
 
 const toggleButton = document.getElementById('toggle-all-details');
 const boxes = document.querySelectorAll('.box');
+const highLeft = document.querySelector('.highLeft');
+const highRight = document.querySelector('.highRight');
 
 // Function to update the UI based on the current state
 function updateUI(expanded) {
     boxes.forEach(box => {
         box.classList.toggle('expanded', expanded);
     });
+
+    // Toggle the CSS for highLeft and highRight elements
+    if (expanded) {
+        highLeft.style.top = '-200px';
+        highRight.style.top = '-205px';
+    } else {
+        highLeft.style.top = '-110px'; 
+        highRight.style.top = '-115px'; 
+    }
+
     toggleButton.textContent = expanded ? 'Hide Details' : 'Show Details';
 }
 
@@ -416,6 +433,12 @@ function toggleDetails() {
 
 // Event listener for the toggle button
 toggleButton.addEventListener('click', toggleDetails);
+
+// On page load, set the UI based on saved state
+document.addEventListener('DOMContentLoaded', () => {
+    const savedState = localStorage.getItem('detailsExpanded') === 'true';
+    updateUI(savedState);
+});
 
 // On page load, set the UI based on saved state
 document.addEventListener('DOMContentLoaded', () => {
