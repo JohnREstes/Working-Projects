@@ -374,6 +374,8 @@ observeElement('Yolandapower');
 observeElement('Casa1power');
 observeElement('Casa2power');
 
+// Toggle Details Functionality
+
 const toggleButton = document.getElementById('toggle-all-details');
 const boxes = document.querySelectorAll('.box');
 
@@ -391,7 +393,7 @@ function toggleDetails() {
     const newExpandedState = !allExpanded;
     
     updateUI(newExpandedState);
-    localStorage.setItem('detailsExpanded', newExpandedState);
+    localStorage.setItem('detailsExpanded', newExpandedState); // Save state in localStorage
 }
 
 // Event listener for the toggle button
@@ -399,25 +401,33 @@ toggleButton.addEventListener('click', toggleDetails);
 
 // On page load, set the UI based on saved state
 document.addEventListener('DOMContentLoaded', () => {
-    const savedState = localStorage.getItem('detailsExpanded') === 'true';
-    updateUI(savedState);
+    const savedDetailsState = localStorage.getItem('detailsExpanded') === 'true';
+    updateUI(savedDetailsState);
+    
+    // Load dark mode preference on page load
+    const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+    if (savedDarkMode) {
+        isDarkMode = true;
+        document.body.classList.add('dark-mode');
+        updateIcon();
+    }
 });
 
-
-// Function to update innerHTML based on screen width
+// Responsive content for different screen sizes
 function updateContent() {
-  const element = document.getElementById('pvCharger'); // Replace with your element ID
-  if (window.matchMedia('(max-width: 425px)').matches) {
-      element.innerHTML = `<i class="fa-solid fa-solar-panel"></i>PV Chgr.`;
-  } else {
-      element.innerHTML = `<i class="fa-solid fa-solar-panel"></i>PV Charger`;
-  }
+    const element = document.getElementById('pvCharger'); // Replace with your element ID
+    if (window.matchMedia('(max-width: 425px)').matches) {
+        element.innerHTML = `<i class="fa-solid fa-solar-panel"></i>PV Chgr.`;
+    } else {
+        element.innerHTML = `<i class="fa-solid fa-solar-panel"></i>PV Charger`;
+    }
 }
 
 // Check on initial load
 updateContent();
 
-//DARK Mode
+// DARK MODE Functionality
+
 const toggleDarkButton = document.getElementById('toggle-dark-mode');
 let isDarkMode = false;
 
@@ -432,18 +442,18 @@ function updateIcon() {
     }
 }
 
-// Toggle dark mode and icon on button click
+// Toggle dark mode and save the state to localStorage
 toggleDarkButton.addEventListener('click', function() {
     isDarkMode = !isDarkMode;
     document.body.classList.toggle('dark-mode');
     updateIcon();
+    localStorage.setItem('darkMode', isDarkMode); // Save dark mode state in localStorage
 });
 
 // Check the user's system preference for the initial state
 const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
-if (prefersDarkScheme.matches) {
+if (prefersDarkScheme.matches && localStorage.getItem('darkMode') === null) {
     isDarkMode = true;
     document.body.classList.add('dark-mode');
     updateIcon();
 }
-
