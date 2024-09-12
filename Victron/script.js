@@ -282,6 +282,7 @@ async function formatGrowattData(data){
       highLeft.style.animation = 'moveb 2s linear infinite';
     } else {
       upDiv.style.animation = 'move 2s linear infinite';
+      highLeft.style.animation = 'none';
     }
 
 }
