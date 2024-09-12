@@ -261,6 +261,24 @@ async function formatGrowattData(data){
 
     const VRMtodayTotal = document.getElementById('VRMtoday');
     VRMtodayTotal.innerHTML = sum + " kWh"
+
+    const acCasa1Text = document.getElementById("Casa1input").innerText;
+    const acCasa2Text = document.getElementById("Casa2input").innerText;  // Fixed to use the correct ID
+    
+    // Parse the text content to integers
+    const acCasa1Int = parseInt(acCasa1Text); 
+    const acCasa2Int = parseInt(acCasa2Text);
+    
+    // Select the span inside the .up-div element
+    const upDiv = document.querySelector('.up-div span');
+    
+    // Apply the animation based on the integer values
+    if (acCasa1Int > 0 || acCasa2Int > 0) {
+      upDiv.style.animation = 'moveb 2s linear infinite';
+    } else {
+      upDiv.style.animation = 'move 2s linear infinite';
+    }
+
 }
 
 fetchData();

@@ -100,6 +100,10 @@ This is the actual bar with stripes
     animation: none;
 }
 
+.up-div span{
+    animation: none;
+}
+
 /*
 Animate the stripes
 */	
