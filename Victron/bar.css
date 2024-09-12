@@ -7,6 +7,13 @@ Set the container for the bar
     --secondary-color: rgb(138, 138, 138);
     --background-color: rgb(211, 211, 211);
 }
+@media (prefers-color-scheme: dark) {
+    :root {
+		--main-color: rgb(197, 197, 197);
+		--secondary-color: rgb(220, 220, 220);
+    }
+}
+
 .bar {
 	height:5px;
 	width:200px;
@@ -82,6 +89,7 @@ This is the actual bar with stripes
 	-ms-animation:move 2s linear infinite;
 	animation:move 2s linear infinite;
 	overflow: hidden;
+	transition: background-color 0.3s, color 0.3s;
 }
 
 .left-div span{

@@ -377,15 +377,32 @@ observeElement('Casa2power');
 const toggleButton = document.getElementById('toggle-all-details');
 const boxes = document.querySelectorAll('.box');
 
-toggleButton.addEventListener('click', function() {
-    const allExpanded = [...boxes].every(box => box.classList.contains('expanded'));
-
+// Function to update the UI based on the current state
+function updateUI(expanded) {
     boxes.forEach(box => {
-        box.classList.toggle('expanded', !allExpanded);
+        box.classList.toggle('expanded', expanded);
     });
+    toggleButton.textContent = expanded ? 'Hide Details' : 'Show Details';
+}
 
-    this.textContent = allExpanded ? 'Show Details' : 'Hide Details';
+// Function to toggle the details and save the preference
+function toggleDetails() {
+    const allExpanded = [...boxes].every(box => box.classList.contains('expanded'));
+    const newExpandedState = !allExpanded;
+    
+    updateUI(newExpandedState);
+    localStorage.setItem('detailsExpanded', newExpandedState);
+}
+
+// Event listener for the toggle button
+toggleButton.addEventListener('click', toggleDetails);
+
+// On page load, set the UI based on saved state
+document.addEventListener('DOMContentLoaded', () => {
+    const savedState = localStorage.getItem('detailsExpanded') === 'true';
+    updateUI(savedState);
 });
+
 
 // Function to update innerHTML based on screen width
 function updateContent() {
@@ -400,5 +417,33 @@ function updateContent() {
 // Check on initial load
 updateContent();
 
-// Add event listener to check on window resize
-window.addEventListener('resize', updateContent);
+//DARK Mode
+const toggleDarkButton = document.getElementById('toggle-dark-mode');
+let isDarkMode = false;
+
+// Function to update the icon based on the mode
+function updateIcon() {
+    if (isDarkMode) {
+        toggleDarkButton.classList.remove('fa-moon');
+        toggleDarkButton.classList.add('fa-sun');
+    } else {
+        toggleDarkButton.classList.remove('fa-sun');
+        toggleDarkButton.classList.add('fa-moon');
+    }
+}
+
+// Toggle dark mode and icon on button click
+toggleDarkButton.addEventListener('click', function() {
+    isDarkMode = !isDarkMode;
+    document.body.classList.toggle('dark-mode');
+    updateIcon();
+});
+
+// Check the user's system preference for the initial state
+const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+if (prefersDarkScheme.matches) {
+    isDarkMode = true;
+    document.body.classList.add('dark-mode');
+    updateIcon();
+}
+
