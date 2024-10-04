@@ -1,13 +1,59 @@
 const REFRESH_RATE = 10; //seconds
 //const HOST = 'http://127.0.0.1:3000';
 const HOST = 'https://node.johnetravels.com/app1';
+const CACHED_DATA_API = `${HOST}/api/cachedData`;
 const VICTRON_API = `${HOST}/api/victron/data`;
 const GROWATT_API = `${HOST}/api/growattData`;
 const YESTERDAY_API = `${HOST}/api/lastEntry`;
 const loadingGraphic = document.getElementById('loadingGraphic')
 let victronAPItimestamp = 0;
 var storedToken = null
+var initalLoad = true;
 
+async function cachedDataCall() {
+    try {
+      // Initial Cache Call
+      var requestOptions = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${storedToken}`,
+        },
+        redirect: 'follow'
+      };
+    
+      try {
+        const response = await fetch(CACHED_DATA_API, requestOptions);
+        const result = await response.text();
+        const jsonResult = JSON.parse(result)
+        
+        if (!result) {
+          return; // Exit early if the response is empty
+        }
+    
+        try {
+          let VData = jsonResult.victron; // Parse the JSON response
+          await format_data(VData);
+
+          let GData = jsonResult.growatt; // result is a JSON string
+          formatGrowattData(GData);
+
+          //return data
+        } catch (parseError) {
+          console.error('Error parsing JSON:', parseError);
+          console.error('Response that caused the error:', result);
+          throw parseError; // Rethrow the error if needed
+        }
+    
+      } catch (error) {
+        console.log('Network or API error:', error);
+        throw error; // Rethrow the error to handle it outside this function if needed
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      // Handle any errors that occurred during the API calls
+    }
+}
 
 async function fetchData() {
   if (storedToken) {
@@ -347,6 +393,11 @@ async function login() {
         });
   
         if (response.ok) {
+          if(initalLoad){
+            cachedDataCall();
+            initalLoad = false
+            loadingGraphic.classList.add('none');
+          }
           const data = await response.json();
           loginContainer.style.display = 'none'
         } else {
@@ -398,20 +449,31 @@ observeElement('Yolandapower');
 observeElement('Casa1power');
 observeElement('Casa2power');
 
-// Toggle Details Functionality
+// Responsive content for different screen sizes
+function updateShorterWords() {
+  const element = document.getElementById('pvCharger'); // Replace with your element ID
+  if (window.matchMedia('(max-width: 425px)').matches) {
+      element.innerHTML = `<i class="fa-solid fa-solar-panel"></i>PV Chgr.`;
+  } else {
+      element.innerHTML = `<i class="fa-solid fa-solar-panel"></i>PV Charger`;
+  }
+}
 
+updateShorterWords();
+
+// Toggle Details Functionality
 const toggleButton = document.getElementById('toggle-all-details');
 const boxes = document.querySelectorAll('.box');
 const highLeft = document.querySelector('.highLeft');
 const highRight = document.querySelector('.highRight');
-
+const toggleDarkButton = document.getElementById('toggle-dark-mode');
+    
 // Function to update the UI based on the current state
 function updateUI(expanded) {
     boxes.forEach(box => {
         box.classList.toggle('expanded', expanded);
     });
 
-    // Toggle the CSS for highLeft and highRight elements
     if (expanded) {
         highLeft.style.top = '-200px';
         highRight.style.top = '-205px';
@@ -427,7 +489,6 @@ function updateUI(expanded) {
 function toggleDetails() {
     const allExpanded = [...boxes].every(box => box.classList.contains('expanded'));
     const newExpandedState = !allExpanded;
-    
     updateUI(newExpandedState);
     localStorage.setItem('detailsExpanded', newExpandedState); // Save state in localStorage
 }
@@ -437,41 +498,20 @@ toggleButton.addEventListener('click', toggleDetails);
 
 // On page load, set the UI based on saved state
 document.addEventListener('DOMContentLoaded', () => {
-    const savedState = localStorage.getItem('detailsExpanded') === 'true';
-    updateUI(savedState);
-});
-
-// On page load, set the UI based on saved state
-document.addEventListener('DOMContentLoaded', () => {
     const savedDetailsState = localStorage.getItem('detailsExpanded') === 'true';
     updateUI(savedDetailsState);
     
     // Load dark mode preference on page load
     const savedDarkMode = localStorage.getItem('darkMode') === 'true';
-    if (savedDarkMode) {
-        isDarkMode = true;
+    isDarkMode = savedDarkMode;
+    if (isDarkMode) {
         document.body.classList.add('dark-mode');
-        updateIcon();
     }
+    updateIcon();
 });
 
-// Responsive content for different screen sizes
-function updateContent() {
-    const element = document.getElementById('pvCharger'); // Replace with your element ID
-    if (window.matchMedia('(max-width: 425px)').matches) {
-        element.innerHTML = `<i class="fa-solid fa-solar-panel"></i>PV Chgr.`;
-    } else {
-        element.innerHTML = `<i class="fa-solid fa-solar-panel"></i>PV Charger`;
-    }
-}
-
-// Check on initial load
-updateContent();
-
 // DARK MODE Functionality
-
-const toggleDarkButton = document.getElementById('toggle-dark-mode');
-let isDarkMode = false;
+let isDarkMode = localStorage.getItem('darkMode') === 'true'; // Load dark mode state from localStorage
 
 // Function to update the icon based on the mode
 function updateIcon() {
@@ -492,10 +532,4 @@ toggleDarkButton.addEventListener('click', function() {
     localStorage.setItem('darkMode', isDarkMode); // Save dark mode state in localStorage
 });
 
-// Check the user's system preference for the initial state
-const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
-if (prefersDarkScheme.matches && localStorage.getItem('darkMode') === null) {
-    isDarkMode = true;
-    document.body.classList.add('dark-mode');
-    updateIcon();
-}
+

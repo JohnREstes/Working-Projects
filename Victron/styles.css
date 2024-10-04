@@ -7,17 +7,6 @@
     --dark-icon: #04001b;
 }
 
-/* Night mode (dark theme) */
-@media (prefers-color-scheme: dark) {
-    :root {
-        --bg-color: #121212;
-        --text-color: #f8f9fa;
-        --box-button: #323232;
-        --box-border: #505050;
-        --dark-icon: #fffeb8;
-    }
-
-}
 .dark-mode{
     --bg-color: #121212;
     --text-color: #f8f9fa;

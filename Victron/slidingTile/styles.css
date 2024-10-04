@@ -1,0 +1,76 @@
+/* Container for the grid and blue tile */
+body{
+    background-color: aqua;
+}
+
+.grid-container {
+    position: relative;
+    width: 408px; /* 4 tiles x 100px + 3 gaps of 2px */
+    height: 408px; /* 4 tiles x 100px + 3 gaps of 2px */
+    margin: 50px auto;
+    background-color: aqua;
+  }
+  
+  /* The grid of tiles */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, 100px);
+    grid-template-rows: repeat(4, 100px);
+    background-color: aqua;
+  }
+  
+  /* Individual tiles */
+  .tile {
+    width: 100px;
+    height: 100px;
+    background-color: transparent; /* Transparent background for tiles */
+    border: 4px solid black; /* Black border around each tile */
+    box-sizing: border-box; /* Ensures the border is included in the size */
+    position: relative; /* Ensure tiles are positioned relative to the grid */
+    z-index: 1; /* Tiles above the blue tile */
+  }
+  
+  /* The Blue Tile */
+  .blue-tile {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background-color: blue; /* Blue color for the sliding tile */
+    top: 0;
+    left: 0;
+    z-index: 0; /* Ensure it stays behind the tiles */
+    transition: transform 0.5s ease-in-out;
+  }
+  
+  /* Background color for gaps */
+  .grid::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: white; /* White background for gaps */
+    z-index: 0; /* Positioned behind tiles */
+  }
+  
+  /* Animation for sliding horizontally */
+  @keyframes slideHorizontal {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(100px);
+    }
+  }
+  
+  /* Animation for sliding vertically */
+  @keyframes slideVertical {
+    0% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(100px);
+    }
+  }
+  

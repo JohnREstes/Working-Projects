@@ -1,30 +1,17 @@
-
-/* 
-Set the container for the bar
-*/
+/* Set the Bar container */
 :root{
     --main-color: rgb(76, 76, 76);
     --secondary-color: rgb(138, 138, 138);
     --background-color: rgb(211, 211, 211);
 }
-@media (prefers-color-scheme: dark) {
-    :root {
-		--main-color: rgb(197, 197, 197);
-		--secondary-color: rgb(220, 220, 220);
-    }
-}
 
 .bar {
 	height:5px;
 	width:200px;
-	/* padding:00px;
-	margin:200px auto 0; */
 
 }
 
-/* 
-This is the actual bar with stripes
-*/	
+/* Actual bar with stripes */	
 .bar span {
 	display:inline-block;
 	height:100%;
