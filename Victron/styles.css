@@ -172,6 +172,17 @@ input{
     justify-content:space-between;
     align-items: center;
 }
+.button_space{
+    width: 150px;
+    display: flex;
+    justify-content: center;
+}
+#button_div_left{
+    justify-content: left;
+}
+#button_div_right{
+    justify-content: right;
+}
 
 .toggle-button {
     display: block;
@@ -179,6 +190,7 @@ input{
     color: #f8f9fa;
     border: none;
     padding: 8px 16px;
+    border-radius: 2px;
     margin: 5px;
     cursor: pointer;
 }

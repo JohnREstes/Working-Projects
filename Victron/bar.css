@@ -16,8 +16,8 @@
 	display:inline-block;
 	height:100%;
 	width:100%;
-	border:1px solid var(--secondary-color);
-	border-bottom-color: var(--main-color);
+	/* border:1px solid var(--secondary-color);
+	border-bottom-color: var(--main-color); */
 	background-color:rgb(211, 211, 211);
 	-webkit-box-sizing:border-box;
 	-moz-box-sizing:border-box;
@@ -153,6 +153,7 @@ Animate the stripes
     width: 5px;
     height: 150px;
     background-color: #0f0;
+	z-index: -2;
   }
   
   .up-div {
@@ -169,11 +170,12 @@ Animate the stripes
     transform-origin: center;
     position: absolute;
     top: -5px;
-    right: -90px;
+    right: -70px;
     transform: translate(-50%, -50%);
     width: 5px;
     height: 150px;
     background-color: #ff0;
+	z-index: -1;
   }
 
 

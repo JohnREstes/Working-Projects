@@ -1,4 +1,4 @@
-const REFRESH_RATE = 10; //seconds
+const REFRESH_RATE = 15; //seconds
 //const HOST = 'http://127.0.0.1:3000';
 const HOST = 'https://node.johnetravels.com/app1';
 const CACHED_DATA_API = `${HOST}/api/cachedData`;
@@ -25,23 +25,25 @@ async function cachedDataCall() {
       try {
         const response = await fetch(CACHED_DATA_API, requestOptions);
         const result = await response.text();
-        const jsonResult = JSON.parse(result)
+        const jsonResult = await JSON.parse(result)
         
         if (!result) {
           return; // Exit early if the response is empty
         }
     
         try {
-          let VData = jsonResult.victron; // Parse the JSON response
-          await format_data(VData);
-
-          let GData = jsonResult.growatt; // result is a JSON string
-          formatGrowattData(GData);
+          if(jsonResult.victron){
+            let VData = jsonResult.victron; // Parse the JSON response
+            await format_data(VData);
+          }
+          if(jsonResult.growatt){
+            let GData = jsonResult.growatt; // result is a JSON string
+            await formatGrowattData(GData);
+          }
 
           //return data
         } catch (parseError) {
           console.error('Error parsing JSON:', parseError);
-          console.error('Response that caused the error:', result);
           throw parseError; // Rethrow the error if needed
         }
     
@@ -53,23 +55,16 @@ async function cachedDataCall() {
       console.error('Error fetching data:', error);
       // Handle any errors that occurred during the API calls
     }
+    updatePVTotal()
+    get_Yesterday_Solar(YESTERDAY_API);
 }
 
 async function fetchData() {
   if (storedToken) {
     try {
-      // Start all API calls concurrently
-      const victronPromise = get_Data(VICTRON_API);
-      const growattPromise = get_Growatt_Data(GROWATT_API);
-      const yesterdayPromise = get_Yesterday_Solar(YESTERDAY_API);
-
-      // Wait for all API calls to complete
-      await Promise.all([
-        victronPromise,
-        growattPromise,
-        yesterdayPromise
-      ]);
-
+      await get_Growatt_Data(GROWATT_API);
+      await get_Data(VICTRON_API);
+      updatePVTotal()
       time_Stamp();
       loadingGraphic.classList.add('none');
 
@@ -144,38 +139,79 @@ async function get_Yesterday_Solar(url) {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${storedToken}`,
     },
-    redirect: 'follow'
+    redirect: 'follow',
   };
 
   try {
     const response = await fetch(url, requestOptions);
+
+    // Ensure the response is OK before parsing
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
     const result = await response.json(); // Parse JSON directly
-    const lastEntry = result.lastEntry;
 
-    // Extract values from the last entry
-    const valuesString = lastEntry.match(/\[([^\]]+)\]/)[1];
-    const valuesArray = valuesString.split(',').map(value => value.trim());
+    // Convert the string into an array called 'solarData'
+    const solarData = result.lastEntry.split('\n');
 
-    // Convert the values to numbers, stripping out any units
-    const values = valuesArray.map(value => parseFloat(value.replace(/[^0-9.-]/g, '')));
+    // Get the current hour in EST (UTC-5)
+    const now = new Date();
+    const utcHour = now.getUTCHours(); // Current hour in UTC
+    const estHour = (utcHour - 5 + 24) % 24; // Adjust for EST and handle negative values
+    let VRMyesterdayValue, after6LastEntry = 0;
 
-    // Calculate the sum of the values
-    const sum = values.reduce((acc, value) => acc + value, 0);
+    // Time check: between 18:00 (6 PM) and 24:00 (midnight) EST
+    if (estHour >= 18 && estHour < 24) {
+      // Store the second to last line in a separate variable
+      VRMyesterdayValue = solarData[solarData.length - 2];
+      after6LastEntry = solarData[solarData.length - 1];
+      const after6Sum = processSum(after6LastEntry);
 
-    const formattedSum = sum.toFixed(2);
+      // Display the result in the specified DOM element
+      const elm = document.getElementById('VRMtoday');
+      elm.innerText = `${after6Sum} kWh`;
 
-    let elm = document.getElementById("VRMyesterday")
-    elm.innerText = `${formattedSum} kWh`      
+    } else {
+      // Store the last line in a separate variable
+      VRMyesterdayValue = solarData[solarData.length - 1];
+    }
+
+    function processSum(dataValue){
+      // Extract values from the last entry using a regex to capture the array inside brackets
+      const valuesString = dataValue.match(/\[([^\]]+)\]/)[1];
+      const valuesArray = valuesString.split(',').map((value) => value.trim());
+
+      // Convert the values to numbers, removing units and non-numeric characters
+      const values = valuesArray.map((value) =>
+        parseFloat(value.replace(/[^0-9.-]/g, ''))
+      );
+
+      // Calculate the sum of the values
+      const sum = values.reduce((acc, value) => acc + value, 0);
+      const formattedSum = sum.toFixed(2);
+      return formattedSum;
+    }
+    const formattedValue = processSum(VRMyesterdayValue)
+
+    // Display the result in the specified DOM element
+    const elm = document.getElementById('VRMyesterday');
+    elm.innerText = `${formattedValue} kWh`;
 
   } catch (error) {
     console.error('Error:', error);
-    throw error; // Rethrow the error to handle it outside this function if needed
+    throw error; // Optional: Rethrow the error for external handling if needed
   }
 }
 
+
+var todayTotalPower = []; 
 async function format_data(data) {
+  // formats data so that second Solar controller shows up
+  const newArray = processArray(data);
+
   let elm;
-    for (const record of data) {
+    for (const record of newArray) {
       switch (record.idDataAttribute) {
         case 81:
           elm = document.getElementById("VRMvoltage");
@@ -191,19 +227,29 @@ async function format_data(data) {
           elm.innerText = record.formattedValue        
           break;
         case 94:
-          //elm = document.getElementById("VRMtoday")
-          //elm.innerText = record.formattedValue
-          //removed to allow for sum below
+          elm = document.getElementById("VRMyesterdayTower")
+          elm.innerText = record.formattedValue
+          //allow for sum below
           todayTotalPower[0] = record.formattedValue;     
+          break;
+        case 940:
+          elm = document.getElementById("VRMyesterdayPergola")
+          elm.innerText = record.formattedValue
+          //allow for sum below
+          todayTotalPower[1] = record.formattedValue;     
           break;
         case 96:
           // elm = document.getElementById("VRMyesterday")
           // elm.innerText = record.formattedValue        
           break;
-        case 442:
-          elm = document.getElementById("VRMpower")
+        case 4420:
+          elm = document.getElementById("VRMpowerPergola")
           elm.innerText = record.formattedValue        
           break;
+        case 442:
+          elm = document.getElementById("VRMpowerTower")
+          elm.innerText = record.formattedValue        
+          break;  
         case 243:
           elm = document.getElementById("VRMBatteryPower")
           elm.innerText = record.formattedValue        
@@ -227,26 +273,46 @@ async function format_data(data) {
           break;
       }
     }
-    const chargingDischarge = document.getElementById('charging_discharging');
-    const vrmCurrentText = document.getElementById("VRMcurrent").innerText;
-    
-    if (vrmCurrentText.includes('-')) {
-      if (window.matchMedia('(max-width: 425px)').matches) {
-        chargingDischarge.innerHTML = '<i class="fa-solid fa-battery-full"></i>Dischg';
-      } else {
-        chargingDischarge.innerHTML = `<i class="fa-solid fa-battery-full"></i>Discharging`;
-      }
-      const element = document.querySelector('.left-div span');
-      element.style.animation = 'moveb 2s linear infinite';
-
+  const chargingDischarge = document.getElementById('charging_discharging');
+  const vrmCurrentText = document.getElementById("VRMcurrent").innerText;
+  
+  if (vrmCurrentText.includes('-')) {
+    if (window.matchMedia('(max-width: 425px)').matches) {
+      chargingDischarge.innerHTML = '<i class="fa-solid fa-battery-full"></i>Dischg';
     } else {
-      chargingDischarge.innerHTML = '<i class="fa-solid fa-battery-full"></i>Charging';
-      const element = document.querySelector('.left-div span');
-      element.style.animation = 'move 2s linear infinite';
+      chargingDischarge.innerHTML = `<i class="fa-solid fa-battery-full"></i>Discharging`;
     }
-  }
+    const element = document.querySelector('.left-div span');
+    element.style.animation = 'moveb 2s linear infinite';
 
-var todayTotalPower = [];  
+  } else {
+    chargingDischarge.innerHTML = '<i class="fa-solid fa-battery-full"></i>Charging';
+    const element = document.querySelector('.left-div span');
+    element.style.animation = 'move 2s linear infinite';
+  }
+} 
+
+//function added to identify second solar charge controller.
+function processArray(array) {
+  const occurrences = {};
+
+  // Use `map` to return a new array with modifications
+  return array.map(item => {
+      const id = item.idDataAttribute;
+
+      // Track occurrences
+      occurrences[id] = (occurrences[id] || 0) + 1;
+
+      // If it's the second occurrence, modify the idDataAttribute
+      if (occurrences[id] === 2) {
+          return { ...item, idDataAttribute: parseInt(`${id}0`) };
+      }
+
+      // Return the original item if no modification is needed
+      return item;
+  });
+}
+
 
 async function formatGrowattData(data){
    
@@ -275,8 +341,9 @@ async function formatGrowattData(data){
     const casa1Input = document.getElementById('Casa1input');
     const casa2Input = document.getElementById('Casa2input');  
 
-    const gridPower = parseInt(data.yolandaData.gridPower) + parseInt(data.casaMJData1.gridPower) + parseInt(data.casaMJData2.gridPower);
-
+    //const gridPower = parseInt(data.yolandaData.gridPower) + parseInt(data.casaMJData1.gridPower) + parseInt(data.casaMJData2.gridPower);
+    const gridPower = parseInt(data.casaMJData1.gridPower) + parseInt(data.casaMJData2.gridPower);
+    
     inputPowerTotal.innerText = `${gridPower} W`;
     yolandaInput.innerText = `${data.yolandaData.gridPower} W`;
     casa1Input.innerText = `${data.casaMJData1.gridPower} W`;
@@ -288,25 +355,35 @@ async function formatGrowattData(data){
 
     condText.innerText = `${data.weatherDataCasaMJ.now.cond_txt}`
     hum.innerText = `${data.weatherDataCasaMJ.now.hum}% hum.`
-    tmp.innerText = `${data.weatherDataCasaMJ.now.tmp}°C`
+    const F = ((data.weatherDataCasaMJ.now.tmp) * 9/5) + 32
+    tmp.innerText = `${F}°F`
 
-    const yolandaDayTotal = data.yolandaDataTotal.epvToday
-    const casa1DayTotal = data.casaMJData1Total.epvToday
-    const casa2DayTotal = data.casaMJData2Total.epvToday
+    // Get the current hour in EST (UTC-5) to correct Growatt error (6 pm rollover)
+    let sum = 0;
+    const now = new Date();
+    const utcHour = now.getUTCHours(); // Current hour in UTC
+    const estHour = (utcHour - 5 + 24) % 24; // Adjust for EST and handle negative values
 
-    todayTotalPower[1] = yolandaDayTotal;
-    todayTotalPower[2] = casa1DayTotal;
-    todayTotalPower[3] = casa2DayTotal;
+    // Time check: before 18:00 (6 PM)
+    if (estHour < 18) {
+      const yolandaDayTotal = data.yolandaDataTotal.epvToday
+      const casa1DayTotal = data.casaMJData1Total.epvToday
+      const casa2DayTotal = data.casaMJData2Total.epvToday
+  
+      todayTotalPower[2] = yolandaDayTotal;
+      todayTotalPower[3] = casa1DayTotal;
+      todayTotalPower[4] = casa2DayTotal;
+  
+      // Calculate the sum of the values
+      const numericValues = todayTotalPower.map(value => {
+        // Remove non-numeric characters (like 'kWh') and convert to a float
+        return parseFloat(value.replace(/[^\d.-]/g, ''));
+      });
+      sum = (numericValues.reduce((accumulator, currentValue) => accumulator + currentValue, 0)).toFixed(2);
 
-    // Calculate the sum of the values
-    const numericValues = todayTotalPower.map(value => {
-      // Remove non-numeric characters (like 'kWh') and convert to a float
-      return parseFloat(value.replace(/[^\d.-]/g, ''));
-    });
-    const sum = (numericValues.reduce((accumulator, currentValue) => accumulator + currentValue, 0)).toFixed(2);
-
-    const VRMtodayTotal = document.getElementById('VRMtoday');
-    VRMtodayTotal.innerHTML = sum + " kWh"
+      const VRMtodayTotal = document.getElementById('VRMtoday');
+      VRMtodayTotal.innerHTML = sum + " kWh"
+    }
 
     const acCasa1Text = document.getElementById("Casa1input").innerText;
     const acCasa2Text = document.getElementById("Casa2input").innerText;  // Fixed to use the correct ID
@@ -394,7 +471,7 @@ async function login() {
   
         if (response.ok) {
           if(initalLoad){
-            cachedDataCall();
+            await cachedDataCall();
             initalLoad = false
             loadingGraphic.classList.add('none');
           }
@@ -418,36 +495,19 @@ handleToken()
 
 // Function to calculate and update PVTotal
 function updatePVTotal() {
-  const vrmPower = parseFloat(document.getElementById('VRMpower').textContent) || 0;
+  const vrmPowerPergola = parseFloat(document.getElementById('VRMpowerPergola').textContent) || 0;
+  const vrmPowerTower = parseFloat(document.getElementById('VRMpowerTower').textContent) || 0;
   const yolandaPower = parseFloat(document.getElementById('Yolandapower').textContent) || 0;
   const casa1Power = parseFloat(document.getElementById('Casa1power').textContent) || 0;
   const casa2Power = parseFloat(document.getElementById('Casa2power').textContent) || 0;
 
-  const pvTotal = vrmPower + yolandaPower + casa1Power + casa2Power;
+  const pvTotal = vrmPowerPergola + vrmPowerTower + yolandaPower + casa1Power + casa2Power;
   document.getElementById('PVTotal').textContent = pvTotal.toFixed(0) + " W";
   if(pvTotal > 1) {
     const element = document.querySelector('.right-div span');
     element.style.animation = 'moveb 2s linear infinite';
   }
 }
-
-// Function to observe changes in the target element
-function observeElement(id) {
-  const target = document.getElementById(id);
-  const observer = new MutationObserver(updatePVTotal);
-
-  // Configuration of the observer
-  const config = { childList: true, subtree: true, characterData: true };
-
-  // Start observing the target node
-  observer.observe(target, config);
-}
-
-// Add observers to all power elements
-observeElement('VRMpower');
-observeElement('Yolandapower');
-observeElement('Casa1power');
-observeElement('Casa2power');
 
 // Responsive content for different screen sizes
 function updateShorterWords() {
@@ -532,4 +592,136 @@ toggleDarkButton.addEventListener('click', function() {
     localStorage.setItem('darkMode', isDarkMode); // Save dark mode state in localStorage
 });
 
+// modal Past Solar
 
+async function buildModal(url) {
+    const requestOptions = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${storedToken}`,
+        },
+        redirect: 'follow',
+    };
+
+    try {
+        const response = await fetch(url, requestOptions);
+        const result = await response.json();
+
+        const solarData = result.lastEntry.split('\n');
+
+        const modalBody = document.getElementById('modalBody');
+        modalBody.innerHTML = ''; // Clear previous content
+
+        // Reverse the order of entries
+        const reversedSolarData = solarData.reverse();
+
+        // Calculate the maximum value across all entries
+        let maxValue = 0;
+        reversedSolarData.forEach((entry) => {
+            const match = entry.match(/Date: ([^:]+): \[(.+)\]/);
+            if (match) {
+                const valuesString = match[2];
+                const valuesArray = valuesString
+                    .split(',')
+                    .map(value => parseFloat(value.trim().replace(/[^0-9.-]/g, '')));
+                const entryMax = Math.max(...valuesArray);
+                if (entryMax > maxValue) {
+                    maxValue = entryMax; // Update maxValue if a larger entry is found
+                }
+            }
+        });
+
+        // Build the cards
+        reversedSolarData.forEach((entry, index) => {
+            const match = entry.match(/Date: ([^:]+): \[(.+)\]/);
+            if (!match) {
+                console.warn(`No values found for entry: ${entry}`);
+                return; // Skip this entry if no match is found
+            }
+
+            const date = match[1]; // This captures the date part
+            const valuesString = match[2]; // This captures the values part
+
+            const valuesArray = valuesString
+                .split(',')
+                .map(value => parseFloat(value.trim().replace(/[^0-9.-]/g, '')));
+
+            const total = valuesArray.reduce((acc, val) => acc + val, 0).toFixed(2);
+
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <h3>${date}</h3>
+                <p>Total: ${total} kWh</p>
+                <canvas id="chart${index}" width="400" height="200"></canvas>
+            `;
+
+            modalBody.appendChild(card);
+
+            const ctx = document.getElementById(`chart${index}`).getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Tower', 'Pergola', 'Yolanda', 'Casa East', 'Casa West'],
+                    datasets: [
+                        {
+                            label: 'kWh',
+                            data: valuesArray,
+                            backgroundColor: ['#f0c43e', '#e97180', '#8ca65a', '#acd2cc', '#335951'],
+                        },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'top' },
+                        tooltip: { callbacks: { label: (tooltipItem) => `${tooltipItem.raw} kWh` } },
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: maxValue, // Set the maximum scale to the calculated max value
+                        },
+                    },
+                },
+            });
+        });
+
+        const modal = document.getElementById('solarDataModal');
+        modal.style.display = 'flex'; // Set display to flex
+        modal.classList.add('fade-in');
+
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+// Close Modal Function
+function closeModal() {
+  const modal = document.getElementById('solarDataModal');
+    modal.classList.add('fade-out')
+    setTimeout(()=>{
+      modal.style.display = 'none';
+      modal.classList.remove('fade-out')
+    },1000)
+     
+ if (modal.classList.contains('fade-in')) {
+     modal.classList.remove('fade-in');
+     }
+}
+
+// Event Listener for opening the modal
+const pastSolarButton = document.getElementById('pastDetails');
+
+pastSolarButton.addEventListener('click', (e) => {
+  e.preventDefault();
+  buildModal(YESTERDAY_API); // Ensure this function is set to build modal content
+});
+
+// Event Listener for closing the modal on clicking outside
+document.getElementById('solarDataModal').addEventListener('click', function (event) {
+  if (event.target === this) {
+      closeModal();
+  }
+});
