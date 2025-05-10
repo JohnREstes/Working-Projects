@@ -1,3 +1,4 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,11 +9,14 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/solar/favicon_io/favicon-16x16.png">
     <link rel="manifest" href="/solar/favicon_io/site.webmanifest">
     <script src="./script.js" defer></script>
+    <script src="API_CALL.js" defer type="module"></script>    
+    <script src="weather.js" defer type="module"></script>
     <script src="https://kit.fontawesome.com/f4c4519de4.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="./styles.css">
     <link rel="stylesheet" href="./bar.css">
     <link rel="stylesheet" href="./modal.css">
+    <link rel="stylesheet" href="weather.css">
     <title>Home Solar</title>
 </head>
 <body>
@@ -36,9 +40,9 @@
     </div>
     <header>
         <div class="header-container">
-            <span id="cond_txt">Condition</span>
-            <span id="hum">Humidity</span>
-            <span id="tmp">Temperature</span>
+            <span class="weatherText" id="cond_txt">Condition</span>
+            <span class="weatherText" id="hum">Humidity</span>
+            <span class="weatherText" id="tmp">Temperature</span>
             <span id="timeStamp">Time</span>
         </div>
     </header>
@@ -126,7 +130,89 @@
             <div id="modalBody"></div> <!-- Cards will be added here dynamically -->
         </div>
         <div id="modal-footer">
-            <button class="toggle-button" onclick="closeModal()">Close</button>
+            <button class="toggle-weather-button" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+    <!-- Weather Modal Structure -->
+    <div id="weatherModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <div class="weatherbody">
+                <div class="weathercontainer blurry">
+                    <nav role="navigation">
+                        <div id="menuToggle">
+                          <input type="checkbox" id="checkbox"/>
+                          <span></span>
+                          <span></span>
+                          <span></span>
+                          <ul id="menu">
+                            <input type="text" class="search" placeholder="please enter new location" data-search-text>
+                            <input type="button" value="submit" id="submit">
+                            <input type="button" value="Current Location" id="currentLoc">
+                          </ul>
+                        </div>
+                      </nav>
+                    <div class="weatherheader">
+                        <div class="current">
+                            <div class="currentWeatherIcon" data-current="icon"> </div>
+                            <span class="currentWeatherTemp" data-current="temp">31&#8451</span>
+                            <span id="cityStateCountry">Francisco uh May, Q.R., MX</span>
+                        </div>
+                        <div class="currentBreakdown">
+                            <span class="currentType">High<span class="currentNumber" data-current=high>32&#8451</span></span>
+                            <span class="currentType">FL High<span class="currentNumber" data-current=fl-high>27&#8451</span></span>
+                            <span class="currentType">Wind<span class="currentNumber" data-current=wind>9mph</span></span>
+                            <span class="currentType">Sunrise<span class="currentNumber" data-current=sunrise>6:00am</span></span>
+                            <span class="currentType">Low<span class="currentNumber" data-current=low>19&#8451</span></span>
+                            <span class="currentType">FL Low<span class="currentNumber" data-current=fl-low>12&#8451</span></span>
+                            <span class="currentType">Precip<span class="currentNumber" data-current=precip>70%</span></span>      
+                            <span class="currentType">Sunset<span class="currentNumber" data-current=sunset>7:00pm</span></span>             
+                        </div>
+                    </div>
+                    <div class="main">
+                        <div class="forecastCard" data-forecast="one">
+                            <div class="forecastIcon" data-forecast-part=icon></div>
+                            <span class="forecastDay" data-forecast-part=day>Thursdayggg</span>
+                            <span class="forecastTemp" data-forecast-part=temp>27&#8451</span>
+                        </div>
+                        <div class="forecastCard" data-forecast="two">
+                            <div class="forecastIcon" data-forecast-part=icon></div>
+                            <span class="forecastDay" data-forecast-part=day>Fridagggy</span>
+                            <span class="forecastTemp" data-forecast-part=temp>28&#8451</span>
+                        </div>
+                        <div class="forecastCard" data-forecast="three">
+                            <div class="forecastIcon" data-forecast-part=icon></div>
+                            <span class="forecastDay" data-forecast-part=day>Satuhhhrday</span>
+                            <span class="forecastTemp" data-forecast-part=temp>29&#8451</span>
+                        </div>
+                        <div class="forecastCard" data-forecast="four">
+                            <div class="forecastIcon" data-forecast-part=icon></div>
+                            <span class="forecastDay" data-forecast-part=day>Sundahhhy</span>
+                            <span class="forecastTemp" data-forecast-part=temp>30&#8451</span>
+                        </div>
+                        <div class="forecastCard" data-forecast="five">
+                            <div class="forecastIcon" data-forecast-part=icon></div>
+                            <span class="forecastDay" data-forecast-part=day>Mondhhay</span>
+                            <span class="forecastTemp" data-forecast-part=temp>31&#8451</span>
+                        </div>
+                        <div class="forecastCard" data-forecast="six">
+                            <div class="forecastIcon" data-forecast-part=icon></div>
+                            <span class="forecastDay" data-forecast-part=day>Tuesday</span>
+                            <span class="forecastTemp" data-forecast-part=temp>32&#8451</span>
+                        </div>
+                        <div class="forecastCard" data-forecast="seven">
+                            <div class="forecastIcon" data-forecast-part=icon></div>
+                            <span class="forecastDay" data-forecast-part=day>Wednesday</span>
+                            <span class="forecastTemp" data-forecast-part=temp>33&#8451</span>
+                        </div>
+                    </div>
+                    <div class="hourly">
+                        <ul class="hourlyForcast" data-hourly></ul>
+                    </div>
+                </div>  
+            </div>
+        </div>
+        <div id="modal-footer">
+            <button class="toggle-button" id="toggle-weather-button">Close</button>
         </div>
     </div>
 </body>

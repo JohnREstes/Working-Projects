@@ -226,13 +226,13 @@ async function format_data(data) {
           elm = document.getElementById("VRMstate")
           elm.innerText = record.formattedValue        
           break;
-        case 94:
+        case "94_HQ2131HZ2ZV":
           elm = document.getElementById("VRMyesterdayTower")
           elm.innerText = record.formattedValue
           //allow for sum below
           todayTotalPower[0] = record.formattedValue;     
           break;
-        case 940:
+        case "94_HQ2342AE2NT":
           elm = document.getElementById("VRMyesterdayPergola")
           elm.innerText = record.formattedValue
           //allow for sum below
@@ -242,11 +242,11 @@ async function format_data(data) {
           // elm = document.getElementById("VRMyesterday")
           // elm.innerText = record.formattedValue        
           break;
-        case 4420:
+        case "442_HQ2342AE2NT":
           elm = document.getElementById("VRMpowerPergola")
           elm.innerText = record.formattedValue        
           break;
-        case 442:
+        case "442_HQ2131HZ2ZV":
           elm = document.getElementById("VRMpowerTower")
           elm.innerText = record.formattedValue        
           break;  
@@ -292,27 +292,37 @@ async function format_data(data) {
   }
 } 
 
-//function added to identify second solar charge controller.
+// Format values for each Smart Solar MPPT
 function processArray(array) {
-  const occurrences = {};
-
-  // Use `map` to return a new array with modifications
-  return array.map(item => {
-      const id = item.idDataAttribute;
-
-      // Track occurrences
-      occurrences[id] = (occurrences[id] || 0) + 1;
-
-      // If it's the second occurrence, modify the idDataAttribute
-      if (occurrences[id] === 2) {
-          return { ...item, idDataAttribute: parseInt(`${id}0`) };
-      }
-
-      // Return the original item if no modification is needed
-      return item;
+  // Create a map for 'instance' to 'formattedValue' from items with idDataAttribute 118
+  const instanceMap = {};
+  array.forEach(item => {
+    if (item.idDataAttribute === 118) {
+      instanceMap[item.instance] = item.formattedValue;
+    }
   });
-}
 
+  // Process the array and modify idDataAttribute for 94 and 442
+  const processedArray = array.map(item => {
+    if (item.idDataAttribute === 94 || item.idDataAttribute === 442) {
+      const instance = item.instance;
+      const formattedValue = instanceMap[instance]; // Get corresponding formattedValue
+
+      if (formattedValue) {
+        // Modify idDataAttribute
+        return {
+          ...item,
+          idDataAttribute: `${item.idDataAttribute}_${formattedValue}`
+        };
+      }
+    }
+    // Return the item unmodified if no changes are needed
+    return item;
+  });
+
+  // Return the processed array without duplicate removal
+  return processedArray;
+}
 
 async function formatGrowattData(data){
    
@@ -386,7 +396,7 @@ async function formatGrowattData(data){
     }
 
     const acCasa1Text = document.getElementById("Casa1input").innerText;
-    const acCasa2Text = document.getElementById("Casa2input").innerText;  // Fixed to use the correct ID
+    const acCasa2Text = document.getElementById("Casa2input").innerText;  
     
     // Parse the text content to integers
     const acCasa1Int = parseInt(acCasa1Text); 

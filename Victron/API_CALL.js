@@ -1,4 +1,4 @@
-// import { API_KEY } from "./key.js";
+// API_CALL.js
 
 const URL_WEATHER = 'https://api.open-meteo.com/v1/forecast?hourly=temperature_2m,relativehumidity_2m,apparent_temperature,precipitation_probability,precipitation,weathercode,surface_pressure,windspeed_10m,temperature_80m&daily=weathercode,temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,sunrise,sunset,precipitation_probability_max&current_weather=true&';
 const URL_GEOAPIFY_SEARCH = "https://api.geoapify.com/v1/geocode/search?";
